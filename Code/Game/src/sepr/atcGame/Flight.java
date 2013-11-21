@@ -1,3 +1,4 @@
+package sepr.atcGame;
 class Flight {
 	// variables
 	public String identifier;
