@@ -133,9 +133,9 @@ public class Menu extends JFrame {
 				this.showMainMenu();
 				repaint();
 				break;
-			case 1:
+			case 1://Choose crew button
 				break;
-			case 2:
+			case 2://Choose aircraft button
 				break;
 			case 3://Difficulty button
 				hideMainMenu();
@@ -145,11 +145,11 @@ public class Menu extends JFrame {
 			case 4://Exit button
 				System.exit(0);
 				break;
-			case 5:
+			case 5://Easy button
 				break;
-			case 6:
+			case 6://Medium button
 				break;
-			case 7:
+			case 7://Hard button
 				break;
 			case 8://Back to Main menu
 				hideDifficultyMenu();
