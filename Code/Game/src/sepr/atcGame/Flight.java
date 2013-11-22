@@ -20,7 +20,7 @@ class Flight {
 		//method will go in here
 	}
 
-	public void toAltitude(Real altitude) {
+	public void toAltitude(double altitude) {
 		//method will go in here
 	}
 
@@ -28,7 +28,7 @@ class Flight {
 		//method will go in here
 	}
 
-	public void toSpeed(Real speed) {
+	public void toSpeed(double speed) {
 		//method will go in here
 	}
 
@@ -40,7 +40,7 @@ class Flight {
 		//method will go in here
 	}
 
-	public void draw(Vector location; int size) {
+	public void draw(Vector location, int size) {
 		//method will go in here
 	}
 
