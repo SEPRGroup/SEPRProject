@@ -20,6 +20,7 @@ public class MenuButton extends JLabel {
 		this.order = order;
 		this.setText(textName);		
 		this.setFont(font);	
+		this.setForeground(Color.black);
 		this.setHorizontalAlignment(SwingConstants.LEFT);
 		this.setVerticalAlignment(SwingConstants.CENTER);
 		this.setBorder(border);
