@@ -1,3 +1,5 @@
+package sepr.atcGame;
+
 
 class TransferWaypoint extends Waypoint {
 	//Variables
