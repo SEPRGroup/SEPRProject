@@ -29,7 +29,7 @@ class Airspace {
 		//method will go in here
 	}
 
-	public void eventCrash(Flight f1, f2) {
+	public void eventCrash(Flight f1, Flight f2) {
 		//method will go in here
 	}
 
