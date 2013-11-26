@@ -60,42 +60,42 @@ public class MenuDisplay extends JFrame {
 		this.setVisible(true);
 		
 	}
+	private void showMenus(int firstLabel, int lastLabel){
+		
+		for(int i = firstLabel; i <= lastLabel; i++){
+			
+			menuButtons[i].setVisible(true);
+			
+		}
+		
+	}
 
+	private void closeMenus(int firstLabel, int lastLabel)
+	{
+		for(int i = firstLabel; i <=lastLabel; i++){
+			menuButtons[i].setVisible(false);
+		}
+	}
 	
 	public void selectedOption(int menuOption)
 	{
 		switch (menuOption){
 			case 0://main menu
+				
 				menuButtons[0].setVisible(false);
-				
-				menuButtons[1].setVisible(true);
-				menuButtons[2].setVisible(true);
-				menuButtons[3].setVisible(true);
-				
+				showMenus(1, 3);
 				break;
 			case 1://Choose airport button
-				menuButtons[1].setVisible(false);
-				menuButtons[2].setVisible(false);
-				menuButtons[3].setVisible(false);
-				
-				
+				closeMenus(1, 3);				
 				menuPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
 				Airport.setVisible(true);
-				menuButtons[7].setVisible(true);
-				menuButtons[8].setVisible(true);
-				menuButtons[9].setVisible(true);
-				
+				showMenus(7, 9);
 				break;
 			case 2://Choose difficulty button
-				//menuButtons[0].setVisible(false);
-				menuButtons[1].setVisible(false);
-				menuButtons[2].setVisible(false);
-				menuButtons[3].setVisible(false);
-				
-				menuButtons[4].setVisible(true);
-				menuButtons[5].setVisible(true);
-				menuButtons[6].setVisible(true);
-				menuButtons[9].setVisible(true);	
+
+				closeMenus(1, 3);
+				showMenus(4, 6);
+				menuButtons[9].setVisible(true);
 				break;
 			case 3://Exit button
 				System.exit(0);
@@ -109,23 +109,13 @@ public class MenuDisplay extends JFrame {
 				break;
 			case 7:
 				break;
-			case 8:
-				
+			case 8:				
 				break;
 			case 9://Back to Main menu
-				menuButtons[4].setVisible(false);
-				menuButtons[5].setVisible(false);
-				menuButtons[6].setVisible(false);
-				menuButtons[7].setVisible(false);
-				menuButtons[8].setVisible(false);
-				menuButtons[9].setVisible(false);
+				closeMenus(4, 9);
 				Airport.setVisible(false);
 				menuPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 500, 20));
-				
-				//menuButtons[0].setVisible(true); // Not sure that this is supposed to be set to visible here as this displays the Play button
-				menuButtons[1].setVisible(true);
-				menuButtons[2].setVisible(true);
-				menuButtons[3].setVisible(true);
+				showMenus(1, 3);
 				break;
 			case 10:
 				break;
