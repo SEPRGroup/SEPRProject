@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 
 public class MenuDisplay extends JFrame {
 	private final int HEIGHT, WIDTH;
-	private final Color bgColor = Color.YELLOW;
+	private final Color bgColor = (new Color(176, 196, 222));
 	private static final int NUMBEROFLABELS = 10;
 	private MenuButton[] menuButtons = new MenuButton[NUMBEROFLABELS];
 	private JPanel menuPanel = new JPanel();
@@ -140,7 +140,7 @@ public class MenuDisplay extends JFrame {
 			}
 		}
 		public void mouseExited(MouseEvent arg0){
-			menuButtons[menuOption].setForeground(Color.black);
+			menuButtons[menuOption].setForeground(Color.white);
 			if((menuOption == 7 || menuOption == 8)){
 				Airport.setIcon(Air);
 			}
