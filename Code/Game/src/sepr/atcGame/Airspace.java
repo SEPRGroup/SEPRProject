@@ -3,10 +3,33 @@ package sepr.atcGame;
 
 class Airspace {
 	//variables
-	public String name;
-	public Flight aircraft; 			//Flight is a user defined data type, an array [0..k]
-	public Waypoint waypoints;			//Waypoint is a user defined data type, an array [0..k]
-	public TransferWaypoint tranfers;	//TransferWaypoint is a user defined data type
+	private String name;
+	private Flight aircraft; 			//Flight is a user defined data type, an array [0..k]
+	private Waypoint waypoints;			//Waypoint is a user defined data type, an array [0..k]
+	private TransferWaypoint transfers;	//TransferWaypoint is a user defined data type
+	
+	//constructor
+	public Airspace(String airspaceName, TransferWaypoint transferWaypoints){
+		name = airspaceName;
+		transfers = transferWaypoints;
+	}
+	
+	//getters and setters
+	public String getName() {
+		return name;
+	}
+
+	public Flight getAircraft() {
+		return aircraft;
+	}
+
+	public Waypoint getWaypoints() {
+		return waypoints;
+	}
+
+	public TransferWaypoint getTransfers() {
+		return transfers;
+	}
 
 	//methods
 	public void newFlight(Flight f) {

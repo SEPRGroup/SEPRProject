@@ -1,13 +1,55 @@
 package sepr.atcGame;
-class Flight {
+abstract class Flight {
 	// variables
-	public String identifier;
-	public FlightStatus status;  //FlightStatus is a user defined data type
-	public Vector position;		 //Vector is a user defined data type
-	public Queue flightPlan;	 //Queue **might** be a user defined data type
-	public Conditions condition; //Conditions is a user defined data type
+	private String identifier;
+	private FlightStatus status;  //FlightStatus is a user defined data type
+	private Vector position;		 //Vector is a user defined data type
+	private Queue flightPlan;	 //Queue **might** be a user defined data type
+	private Conditions condition; //Conditions is a user defined data type
+	private double bearing;
+	
+	// constructor
+ 	public Flight(String id, Queue plan){
+		identifier = id;
+		flightPlan = plan;
+	}
+	
+	//getters and setters
+	
+ 	public Conditions getCondition() {
+		return condition;
+	}
 
-	//methods
+	public void setCondition(Conditions condition) {
+		this.condition = condition;
+	}
+
+	public String getIdentifier() {
+		return identifier;
+	}
+
+	public FlightStatus getStatus() {
+		return status;
+	}
+
+	public Vector getPosition() {
+		return position;
+	}
+
+	public Queue getFlightPlan() {
+		return flightPlan;
+	}
+
+	public double getBearing() {
+		return bearing;
+	}
+
+	public void setBearing(double bearing) {
+		this.bearing = bearing;
+	}
+	
+	// methods
+	
 	public void takeOff(TransferWaypoint t) { 	//TransferWaypoint is a user defined data type
 		//method will go in here
 	}
@@ -16,7 +58,7 @@ class Flight {
 		//method will go in here
 	}
 
-	public void turnTo(Bearing b) {				//Bearing is a user defined data type
+	public void turnTo(double b) {				//Bearing is a user defined data type
 		//method will go in here
 	}
 
