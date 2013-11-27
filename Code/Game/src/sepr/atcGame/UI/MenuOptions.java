@@ -1,22 +1,22 @@
 package sepr.atcGame.UI;
 
 public enum MenuOptions {
-	PLAY ("Play"), //0
-	CHOOSEAIRPORT ("Choose Airport"),//1
-	SELECTDIFFICULTY ("Select Difficulty"),//2
-	EXIT ("Exit"),//3
-	EASY ("Easy"),//4
-	MEDIUM ("Medium"),//5
-	HARD ("Hard"),//6
-	AIRPORT1 ("Airport 1"),//7
-	AIRPORT2 ("Airport 2"),//8
-	BACK ("Back");//9
+	START (new MenuButton("START")),
+	PLAY (new MenuButton("Play")), 
+	CHOOSEAIRPORT (new MenuButton("Choose Airport")),
+	SELECTDIFFICULTY (new MenuButton("Select Difficulty")),
+	EXIT (new MenuButton("Exit")),
+	EASY (new MenuButton("Easy")),
+	MEDIUM (new MenuButton("Medium")),
+	HARD (new MenuButton("Hard")),
+	AIRPORT1 (new MenuButton("Airport 1")),
+	AIRPORT2 (new MenuButton("Airport 2")),
+	BACK (new MenuButton("Back"));
 	
-	private final String labelText;
-	MenuOptions(String text) {
-		this.labelText = text;
+	public final MenuButton menuButton;
+	MenuOptions(MenuButton menuButton) {
+		this.menuButton = menuButton;
 	}
-	
-	public String labelText() { return labelText; }
 		
+	
 }

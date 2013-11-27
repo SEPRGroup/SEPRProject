@@ -2,8 +2,6 @@ package sepr.atcGame.UI;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.FontMetrics;
-import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -15,6 +13,7 @@ import javax.swing.JPanel;
 public class MenuDisplay extends JFrame {
 	private final int HEIGHT, WIDTH;
 	private final Color bgColor = (new Color(176, 196, 222));
+	
 	private static final int NUMBEROFLABELS = 10;
 	private MenuButton[] menuButtons = new MenuButton[NUMBEROFLABELS];
 	private JPanel menuPanel = new JPanel();
@@ -37,16 +36,15 @@ public class MenuDisplay extends JFrame {
 		int i = 0;
 
 		for (MenuOptions o : MenuOptions.values()){
+					
+			o.menuButton.addMouseListener(new mListener(o));
+			o.menuButton.setVisible(false);			
+			menuPanel.add(o.menuButton);
 			
-			MenuButton mb = new MenuButton(o.labelText(), i);
-			
-			mb.addMouseListener(new mListener(i));
-			mb.setVisible(false);
-			menuButtons[i] = mb;
-			menuPanel.add(mb);
-			i++;
 		}
-		menuButtons[0].setVisible(true);
+				
+		MenuOptions.START.menuButton.setVisible(true);
+		
 		menuPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 500, 20));
 		imagePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 100, 20));
 		menuPanel.setBackground(bgColor);
@@ -64,7 +62,7 @@ public class MenuDisplay extends JFrame {
 		
 		for(int i = firstLabel; i <= lastLabel; i++){
 			
-			menuButtons[i].setVisible(true);
+			MenuOptions.values()[i].menuButton.setVisible(true);
 			
 		}
 		
@@ -72,87 +70,91 @@ public class MenuDisplay extends JFrame {
 
 	private void closeMenus(int firstLabel, int lastLabel)
 	{
-		for(int i = firstLabel; i <=lastLabel; i++){
-			menuButtons[i].setVisible(false);
+		for(int i = firstLabel; i <= lastLabel; i++){
+			
+			MenuOptions.values()[i].menuButton.setVisible(false);
+			
 		}
 	}
 	
-	public void selectedOption(int menuOption)
+	public void selectedOption(MenuOptions menuOption)
 	{
 		switch (menuOption){
-			case 0://main menu
-				
-				menuButtons[0].setVisible(false);
-				showMenus(1, 3);
+			case START:
+				MenuOptions.START.menuButton.setVisible(false);
+				showMenus(1, 4);
 				break;
-			case 1://Choose airport button
-				closeMenus(1, 3);				
+			case PLAY:				
+				MenuOptions.PLAY.menuButton.setVisible(false);
+				
+				break;
+			case CHOOSEAIRPORT:
+				closeMenus(1, 4);				
 				menuPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
 				Airport.setVisible(true);
-				showMenus(7, 9);
+				showMenus(8, 10);
 				break;
-			case 2://Choose difficulty button
-
-				closeMenus(1, 3);
-				showMenus(4, 6);
-				menuButtons[9].setVisible(true);
+			case SELECTDIFFICULTY:
+				closeMenus(1, 4);
+				showMenus(5, 7);
+				MenuOptions.BACK.menuButton.setVisible(true);
 				break;
-			case 3://Exit button
+			case EXIT:
 				System.exit(0);
 				break;
-			case 4://Easy button
-				
+			case EASY:				
 				break;
-			case 5://Medium button
+			case MEDIUM:
 				break;
-			case 6://Hard button
+			case HARD:
 				break;
-			case 7:
+			case AIRPORT1:
 				break;
-			case 8:				
+			case AIRPORT2:				
 				break;
-			case 9://Back to Main menu
-				closeMenus(4, 9);
+			case BACK:
+				closeMenus(5, 10);
 				Airport.setVisible(false);
 				menuPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 500, 20));
-				showMenus(1, 3);
-				break;
-			case 10:
+				showMenus(1, 4);
 				break;
 		}
 	}
 	
 	private class mListener extends MouseAdapter
 	{
-		private int menuOption;
+		private final Color fgColor = (new Color(65,105,225));
+		private MenuOptions menuOption;
 		
-		public mListener(int i)
+		
+		public mListener(MenuOptions menuOption)
 		{
-			menuOption = i;
+			this.menuOption = menuOption;
+		
 		}
 		public void mouseEntered(MouseEvent arg0) {
-			menuButtons[menuOption].setForeground(Color.blue);
-			if(menuOption == 7){
+			menuOption.menuButton.setForeground(fgColor);
+			if(menuOption.equals(MenuOptions.AIRPORT1)){
 				Airport.setIcon(Air1);
 			}
-			if(menuOption == 8){
+			if(menuOption.equals(MenuOptions.AIRPORT2)){
 				Airport.setIcon(Air2);
 			}
 		}
 		public void mouseExited(MouseEvent arg0){
-			menuButtons[menuOption].setForeground(Color.white);
-			if((menuOption == 7 || menuOption == 8)){
+			menuOption.menuButton.setForeground(Color.white);
+			if(menuOption.equals(MenuOptions.AIRPORT2) || menuOption.equals(MenuOptions.AIRPORT1)){
 				Airport.setIcon(Air);
 			}
 		
 		}
 		public void mouseClicked(MouseEvent arg0){
-			menuButtons[menuOption].setForeground(Color.blue);
+			menuOption.menuButton.setForeground(fgColor);
 			selectedOption(menuOption);
-			if(menuOption == 7){
+			if(menuOption.equals(MenuOptions.AIRPORT1)){
 				Air = Air1;
 			}
-			if(menuOption == 8){
+			if(menuOption.equals(MenuOptions.AIRPORT2)){
 				Air = Air2;
 			}
 		}

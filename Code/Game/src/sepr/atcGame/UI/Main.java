@@ -8,7 +8,7 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		new MenuDisplay(640, 480);
+		new MenuDisplay(640, 580);
 		
 
 	}
