@@ -3,12 +3,12 @@ package sepr.atcGame;
 
 class Waypoint {
 	private String name;
-	private Vector position;		//Vector is a user defined variable, possibly a 3d array?
+	private Position position;
 	
 	//constructor
-	public Waypoint(String waypointName, Vector waypointPosition){
-		name = waypointName;
-		position = waypointPosition;
+	public Waypoint(String name, Position position){
+		this.name = name;
+		this.position = position;
 	}
 
 	
@@ -17,7 +17,7 @@ class Waypoint {
 		return name;
 	}
 
-	public Vector getPosition() {
+	public Position getPosition() {
 		return position;
 	}
 }

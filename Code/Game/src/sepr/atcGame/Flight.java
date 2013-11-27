@@ -1,55 +1,58 @@
 package sepr.atcGame;
-abstract class Flight {
+
+import java.util.Queue;
+
+abstract class Flight implements GameTime {
 	// variables
 	private String identifier;
 	private FlightStatus status;  //FlightStatus is a user defined data type
-	private Vector position;		 //Vector is a user defined data type
-	private Queue flightPlan;	 //Queue **might** be a user defined data type
-	private Conditions condition; //Conditions is a user defined data type
-	private double bearing;
+	private Position position;
+	private Queue<Waypoint> flightPlan;
+	private FlightConditions condition;
+	private double bearing;	//radians
 	
 	// constructor
- 	public Flight(String id, Queue plan){
+ 	public Flight(String id, Queue<Waypoint> flightPlan){
 		identifier = id;
-		flightPlan = plan;
+		this.flightPlan = flightPlan;
+		
+		assert(flightPlan.peek() instanceof TransferWaypoint);
 	}
 	
 	//getters and setters
-	
- 	public Conditions getCondition() {
+ 	public FlightConditions getCondition() {
 		return condition;
 	}
-
-	public void setCondition(Conditions condition) {
+	public void setCondition(FlightConditions condition) {
 		this.condition = condition;
 	}
 
 	public String getIdentifier() {
 		return identifier;
 	}
-
+	
 	public FlightStatus getStatus() {
 		return status;
 	}
 
-	public Vector getPosition() {
+	public Position getPosition() {
 		return position;
 	}
 
-	public Queue getFlightPlan() {
+	//{!}allows modification: mutable
+	public Queue<Waypoint> getFlightPlan() {
 		return flightPlan;
 	}
 
 	public double getBearing() {
 		return bearing;
 	}
-
 	public void setBearing(double bearing) {
 		this.bearing = bearing;
 	}
 	
-	// methods
 	
+	// methods
 	public void takeOff(TransferWaypoint t) { 	//TransferWaypoint is a user defined data type
 		//method will go in here
 	}
@@ -58,7 +61,7 @@ abstract class Flight {
 		//method will go in here
 	}
 
-	public void turnTo(double b) {				//Bearing is a user defined data type
+	public void turnTo(double bearing) {	//bearing in radians
 		//method will go in here
 	}
 
@@ -82,11 +85,11 @@ abstract class Flight {
 		//method will go in here
 	}
 
-	public void draw(Vector location, int size) {
+	public void draw(Position location, double scale) {
 		//method will go in here
 	}
 
-	public void update(Time t) { 				//Time **might** be a user defined data type
+	public void update(double time) {	//expecting game time in seconds
 		//method will go in here
 	}
 }

@@ -3,24 +3,24 @@ package sepr.atcGame;
 
 class TransferWaypoint extends Waypoint {
 	//Variables
-	private Vector tPosition;		//Vector is a user defined data type
+	private Position position2;
 	private Airspace airspace1, airspace2; 
-	private double bearing;			//Bearing is a user defined data type
+	private double bearing;	//radians
 	
 	//constructor
-	public TransferWaypoint(Vector tranferPosition, Airspace airspace1Name, Airspace airspaceName2,
-			double transferBearing, String waypointName, Vector waypointPosition){
+	public TransferWaypoint(Position tranferPosition, Airspace airspace1Name, Airspace airspaceName2,
+			double transferBearing, String waypointName, Position waypointPosition){
 		super(waypointName, waypointPosition);
 	}
 	
 	//getters and setters
 
-	public Vector gettPosition() {
-		return tPosition;
+	public Position getPosition2() {
+		return position2;
 	}
 
-	public void settPosition(Vector tPosition) {
-		this.tPosition = tPosition;
+	public void setPosition2(Position tPosition) {
+		this.position2 = tPosition;
 	}
 
 	public Airspace getAirspace1() {

@@ -1,33 +1,44 @@
 package sepr.atcGame;
 
+import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.List;
 
-class Airspace {
+
+class Airspace implements GameTime{
+	//constants
+	private static final int MAXFLIGHTS = 5;
+	private static final int MAXWAYPOINTS = 5;
+	
 	//variables
 	private String name;
-	private Flight aircraft; 			//Flight is a user defined data type, an array [0..k]
-	private Waypoint waypoints;			//Waypoint is a user defined data type, an array [0..k]
-	private TransferWaypoint transfers;	//TransferWaypoint is a user defined data type
+	private Flight[] aircraft = new Flight[MAXFLIGHTS];	//Fixed size; may be filled
+	private Waypoint[] waypoints = new Waypoint[MAXWAYPOINTS];	//Fixed size, should be filled
+	private List<TransferWaypoint> transfers = new ArrayList<TransferWaypoint>(5);	//Flexible size, initially set here
 	
 	//constructor
-	public Airspace(String airspaceName, TransferWaypoint transferWaypoints){
+	public Airspace(String airspaceName, ArrayList<TransferWaypoint> transferWaypoints){
 		name = airspaceName;
-		transfers = transferWaypoints;
+		transfers.addAll(transferWaypoints);
 	}
+	
+	/*	Full event generating routines and data	*/
 	
 	//getters and setters
 	public String getName() {
 		return name;
 	}
 
-	public Flight getAircraft() {
+	public Flight[] getAircraft() {
 		return aircraft;
 	}
 
-	public Waypoint getWaypoints() {
+	public Waypoint[] getWaypoints() {
 		return waypoints;
 	}
-
-	public TransferWaypoint getTransfers() {
+	
+	//{!}allows modification (mutable)
+	public List<TransferWaypoint> getTransfers() {
 		return transfers;
 	}
 
@@ -36,19 +47,19 @@ class Airspace {
 		//method will go in here
 	}
 
-	public void recieveFlight(Flight f, TransferWaypoint t) {
+	public void receiveFlight(Flight f, TransferWaypoint t) {
 		//method will go in here
 	}
 
-	public void newObstacle(Flight flight) {	//I believe flight here is referring to the class
+	public void newObstacle(Flight flight) {
 		//method will go in here
 	}
 
-	public void draw(Rect boundaries) {			//unsure what Rect is - Charlie can clarify?
+	public void draw(Rectangle boundaries) {	//also needs a canvas/image to draw on: tbc
 		//method will go in here
 	}
 
-	public void update(Time time) {				//Time isn't a Java recognised data type - but there may be Java classes etc for it?
+	public void update(double time) {	//expecting game time in seconds
 		//method will go in here
 	}
 
