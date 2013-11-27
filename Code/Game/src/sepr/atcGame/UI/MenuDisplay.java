@@ -131,7 +131,7 @@ public class MenuDisplay extends JFrame {
 			menuOption = i;
 		}
 		public void mouseEntered(MouseEvent arg0) {
-			menuButtons[menuOption].setForeground(Color.white);
+			menuButtons[menuOption].setForeground(Color.blue);
 			if(menuOption == 7){
 				Airport.setIcon(Air1);
 			}
@@ -147,7 +147,7 @@ public class MenuDisplay extends JFrame {
 		
 		}
 		public void mouseClicked(MouseEvent arg0){
-			menuButtons[menuOption].setForeground(Color.white);
+			menuButtons[menuOption].setForeground(Color.blue);
 			selectedOption(menuOption);
 			if(menuOption == 7){
 				Air = Air1;
