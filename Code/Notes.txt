@@ -1,0 +1,6 @@
+Notes: 
+
+Airport menu needs feedback to indicate when picture changes: mouseover is not currently intuitive; wanted to click. (consider cross-platform compatability e.g. touchscreen).
+(I know this is a work in progress; just don't want this observation to get lost when we all think of its current behaviour as normal later on)
+
+MenuOptions should really be used as a type throughout, not artifically cast to an int. Defeats the point of an enum otherwise; makes it hard to maintain since we can't change order later. I'll look into refactoring this.
