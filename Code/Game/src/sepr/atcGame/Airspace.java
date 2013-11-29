@@ -1,7 +1,6 @@
 package sepr.atcGame;
 
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,17 +9,17 @@ import javax.swing.JPanel;
 
 abstract class Airspace extends JPanel implements GameTime{
 	//constants
-	private static final int MAXFLIGHTS = 5;
-	private static final int MAXWAYPOINTS = 5;
+	private static final int MAX_FLIGHTS = 5;
+	private static final int MAX_WAYPOINTS = 5;
 	
 	//variables
 	private String name;
-	private Flight[] aircraft = new Flight[MAXFLIGHTS];	//Fixed size; may be filled
-	private Waypoint[] waypoints = new Waypoint[MAXWAYPOINTS];	//Fixed size, should be filled
+	private Flight[] aircraft = new Flight[MAX_FLIGHTS];	//Fixed size; may be filled
+	private Waypoint[] waypoints = new Waypoint[MAX_WAYPOINTS];	//Fixed size, should be filled
 	private List<TransferWaypoint> transfers = new ArrayList<TransferWaypoint>(5);	//Flexible size, initially set here
 	
 	//constructor
-	public Airspace(String airspaceName, ArrayList<TransferWaypoint> transferWaypoints){
+	protected Airspace(String airspaceName, ArrayList<TransferWaypoint> transferWaypoints){
 		name = airspaceName;
 		transfers.addAll(transferWaypoints);
 	}
@@ -60,6 +59,7 @@ abstract class Airspace extends JPanel implements GameTime{
 		//method will go in here
 	}
 
+	
 	public void update(double time) {	//expecting game time in seconds
 		//method will go in here
 	}
@@ -85,6 +85,6 @@ abstract class Airspace extends JPanel implements GameTime{
 	public void paintComponent(Graphics g) {
         super.paintComponent(g);       
 
-        //draw using [g]
+        //draw using [g]: background, waypoints, flights
     }  
 }

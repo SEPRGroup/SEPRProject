@@ -14,7 +14,7 @@ abstract class Flight implements GameTime, Drawable {
 	private double bearing;	//radians
 	
 	// constructor
- 	public Flight(String id, Queue<Waypoint> flightPlan){
+ 	protected Flight(String id, Queue<Waypoint> flightPlan){
 		identifier = id;
 		this.flightPlan = flightPlan;
 		
@@ -91,9 +91,8 @@ abstract class Flight implements GameTime, Drawable {
 		//method will go in here		
 	}
 
-
-
 	public void update(double time) {	//expecting game time in seconds
 		//method will go in here
 	}
+
 }

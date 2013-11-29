@@ -9,7 +9,6 @@ public final class FlightConditions {
 	public double getWindSpeed() {
 		return windSpeed;
 	}
-	
 	public void setWindSpeed(double windSpeed) {
 		this.windSpeed = windSpeed;
 	}
