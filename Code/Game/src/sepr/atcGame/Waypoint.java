@@ -1,7 +1,10 @@
 package sepr.atcGame;
 
+import java.awt.Graphics;
+import java.awt.Point;
 
-class Waypoint {
+
+class Waypoint implements Drawable{
 	private String name;
 	private Position position;
 	
@@ -12,6 +15,12 @@ class Waypoint {
 	}
 
 	
+	//methods
+	public void draw(Graphics g, Point location, double scale) {
+		//method will go in here
+	}
+	
+	
 	//getters
 	public String getName() {
 		return name;
@@ -20,4 +29,6 @@ class Waypoint {
 	public Position getPosition() {
 		return position;
 	}
+
+	
 }

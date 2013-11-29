@@ -1,8 +1,10 @@
 package sepr.atcGame;
 
+import java.awt.Graphics;
+import java.awt.Point;
 import java.util.Queue;
 
-abstract class Flight implements GameTime {
+abstract class Flight implements GameTime, Drawable {
 	// variables
 	private String identifier;
 	private FlightStatus status;  //FlightStatus is a user defined data type
@@ -84,10 +86,12 @@ abstract class Flight implements GameTime {
 	public void crash() {
 		//method will go in here
 	}
-
-	public void draw(Position location, double scale) {
-		//method will go in here
+	
+	public void draw(Graphics g, Point location, double scale) {
+		//method will go in here		
 	}
+
+
 
 	public void update(double time) {	//expecting game time in seconds
 		//method will go in here

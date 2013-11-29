@@ -1,11 +1,14 @@
 package sepr.atcGame;
 
+import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JPanel;
 
-class Airspace implements GameTime{
+
+abstract class Airspace extends JPanel implements GameTime{
 	//constants
 	private static final int MAXFLIGHTS = 5;
 	private static final int MAXWAYPOINTS = 5;
@@ -23,6 +26,7 @@ class Airspace implements GameTime{
 	}
 	
 	/*	Full event generating routines and data	*/
+	
 	
 	//getters and setters
 	public String getName() {
@@ -42,6 +46,7 @@ class Airspace implements GameTime{
 		return transfers;
 	}
 
+	
 	//methods
 	public void newFlight(Flight f) {
 		//method will go in here
@@ -52,10 +57,6 @@ class Airspace implements GameTime{
 	}
 
 	public void newObstacle(Flight flight) {
-		//method will go in here
-	}
-
-	public void draw(Rectangle boundaries) {	//also needs a canvas/image to draw on: tbc
 		//method will go in here
 	}
 
@@ -78,4 +79,12 @@ class Airspace implements GameTime{
 	public void eventLost(Flight f) {
 		//method will go in here
 	}
+	
+	
+	//overridden methods
+	public void paintComponent(Graphics g) {
+        super.paintComponent(g);       
+
+        //draw using [g]
+    }  
 }
