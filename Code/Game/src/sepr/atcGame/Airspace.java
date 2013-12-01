@@ -1,9 +1,7 @@
 package sepr.atcGame;
 
-import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JPanel;
 
 
@@ -13,23 +11,23 @@ abstract class Airspace extends JPanel implements GameTime{
 	private static final int MAX_WAYPOINTS = 5;
 	
 	//variables
-	private String name;
+	private String airspaceName;
 	private Flight[] aircraft = new Flight[MAX_FLIGHTS];	//Fixed size; may be filled
-	private Waypoint[] waypoints = new Waypoint[MAX_WAYPOINTS];	//Fixed size, should be filled
-	private List<TransferWaypoint> transfers = new ArrayList<TransferWaypoint>(5);	//Flexible size, initially set here
+	private Waypoint[] waypoints = new Waypoint[MAX_WAYPOINTS];	//Fixed size, may be filled
+	private List<TransferWaypoint> transfers;
 	
 	//constructor
 	protected Airspace(String airspaceName, ArrayList<TransferWaypoint> transferWaypoints){
-		name = airspaceName;
-		transfers.addAll(transferWaypoints);
+		this.airspaceName = airspaceName;
+		transfers = new ArrayList<TransferWaypoint>(transferWaypoints);
 	}
 	
 	/*	Full event generating routines and data	*/
 	
 	
 	//getters and setters
-	public String getName() {
-		return name;
+	public String getAirspaceName(){
+		return airspaceName;
 	}
 
 	public Flight[] getAircraft() {
@@ -46,45 +44,27 @@ abstract class Airspace extends JPanel implements GameTime{
 	}
 
 	
-	//methods
-	public void newFlight(Flight f) {
+	//methods	
+	public abstract void newFlight(Flight f);
+
+	public abstract void receiveFlight(Flight f, TransferWaypoint t);
+
+	public abstract void newObstacle(Flight flight);
+
+	public final void eventCrash(Flight f1, Flight f2) {
 		//method will go in here
 	}
 
-	public void receiveFlight(Flight f, TransferWaypoint t) {
+	public final void eventLanded(Flight f) {
 		//method will go in here
 	}
 
-	public void newObstacle(Flight flight) {
+	public final void eventHandover(Flight f) {
 		//method will go in here
 	}
 
-	
-	public void update(double time) {	//expecting game time in seconds
-		//method will go in here
-	}
-
-	public void eventCrash(Flight f1, Flight f2) {
-		//method will go in here
-	}
-
-	public void eventLanded(Flight f) {
-		//method will go in here
-	}
-
-	public void eventHandover(Flight f) {
-		//method will go in here
-	}
-
-	public void eventLost(Flight f) {
+	public final void eventLost(Flight f) {
 		//method will go in here
 	}
 	
-	
-	//overridden methods
-	public void paintComponent(Graphics g) {
-        super.paintComponent(g);       
-
-        //draw using [g]: background, waypoints, flights
-    }  
 }

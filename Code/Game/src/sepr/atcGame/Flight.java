@@ -1,6 +1,5 @@
 package sepr.atcGame;
 
-import java.awt.Graphics;
 import java.awt.Point;
 import java.util.Queue;
 
@@ -10,8 +9,9 @@ abstract class Flight implements GameTime, Drawable {
 	private FlightStatus status;  //FlightStatus is a user defined data type
 	private Position position;
 	private Queue<Waypoint> flightPlan;
-	private FlightConditions condition;
+	private FlightConditions conditions;
 	private double bearing;	//radians
+	
 	
 	// constructor
  	protected Flight(String id, Queue<Waypoint> flightPlan){
@@ -21,32 +21,33 @@ abstract class Flight implements GameTime, Drawable {
 		assert(flightPlan.peek() instanceof TransferWaypoint);
 	}
 	
+ 	
 	//getters and setters
- 	public FlightConditions getCondition() {
-		return condition;
+ 	public final FlightConditions getCondition() {
+		return conditions;
 	}
-	public void setCondition(FlightConditions condition) {
-		this.condition = condition;
+	public void setConditions(FlightConditions conditions) {
+		this.conditions = conditions;
 	}
 
-	public String getIdentifier() {
+	public final String getIdentifier() {
 		return identifier;
 	}
 	
-	public FlightStatus getStatus() {
+	public final FlightStatus getStatus() {
 		return status;
 	}
 
-	public Position getPosition() {
+	public final Position getPosition() {
 		return position;
 	}
 
 	//{!}allows modification: mutable
-	public Queue<Waypoint> getFlightPlan() {
+	public final Queue<Waypoint> getFlightPlan() {
 		return flightPlan;
 	}
 
-	public double getBearing() {
+	public final double getBearing() {
 		return bearing;
 	}
 	public void setBearing(double bearing) {
@@ -55,44 +56,16 @@ abstract class Flight implements GameTime, Drawable {
 	
 	
 	// methods
-	public void takeOff(TransferWaypoint t) { 	//TransferWaypoint is a user defined data type
-		//method will go in here
-	}
-
-	public void land(TransferWaypoint t) { 		
-		//method will go in here
-	}
-
-	public void turnTo(double bearing) {	//bearing in radians
-		//method will go in here
-	}
-
-	public void toAltitude(double altitude) {
-		//method will go in here
-	}
-
-	public void nextWaypoint() {
-		//method will go in here
-	}
-
-	public void toSpeed(double speed) {
-		//method will go in here
-	}
-
-	public void abort() {
-		//method will go in here
-	}
-
-	public void crash() {
-		//method will go in here
+	public final void nextWaypoint(){
+		flightPlan.poll();
 	}
 	
-	public void draw(Graphics g, Point location, double scale) {
-		//method will go in here		
-	}
-
-	public void update(double time) {	//expecting game time in seconds
-		//method will go in here
-	}
+	public abstract void takeOff(TransferWaypoint t);
+	public abstract void land(TransferWaypoint t);
+	public abstract void turnTo(double bearing);
+	public abstract void toAltitude(double altitude);
+	public abstract void toSpeed(double speed);
+	public abstract void abort();
+	public abstract void crash();
 
 }
