@@ -1,18 +1,33 @@
 package sepr.atcGame;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
+
 
 abstract class Airport extends Airspace{
 
 	private Image background;
+	private Dimension boundaries;	//size of airspace in metres
 
 	
 	//constructor
-	protected Airport(String airspaceName, Image background, ArrayList<TransferWaypoint> transferWaypoints) {
+	protected Airport(String airspaceName,
+			Dimension boundaries,
+			ArrayList<TransferWaypoint> transferWaypoints) {
 		super(airspaceName, transferWaypoints);
+		this.boundaries = boundaries;
+		
 		generateWaypoints();
+		setDoubleBuffered(true);
+	}
+
+	
+	//getters/setters
+	protected final void setBackground(Image background) {
 		this.background = background;
 	}
 
@@ -43,8 +58,39 @@ abstract class Airport extends Airspace{
 	}
 	
 	public final void paintComponent(Graphics g) {
-	       super.paintComponent(g);       
-	       //draw using [g]: background, waypoints, flights
+	       super.paintComponent(g);
+	       
+	       Rectangle bounds = getBounds();
+	       double scale = bounds.getWidth() / boundaries.getWidth();
+	       Point loc = new Point();
+	       Position pos;
+	       
+	       //draw background
+	       if(background != null){
+	    	   g.drawImage(background, 0, 0, null);
+	       }else{
+		       g.drawRect(bounds.x, bounds.y, bounds.width, bounds.height); 
+	       } 
+	       
+	       //draw Waypoints
+	       for(Waypoint w:getWaypoints()){
+	    	   if(w != null){
+	    		   pos = w.getPosition();
+	    		   loc.x = Math.round( (float)(pos.x *scale) );
+	    		   loc.y = Math.round( (float)(pos.y *scale) );
+	    		   w.draw(g, loc, 1);
+	    	   }
+	       }
+	       
+	       //draw Flights
+	       for(Flight f:getAircraft()){
+	    	   if(f != null){
+	    		   pos = f.getPosition();
+	    		   loc.x = Math.round( (float)(pos.x *scale) );
+	    		   loc.y = Math.round( (float)(pos.y *scale) );
+	    		   f.draw(g, loc, 1);
+	    	   }
+	       }
 	}  
 
 }

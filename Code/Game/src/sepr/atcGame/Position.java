@@ -3,7 +3,7 @@ package sepr.atcGame;
 
 final class Position {
 	//variables
-	private double x, y, altitude;
+	public double x, y, altitude;
 	
 	//constructor
 	public Position(double x, double y, double altitude){

@@ -2,8 +2,8 @@ package sepr.atcGame;
 
 final class ScheduleItem {
 	
-	private Flight flight;
-	private double time;
+	public Flight flight;
+	public double time;
 	
 	public ScheduleItem(Flight flight, double time) {
 		this.flight = flight;

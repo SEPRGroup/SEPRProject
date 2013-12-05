@@ -1,8 +1,8 @@
 package sepr.atcGame;
 
 public final class FlightConditions {
-	private double windSpeed;
-	private double windDirection;
+	public double windSpeed;
+	public double windDirection;
 	//extend as necessary, get/set all
 	
 
