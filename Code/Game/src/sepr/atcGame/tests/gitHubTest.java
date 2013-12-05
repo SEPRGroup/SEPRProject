@@ -9,5 +9,10 @@ public class gitHubTest {
 		this.test = test;
 		this.input = input;
 	}
+	
+	private void Message()
+	{
+		System.out.println("Stuff");
+	}
 
 }
