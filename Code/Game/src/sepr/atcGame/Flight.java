@@ -1,5 +1,6 @@
 package sepr.atcGame;
 
+import java.awt.Graphics;
 import java.awt.Point;
 import java.util.Queue;
 
@@ -67,5 +68,11 @@ abstract class Flight implements GameTime, Drawable {
 	public abstract void toSpeed(double speed);
 	public abstract void abort();
 	public abstract void crash();
+
+
+	public void paint(Graphics g) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
