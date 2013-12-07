@@ -8,9 +8,24 @@ public class TransferWaypoint extends Waypoint {
 	private double bearing;	//radians
 	
 	//constructor
-	public TransferWaypoint(Position tranferPosition, Airspace airspace1Name, Airspace airspaceName2,
+	/** Creates an waypoint that provides the linking between airspaces.
+	 * 
+	 * @param tranferPosition 
+	 * @param airspace1Name
+	 * @param airspace2Name
+	 * @param transferBearing
+	 * @param waypointName Name for the waypoint
+	 * @param waypointPosition Position which the waypoint is to be created at in the airspace
+	 */
+	public TransferWaypoint(Position tranferPosition, Airspace airspace1Name, Airspace airspace2Name,
 			double transferBearing, String waypointName, Position waypointPosition){
+		
 		super(waypointName, waypointPosition);
+		
+		airspace1 = airspace1Name;
+		airspace2 = airspace2Name;
+		bearing = transferBearing;
+		
 	}
 	
 	//getters and setters
