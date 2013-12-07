@@ -6,18 +6,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.swing.JFrame;
 
 
-final class Heathrow extends Airport {
+public final class Heathrow extends Airport {
 	
 	//constructor
 	public Heathrow(ArrayList<TransferWaypoint> transferWaypoints){
 		super("Heathrow Airport", 
-				new Dimension(8000, 6000),
+				new Dimension(800, 600),
 				transferWaypoints);
 		try{
 			setBackground(ImageIO.read(new File("dummy1.png")));
 		} catch (IOException e){};
+		
 	}
 	
 	

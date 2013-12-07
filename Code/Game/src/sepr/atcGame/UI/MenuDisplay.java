@@ -10,12 +10,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import sepr.atcGame.Game;
+import sepr.atcGame.GameDifficulty;
+
 public class MenuDisplay extends JFrame {
 	private final int HEIGHT, WIDTH;
 	private final Color bgColor = (new Color(176, 196, 222));
 	
 	private static final int NUMBEROFLABELS = 10;
-	private MenuButton[] menuButtons = new MenuButton[NUMBEROFLABELS];
 	private JPanel menuPanel = new JPanel();
 	private JPanel imagePanel = new JPanel();
 	private ImageIcon Air = new ImageIcon("src/sepr/atcGame/UI/Airport.png");
@@ -33,7 +35,7 @@ public class MenuDisplay extends JFrame {
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		menuPanel.add(imagePanel);
-		int i = 0;
+		
 
 		for (MenuOptions o : MenuOptions.values()){
 					
@@ -85,7 +87,9 @@ public class MenuDisplay extends JFrame {
 				showMenus(1, 4);
 				break;
 			case PLAY:				
-				MenuOptions.PLAY.menuButton.setVisible(false);
+				new Game(800, 600, GameDifficulty.EASY);
+				setVisible(false);
+				
 				
 				break;
 			case CHOOSEAIRPORT:
@@ -101,6 +105,7 @@ public class MenuDisplay extends JFrame {
 				break;
 			case EXIT:
 				System.exit(0);
+				
 				break;
 			case EASY:				
 				break;
