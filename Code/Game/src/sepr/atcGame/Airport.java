@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.io.PrintStream;
 import java.util.ArrayList;
 
 
@@ -23,6 +24,7 @@ abstract class Airport extends Airspace{
 		
 		generateWaypoints();
 		setDoubleBuffered(true);
+		this.repaint();
 	}
 
 	
@@ -71,7 +73,7 @@ abstract class Airport extends Airspace{
 	       }else{
 		       g.drawRect(bounds.x, bounds.y, bounds.width, bounds.height); 
 	       } 
-	       
+	    
 	       //draw Waypoints
 	       for(Waypoint w:getWaypoints()){
 	    	   if(w != null){
@@ -79,6 +81,19 @@ abstract class Airport extends Airspace{
 	    		   loc.x = Math.round( (float)(pos.x *scale) );
 	    		   loc.y = Math.round( (float)(pos.y *scale) );
 	    		   w.draw(g, loc, 1);
+	    		   
+	    		   
+	    	   }
+	       }
+	       //draw TransferWaypoints
+	       for(TransferWaypoint t:this.getTransfers()){
+	    	   
+	    	   if(t != null){
+	    		   pos = t.getPosition();
+	    		   loc.x = Math.round( (float)(pos.x *scale) );
+	    		   loc.y = Math.round( (float)(pos.y *scale) );
+	    		   t.draw(g, loc, 1);
+	    		   System.out.println("hey");
 	    	   }
 	       }
 	       

@@ -19,7 +19,19 @@ abstract class Airspace extends JPanel implements GameTime{
 	//constructor
 	protected Airspace(String airspaceName, ArrayList<TransferWaypoint> transferWaypoints){
 		this.airspaceName = airspaceName;
+		
+		TransferWaypoint waypoint1 = new TransferWaypoint(null, this, null, 360, "Top",new Position(400,0,50));
+		TransferWaypoint waypoint2 = new TransferWaypoint(null, this, null, 360, "Left",new Position(0,300,50));
+		TransferWaypoint waypoint3 = new TransferWaypoint(null, this, null, 360, "Right",new Position(770,300,50));
+		TransferWaypoint waypoint4 = new TransferWaypoint(null, this, null, 360, "Bottom",new Position(400,545,50));
+		
+		transferWaypoints.add(waypoint1);
+		transferWaypoints.add(waypoint2);
+		transferWaypoints.add(waypoint3);
+		transferWaypoints.add(waypoint4);
 		transfers = new ArrayList<TransferWaypoint>(transferWaypoints);
+		
+		
 	}
 	
 	/*	Full event generating routines and data	*/
@@ -37,6 +49,7 @@ abstract class Airspace extends JPanel implements GameTime{
 	public Waypoint[] getWaypoints() {
 		return waypoints;
 	}
+	
 	
 	//{!}allows modification (mutable)
 	public List<TransferWaypoint> getTransfers() {

@@ -33,7 +33,8 @@ public class TransferWaypoint extends Waypoint {
 	public Position getPosition2() {
 		return position2;
 	}
-
+	
+	
 	public void setPosition2(Position tPosition) {
 		this.position2 = tPosition;
 	}

@@ -13,11 +13,13 @@ public final class Heathrow extends Airport {
 	
 	//constructor
 	public Heathrow(ArrayList<TransferWaypoint> transferWaypoints){
+		
 		super("Heathrow Airport", 
 				new Dimension(800, 600),
 				transferWaypoints);
 		try{
 			setBackground(ImageIO.read(new File("src/sepr/atcGame/Images/dummy1.png")));
+			
 		} catch (IOException e){};
 		
 	}
