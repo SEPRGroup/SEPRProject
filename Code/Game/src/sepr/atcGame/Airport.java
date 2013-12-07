@@ -6,7 +6,7 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.PrintStream;
-import java.util.ArrayList;
+import java.util.List;
 
 
 abstract class Airport extends Airspace{
@@ -18,7 +18,7 @@ abstract class Airport extends Airspace{
 	//constructor
 	protected Airport(String airspaceName,
 			Dimension boundaries,
-			ArrayList<TransferWaypoint> transferWaypoints) {
+			List<TransferWaypoint> transferWaypoints) {
 		super(airspaceName, transferWaypoints);
 		this.boundaries = boundaries;
 		
@@ -80,11 +80,10 @@ abstract class Airport extends Airspace{
 	    		   pos = w.getPosition();
 	    		   loc.x = Math.round( (float)(pos.x *scale) );
 	    		   loc.y = Math.round( (float)(pos.y *scale) );
-	    		   w.draw(g, loc, 1);
-	    		   
-	    		   
+	    		   w.draw(g, loc, 1);   		   
 	    	   }
 	       }
+	       
 	       //draw TransferWaypoints
 	       for(TransferWaypoint t:this.getTransfers()){
 	    	   
@@ -93,7 +92,7 @@ abstract class Airport extends Airspace{
 	    		   loc.x = Math.round( (float)(pos.x *scale) );
 	    		   loc.y = Math.round( (float)(pos.y *scale) );
 	    		   t.draw(g, loc, 1);
-	    		   System.out.println("hey");
+	    		   System.out.println("Draw transferWaypoint " +t.getName());
 	    	   }
 	       }
 	       

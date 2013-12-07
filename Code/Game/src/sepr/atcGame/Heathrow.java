@@ -3,23 +3,21 @@ package sepr.atcGame;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
 
 
 public final class Heathrow extends Airport {
 	
 	//constructor
-	public Heathrow(ArrayList<TransferWaypoint> transferWaypoints){
+	public Heathrow(List<TransferWaypoint> transferWaypoints){
 		
 		super("Heathrow Airport", 
-				new Dimension(800, 600),
+				new Dimension(8000, 6000),
 				transferWaypoints);
 		try{
 			setBackground(ImageIO.read(new File("src/sepr/atcGame/Images/dummy1.png")));
-			
 		} catch (IOException e){};
 		
 	}
