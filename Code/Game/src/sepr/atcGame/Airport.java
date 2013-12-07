@@ -17,18 +17,37 @@ abstract class Airport extends Airspace{
 	
 	//constructor
 	protected Airport(String airspaceName,
-			Dimension boundaries,
-			List<TransferWaypoint> transferWaypoints) {
-		super(airspaceName, transferWaypoints);
+			Dimension boundaries) {
+		super(airspaceName);
 		this.boundaries = boundaries;
 		
-		generateWaypoints();
 		setDoubleBuffered(true);
+		setPreferredSize(new Dimension(boundaries.width/10, boundaries.height/10));
+		
+		generateWaypoints();
 		this.repaint();
 	}
 
 	
 	//getters/setters
+	@Override
+	public final void setTransfers(List<TransferWaypoint> transfers){
+		super.setTransfers(transfers);
+		double w = boundaries.width/2;
+		double h = boundaries.height/2;
+		for(TransferWaypoint t:transfers){
+			Position pos = t.getPosition(this);
+			double bearing = t.getBearing(this);
+			double a = Math.tan(bearing);
+			double x = Math.min(Math.abs(h*a), w);
+			double y = Math.min(Math.abs(w/a), h);
+			pos.x = w +( bearing<Math.PI ? x : -x );	//RHS ? add : sub
+			pos.y = h +( Math.abs(bearing-Math.PI)>(Math.PI/2) ? -y : y );	//TOP ? sub : add 
+			pos.altitude = 1000; //{!}
+			System.out.println("set transferWaypoint " +t.getName() +" : " +pos.x +"," +pos.y);	//{!}
+		}
+	}
+	
 	protected final void setBackground(Image background) {
 		this.background = background;
 	}
@@ -92,7 +111,6 @@ abstract class Airport extends Airspace{
 	    		   loc.x = Math.round( (float)(pos.x *scale) );
 	    		   loc.y = Math.round( (float)(pos.y *scale) );
 	    		   t.draw(g, loc, 1);
-	    		   System.out.println("Draw transferWaypoint " +t.getName());
 	    	   }
 	       }
 	       

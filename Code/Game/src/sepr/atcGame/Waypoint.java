@@ -1,13 +1,10 @@
 package sepr.atcGame;
 
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 
 
@@ -28,15 +25,15 @@ class Waypoint implements Drawable{
 
 	
 	//methods
-	public void draw(Graphics g, Point location, double scale) {
-		//method will go in here
-		 
-		g.drawImage(image,location.x,location.y,null);
-		
+	public void draw(Graphics g, Point location, double scale) {	 
+		g.drawImage(image,
+				location.x -(image.getWidth(null)/2),
+				location.y -(image.getHeight(null)/2),
+				null);
 	}
 	
 	
-	//getters
+	//getters/setters
 	public String getName() {
 		return name;
 	}
@@ -45,5 +42,8 @@ class Waypoint implements Drawable{
 		return position;
 	}
 
-	
+	public void setPosition(Position position) {
+		this.position = position;
+	}
+		
 }

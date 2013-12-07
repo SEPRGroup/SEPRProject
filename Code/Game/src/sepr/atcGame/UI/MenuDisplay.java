@@ -87,7 +87,7 @@ public class MenuDisplay extends JFrame {
 				showMenus(1, 4);
 				break;
 			case PLAY:				
-				new Game(800, 600, GameDifficulty.EASY);
+				new Game(GameDifficulty.EASY);
 				setVisible(false);
 				
 				
