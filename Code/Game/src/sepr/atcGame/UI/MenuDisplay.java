@@ -20,9 +20,9 @@ public class MenuDisplay extends JFrame {
 	private static final int NUMBEROFLABELS = 10;
 	private JPanel menuPanel = new JPanel();
 	private JPanel imagePanel = new JPanel();
-	private ImageIcon Air = new ImageIcon("src/sepr/atcGame/UI/Airport.png");
-	private ImageIcon Air1 = new ImageIcon("src/sepr/atcGame/UI/Airport1.png");
-	private ImageIcon Air2 = new ImageIcon("src/sepr/atcGame/UI/Airport2.png");
+	private ImageIcon Air = new ImageIcon("src/sepr/atcGame/Images/Airport.png");
+	private ImageIcon Air1 = new ImageIcon("src/sepr/atcGame/Images/Airport1.png");
+	private ImageIcon Air2 = new ImageIcon("src/sepr/atcGame/Images/Airport2.png");
 	private JLabel Airport = new JLabel("",Air,JLabel.CENTER);
 
 	public MenuDisplay(int height, int width)
