@@ -1,34 +1,33 @@
 package sepr.atcGame;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.io.PrintStream;
 import java.util.List;
+import static java.lang.Math.PI;
 
 
 abstract class Airport extends Airspace{
 
 	private Image background;
+	private Image scaleBackground;
 	private Dimension boundaries;	//size of airspace in metres
 
-	
+
 	//constructor
 	protected Airport(String airspaceName,
 			Dimension boundaries) {
 		super(airspaceName);
 		this.boundaries = boundaries;
-		
+
 		setDoubleBuffered(true);
-		setPreferredSize(new Dimension(boundaries.width/10, boundaries.height/10));
-		
 		generateWaypoints();
-		this.repaint();
 	}
 
-	
+
 	//getters/setters
 	@Override
 	public final void setTransfers(List<TransferWaypoint> transfers){
@@ -41,26 +40,31 @@ abstract class Airport extends Airspace{
 			double a = Math.tan(bearing);
 			double x = Math.min(Math.abs(h*a), w);
 			double y = Math.min(Math.abs(w/a), h);
-			pos.x = w +( bearing<Math.PI ? x : -x );	//RHS ? add : sub
-			pos.y = h +( Math.abs(bearing-Math.PI)>(Math.PI/2) ? -y : y );	//TOP ? sub : add 
-			pos.altitude = 1000; //{!}
+			pos.x = w +( bearing<PI ? x : -x );	//RHS ? add : sub
+			pos.y = h +( Math.abs(bearing-PI)>(PI/2) ? -y : y );	//TOP ? sub : add
 			System.out.println("set transferWaypoint " +t.getName() +" : " +pos.x +"," +pos.y);	//{!}
 		}
 	}
-	
+
 	protected final void setBackground(Image background) {
 		this.background = background;
+		this.scaleBackground = null;
+		setPreferredSize(new Dimension(background.getWidth(null), background.getHeight(null)));
 	}
 
 
 	//methods
 	protected abstract void generateWaypoints();
-	
-	
+
+
 	//overridden methods
 	@Override
 	public final void update(double time) {
-		// TODO Auto-generated method stub
+		for(Flight f:getAircraft()){
+			if(f != null){
+				f.update(time);
+			}
+		}
 	}
 
 	@Override
@@ -78,51 +82,57 @@ abstract class Airport extends Airspace{
 		// TODO Auto-generated method stub
 	}
 	
+	@Override
 	public final void paintComponent(Graphics g) {
-	       super.paintComponent(g);
-	       
-	       Rectangle bounds = getBounds();
-	       double scale = bounds.getWidth() / boundaries.getWidth();
-	       Point loc = new Point();
-	       Position pos;
-	       
-	       //draw background
-	       if(background != null){
-	    	   g.drawImage(background, 0, 0, null);
-	       }else{
-		       g.drawRect(bounds.x, bounds.y, bounds.width, bounds.height); 
-	       } 
-	    
-	       //draw Waypoints
-	       for(Waypoint w:getWaypoints()){
-	    	   if(w != null){
-	    		   pos = w.getPosition();
-	    		   loc.x = Math.round( (float)(pos.x *scale) );
-	    		   loc.y = Math.round( (float)(pos.y *scale) );
-	    		   w.draw(g, loc, 1);   		   
-	    	   }
-	       }
-	       
-	       //draw TransferWaypoints
-	       for(TransferWaypoint t:this.getTransfers()){
-	    	   
-	    	   if(t != null){
-	    		   pos = t.getPosition();
-	    		   loc.x = Math.round( (float)(pos.x *scale) );
-	    		   loc.y = Math.round( (float)(pos.y *scale) );
-	    		   t.draw(g, loc, 1);
-	    	   }
-	       }
-	       
-	       //draw Flights
-	       for(Flight f:getAircraft()){
-	    	   if(f != null){
-	    		   pos = f.getPosition();
-	    		   loc.x = Math.round( (float)(pos.x *scale) );
-	    		   loc.y = Math.round( (float)(pos.y *scale) );
-	    		   f.draw(g, loc, 1);
-	    	   }
-	       }
+		super.paintComponent(g);
+
+		Rectangle bounds = getBounds();
+		double scale = bounds.getWidth() / boundaries.getWidth();
+		Point loc = new Point();
+		Position pos;
+
+		//draw background
+		if (scaleBackground != null){
+			if(getWidth() != scaleBackground.getWidth(null)){
+				scaleBackground = background.getScaledInstance(bounds.width, bounds.height, Image.SCALE_SMOOTH);}
+			g.drawImage(scaleBackground, 0, 0, null);}
+		else if(background != null){
+			scaleBackground = background.getScaledInstance(bounds.width, bounds.height, Image.SCALE_SMOOTH);
+			g.drawImage(scaleBackground, 0, 0, null);}
+		else{
+			g.setColor(Color.BLACK);
+			g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height); 
+		}
+
+		//draw Waypoints
+		for(Waypoint w:getWaypoints()){
+			if(w != null){
+				pos = w.getPosition();
+				loc.x = (int)Math.round(pos.x *scale);
+				loc.y = (int)Math.round(pos.y *scale);
+				w.draw(g, loc, 1);   		   
+			}
+		}
+
+		//draw TransferWaypoints
+		for(TransferWaypoint t:getTransfers()){	   
+			if(t != null){
+				pos = t.getPosition(this);
+				loc.x = (int)Math.round(pos.x *scale);
+				loc.y = (int)Math.round(pos.y *scale);
+				t.draw(g, loc, 1);
+			}
+		}
+
+		//draw Flights
+		for(Flight f:getAircraft()){
+			if(f != null){
+				pos = f.getPosition();
+				loc.x = (int)Math.round(pos.x *scale);
+				loc.y = (int)Math.round(pos.y *scale);
+				f.draw(g, loc, 1);
+			}
+		}
 	}  
 
 }

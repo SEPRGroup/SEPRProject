@@ -3,6 +3,7 @@ package sepr.atcGame;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import static java.lang.Math.PI;
 
 public class Game extends JFrame{
 
@@ -17,13 +18,13 @@ public class Game extends JFrame{
 		//setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setTitle("ATC Game ¦ GAME");
 		setResizable(false);	//may change if aspect ratio is locked
-		setVisible(true);
 		setLocationRelativeTo(null);
 		
 		generateWorld();
 		add(airport);
 		pack();
 		setMinimumSize(getSize());
+		setVisible(true);
 	}
 	
 	//methods
@@ -31,10 +32,10 @@ public class Game extends JFrame{
 		airport = new Heathrow();
 		
 		TransferWaypoint waypoint1 = new TransferWaypoint("Top",airport, null, 0);
-		TransferWaypoint waypoint2 = new TransferWaypoint("Right",airport, null, Math.PI /2);
-		TransferWaypoint waypoint3 = new TransferWaypoint("Bottom",airport, null, Math.PI);
-		TransferWaypoint waypoint4 = new TransferWaypoint("Left",airport, null, Math.PI *3/2);
-		TransferWaypoint waypoint5 = new TransferWaypoint("TR",airport, null, Math.PI/4);
+		TransferWaypoint waypoint2 = new TransferWaypoint("Right",airport, null, PI /2);
+		TransferWaypoint waypoint3 = new TransferWaypoint("Bottom", null, airport, 0);
+		TransferWaypoint waypoint4 = new TransferWaypoint("Left",airport, null, PI*3/2);
+		TransferWaypoint waypoint5 = new TransferWaypoint("TR1", airport, null, PI/4);
 		transferWaypoints.add(waypoint1);
 		transferWaypoints.add(waypoint2);
 		transferWaypoints.add(waypoint3);

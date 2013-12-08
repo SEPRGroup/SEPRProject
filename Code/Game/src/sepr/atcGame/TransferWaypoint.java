@@ -20,10 +20,10 @@ class TransferWaypoint extends Waypoint {
 	public TransferWaypoint(String name, Airspace airspace1, Airspace airspace2,
 			double bearing){
 		super(name, new Position(-1,-1,-1));	
+		position2 = new Position(-1,-1,-1);	
 		this.airspace1 = airspace1;
 		this.airspace2 = airspace2;
 		this.bearing = bearing;
-		position2 = new Position(-1,-1,-1);	
 	}
 	
 	
