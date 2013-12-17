@@ -18,7 +18,7 @@ abstract class Flight implements GameTime, Drawable {
  	protected Flight(String id, Queue<Waypoint> flightPlan){
 		identifier = id;
 		this.flightPlan = flightPlan;
-		
+		this.position = new Position(1, 1, 1);
 		assert(flightPlan.peek() instanceof TransferWaypoint);
 	}
 	

@@ -88,9 +88,7 @@ public class MenuDisplay extends JFrame {
 				break;
 			case PLAY:				
 				new Game(GameDifficulty.EASY);
-				setVisible(false);
-				
-				
+				setVisible(false);							
 				break;
 			case CHOOSEAIRPORT:
 				closeMenus(1, 4);				

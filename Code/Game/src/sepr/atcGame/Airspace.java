@@ -15,6 +15,7 @@ abstract class Airspace extends JPanel implements GameTime{
 	private Flight[] aircraft = new Flight[MAX_FLIGHTS];	//Fixed size; may be filled
 	private Waypoint[] waypoints = new Waypoint[MAX_WAYPOINTS];	//Fixed size, may be filled
 	private List<TransferWaypoint> transfers;
+	private List<testAircraft> planes;
 	
 	//constructor
 	protected Airspace(String airspaceName){
@@ -29,8 +30,12 @@ abstract class Airspace extends JPanel implements GameTime{
 		return airspaceName;
 	}
 
-	public Flight[] getAircraft() {
-		return aircraft;
+//	public Flight[] getAircraft() {
+//		return aircraft;
+//	}
+	
+	public List<testAircraft> getAircraft() {
+		return planes;
 	}
 
 	public Waypoint[] getWaypoints() {
@@ -44,6 +49,10 @@ abstract class Airspace extends JPanel implements GameTime{
 	
 	public void setTransfers(List<TransferWaypoint> transfers){
 		this.transfers = new ArrayList<TransferWaypoint>(transfers);
+	}
+	
+	public void setFlights(List<testAircraft> flights){
+		this.planes = new ArrayList<testAircraft>(flights);
 	}
 
 	

@@ -5,8 +5,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
 import java.io.*;
+
 import javax.imageio.*;
 import javax.swing.*;
+
 import java.util.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -18,11 +20,24 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 	
-	abstract class Aircraft extends Flight {
+	abstract class Aircraft extends Flight implements Drawable {
+		
+		
+		private Position position;
+		private Image image = null;
+		
+		
+		
+		public void draw(Graphics g, Point location, double scale) {	 
+			g.drawImage(image,
+					location.x -(image.getWidth(null)/2),
+					location.y -(image.getHeight(null)/2),
+					null);
+		}
+		
 		
 		public class LoadImage extends Component {
-	       
-			private static final long serialVersionUID = 1L;//?????????????
+
 			BufferedImage img;
 		 
 		    public void paint(Graphics g) {
@@ -31,11 +46,13 @@ import javax.swing.UIManager;
 		 
 		    public LoadImage() {
 		       try {
-		           img = ImageIO.read(new File("plane.png"));
+		           img = ImageIO.read(new File("src/sepr/atcGame/Images/plane.png"));
 		       } catch (IOException e) {
+		    	   System.out.println("Could not find plane image.");
 		       }
 		 
 		    }
+		}
 		 
 	
 		 public class MoveImage extends JFrame implements ActionListener {
@@ -52,8 +69,7 @@ import javax.swing.UIManager;
 		        repaint();
 		    }
 				
-			}
-		}
+
 //		       Timer timer = new Timer(50, this);
 //		       timer.start();
 //		    }
@@ -65,33 +81,39 @@ import javax.swing.UIManager;
 			int y = 0;
 			g.drawImage(x, y, image, null);
 		    }
-
+		 }
 		    
-		private void repaint() {
-		// TODO Auto-generated method stub
-				}
+//		private void repaint() {
+//		// TODO Auto-generated method stub
+//				}
 		
-		public void display () {
+		public void display() {
 			 
-	        JFrame f = new JFrame("Load Plane Image ");
+	        
 	             
-	        f.addWindowListener(new WindowAdapter(){
-	                public void windowClosing(WindowEvent e) {
-	                    System.exit(0);
-	                }
-	            });
-	        f.add(new LoadImage());
-	        f.pack();
-	        f.setVisible(true);
+//	        f.addWindowListener(new WindowAdapter(){
+//	                public void windowClosing(WindowEvent e) {
+//	                    System.exit(0);
+//	                }
+//	            });
+	        //f.add(new LoadImage());
+	        //f.pack();
+	        //f.setVisible(true);
 	    }
 
 		
 	//constructor
 	protected Aircraft(String id, Queue<Waypoint> flightPlan) {
 		super(id, flightPlan);
+		try{
+			image = ImageIO.read(new File("src/sepr/atcGame/Images/plane.png"));
+		}catch (IOException e){};
 		// TODO Auto-generated constructor stub
 	}
-
+	
+	public final void originalPosition(Position position){
+		this.position = position;
+	}
 	
 	//overridden methods
 	@Override
