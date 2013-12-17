@@ -12,6 +12,13 @@ final class Position {
 		this.altitude = altitude;
 	}
 	
+	public Position(Position p){
+		this.x = p.x;
+		this.y = p.y;
+		this.altitude = p.altitude;
+	}
+	
+	
 	//methods
 	public double getX() {
 		return x;

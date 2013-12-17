@@ -1,14 +1,13 @@
 package sepr.atcGame;
 
 import java.awt.Graphics;
-import java.awt.Point;
 import java.util.Queue;
 
 abstract class Flight implements GameTime, Drawable {
 	// variables
 	private String identifier;
 	private FlightStatus status;  //FlightStatus is a user defined data type
-	private Position position;
+	protected Position position;
 	private Queue<Waypoint> flightPlan;
 	private FlightConditions conditions;
 	private double bearing;	//radians
@@ -18,8 +17,7 @@ abstract class Flight implements GameTime, Drawable {
  	protected Flight(String id, Queue<Waypoint> flightPlan){
 		identifier = id;
 		this.flightPlan = flightPlan;
-		this.position = new Position(1, 1, 1);
-		assert(flightPlan.peek() instanceof TransferWaypoint);
+		this.position = new Position(-1, -1, -1);
 	}
 	
  	
@@ -38,7 +36,11 @@ abstract class Flight implements GameTime, Drawable {
 	public final FlightStatus getStatus() {
 		return status;
 	}
-
+	
+	public final void setPosition(Position position){
+		this.position = position;
+	}
+	
 	public final Position getPosition() {
 		return position;
 	}

@@ -1,10 +1,6 @@
 package sepr.atcGame;
 
-import java.awt.Graphics;
-import java.awt.Point;
 import java.util.Queue;
-
-import javax.swing.JFrame;
 
 final class testAircraft extends Aircraft {
 
@@ -16,12 +12,10 @@ final class testAircraft extends Aircraft {
 
 	
 	//overridden methods
-	@Override
+	/*@Override
 	public void draw(Graphics g, Point location, double scale) {
-		// TODO
-		
-
-	}
+	
+	}*/
 	
 
 }

@@ -1,8 +1,6 @@
 package sepr.atcGame;
 
 import java.util.ArrayList;
-import java.util.Queue;
-
 import javax.swing.JFrame;
 
 
@@ -13,7 +11,14 @@ public class Game extends JFrame{
 	private Airport airport;
 	private Output output;
 	private ArrayList<TransferWaypoint> transferWaypoints = new ArrayList<TransferWaypoint>();
-	private ArrayList<testAircraft> planes = new ArrayList<testAircraft>();
+	
+	private boolean paused = true;
+	private boolean gameOver = false;
+	
+	
+	private static double nanoToGameTime(long time){
+		return time/1000000000.0;}
+	
 	
 	//constructor
 	public Game(GameDifficulty difficulty) {
@@ -22,10 +27,7 @@ public class Game extends JFrame{
 		setTitle("ATC Game ¦ GAME");
 		setResizable(false);	//may change if aspect ratio is locked		
 		setLocationRelativeTo(null);
-		
-		
-		
-		
+
 		generateWorld();
 		add(airport);
 		pack();
@@ -50,12 +52,40 @@ public class Game extends JFrame{
 		
 		airport.setTransfers(transferWaypoints);
 		
-		Queue<Waypoint> flightplan = null;
-		testAircraft taircraft = new testAircraft("test plane", flightplan);
-		planes.add(taircraft);
+		testAircraft aircraft = new testAircraft("test plane", null);
+		airport.receiveFlight(aircraft, waypoint4);
 		
-		airport.setFlights(planes);
+	}
 		
+	public void Play(){
+		paused = false;
+		long gameTime, lastTime, elapsedTime;
+		double elapsedGameTime;
+		
+		lastTime = System.nanoTime();
+		gameTime = 0;	
+		while (!gameOver){
+			try {Thread.sleep(1);} 
+			catch (Exception e) {};
+			
+			elapsedTime = System.nanoTime() -lastTime;
+			lastTime += elapsedTime;
+				
+			if (!paused){
+				elapsedGameTime = nanoToGameTime(elapsedTime);
+				gameTime += elapsedTime;
+				
+				airport.update(elapsedGameTime);
+				airport.paintImmediately(airport.getBounds());
+				//{!} update ATC
+				//{!} update scheduler
+				
+				System.out.println(elapsedGameTime);
+			}
+			
+			//{!} end game after 5 seconds
+			gameOver = (nanoToGameTime(gameTime) > 5.0);
+		}
 	}
 	
 	//getters/setters

@@ -3,9 +3,6 @@ package sepr.atcGame;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Queue;
-
 import javax.imageio.ImageIO;
 
 

@@ -6,11 +6,9 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.PI;
-
 
 abstract class Airport extends Airspace{
 
@@ -73,6 +71,7 @@ abstract class Airport extends Airspace{
 				f.update(time);
 			}
 		}
+		repaint();
 	}
 
 	@Override
@@ -82,7 +81,15 @@ abstract class Airport extends Airspace{
 
 	@Override
 	public final void receiveFlight(Flight f, TransferWaypoint t) {
-		// TODO Auto-generated method stub
+		f.setPosition(new Position(t.getPosition(this)));
+		f.setBearing(t.getBearing(this));
+		int i = 0;
+		while ((f != null) && (i < MAX_FLIGHTS)){
+			if (aircraft[i] == null){
+				aircraft[i] = f;
+				f = null;}
+			else i++;
+		}
 	}
 
 	@Override
@@ -142,8 +149,5 @@ abstract class Airport extends Airspace{
 			}
 		}
 	}
-
-
 	
-
 }

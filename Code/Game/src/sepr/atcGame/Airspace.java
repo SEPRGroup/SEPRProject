@@ -7,15 +7,14 @@ import javax.swing.JPanel;
 
 abstract class Airspace extends JPanel implements GameTime{
 	//constants
-	private static final int MAX_FLIGHTS = 5;
+	protected static final int MAX_FLIGHTS = 5;
 	protected static final int MAX_WAYPOINTS = 5;
 	
 	//variables
 	private String airspaceName;
-	private Flight[] aircraft = new Flight[MAX_FLIGHTS];	//Fixed size; may be filled
+	protected Flight[] aircraft = new Flight[MAX_FLIGHTS];	//Fixed size; may be filled
 	protected Waypoint[] waypoints = new Waypoint[MAX_WAYPOINTS];	//Fixed size, may be filled
-	private List<TransferWaypoint> transfers;
-	private List<testAircraft> planes;
+	protected List<TransferWaypoint> transfers;
 	
 	//constructor
 	protected Airspace(String airspaceName){
@@ -36,8 +35,8 @@ abstract class Airspace extends JPanel implements GameTime{
 //		return aircraft;
 //	}
 	
-	public List<testAircraft> getAircraft() {
-		return planes;
+	public Flight[] getAircraft() {
+		return aircraft;
 	}
 
 	public Waypoint[] getWaypoints() {
@@ -51,10 +50,6 @@ abstract class Airspace extends JPanel implements GameTime{
 	
 	public void setTransfers(List<TransferWaypoint> transfers){
 		this.transfers = new ArrayList<TransferWaypoint>(transfers);
-	}
-	
-	public void setFlights(List<testAircraft> flights){
-		this.planes = new ArrayList<testAircraft>(flights);
 	}
 
 	
