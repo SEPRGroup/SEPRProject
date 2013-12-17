@@ -15,7 +15,7 @@ final class Heathrow extends Airport {
 	public Heathrow(){
 		
 		super("Heathrow Airport", new Dimension(8000, 6000));
-
+		
 		try{
 			setBackground(ImageIO.read(new File("src/sepr/atcGame/Images/dummy1.png")));
 		} catch (IOException e){};
@@ -27,6 +27,10 @@ final class Heathrow extends Airport {
 	@Override
 	protected void generateWaypoints() {
 		// TODO generate and place internal Waypoints, landing zones
+		for(int i = 0 ; i < MAX_WAYPOINTS; i++){
+			waypoints[i] = new Waypoint(i + " waypoint",new Position((i)*getWidth()/(MAX_WAYPOINTS)+400, (Math.sin(Math.toRadians(i*360/MAX_WAYPOINTS))+1)*(getHeight()/3)+200, 5000) );
+			
+		}
 	}
 
 }

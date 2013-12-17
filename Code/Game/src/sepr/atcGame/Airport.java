@@ -54,7 +54,13 @@ abstract class Airport extends Airspace{
 		setPreferredSize(new Dimension(background.getWidth(null), background.getHeight(null)));
 	}
 
-
+	public final int getWidth(){
+		return boundaries.width;
+	}
+	
+	public final int getHeight(){
+		return boundaries.height;
+	}
 	//methods
 	protected abstract void generateWaypoints();
 

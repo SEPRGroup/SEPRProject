@@ -8,18 +8,20 @@ import javax.swing.JPanel;
 abstract class Airspace extends JPanel implements GameTime{
 	//constants
 	private static final int MAX_FLIGHTS = 5;
-	private static final int MAX_WAYPOINTS = 5;
+	protected static final int MAX_WAYPOINTS = 5;
 	
 	//variables
 	private String airspaceName;
 	private Flight[] aircraft = new Flight[MAX_FLIGHTS];	//Fixed size; may be filled
-	private Waypoint[] waypoints = new Waypoint[MAX_WAYPOINTS];	//Fixed size, may be filled
+	protected Waypoint[] waypoints = new Waypoint[MAX_WAYPOINTS];	//Fixed size, may be filled
 	private List<TransferWaypoint> transfers;
 	private List<testAircraft> planes;
 	
 	//constructor
 	protected Airspace(String airspaceName){
-		this.airspaceName = airspaceName;		
+		this.airspaceName = airspaceName;	
+		// Math.sin(Math.toRadians(i*360/MAX_WAYPOINTS))
+		
 	}
 	
 	/*	Full event generating routines and data	*/
