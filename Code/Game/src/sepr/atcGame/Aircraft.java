@@ -30,7 +30,7 @@ import javax.imageio.ImageIO;
 	protected Aircraft(String id, Queue<Waypoint> flightPlan) {
 		super(id, flightPlan);
 		try{
-			image = ImageIO.read(new File("src/sepr/atcGame/Images/plane.jpg"));
+			image = ImageIO.read(new File("src/sepr/atcGame/Images/plane.png"));
 			rotatedimage = image;
 		}catch (IOException e){};
 	}

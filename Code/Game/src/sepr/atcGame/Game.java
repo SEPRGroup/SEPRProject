@@ -54,7 +54,7 @@ public class Game extends JFrame{
 		airport.setTransfers(transferWaypoints);
 		
 		testAircraft aircraft = new testAircraft("test plane", null);
-		airport.receiveFlight(aircraft, waypoint3);
+		airport.receiveFlight(aircraft, waypoint5);
 		
 	}
 		
