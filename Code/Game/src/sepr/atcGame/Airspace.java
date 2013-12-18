@@ -59,21 +59,32 @@ abstract class Airspace extends JPanel implements GameTime{
 	public abstract void receiveFlight(Flight f, TransferWaypoint t);
 
 	public abstract void newObstacle(Flight flight);
+	
+	public final void findAndRemoveFlight(Flight f) {
+		//This function cuts down on repeated code
+		//It finds and removes a flight which has been terminated in one way or another
+		//from the array of active flights 
+		
+	}
 
 	public final void eventCrash(Flight f1, Flight f2) {
-		//method will go in here
+		//TODO remove crashed planes from array of active flights
+		//TODO remove points or end game accordingly
 	}
 
 	public final void eventLanded(Flight f) {
-		//method will go in here
+		//TODO remove landed plane from array of active flights
+		//TODO reward points accordingly
 	}
 
 	public final void eventHandover(Flight f) {
-		//method will go in here
+		//TODO remove landed plane from array of active flights
+		//TODO reward points accordingly
 	}
 
 	public final void eventLost(Flight f) {
-		//method will go in here
+		//TODO remove landed plane from array of active flights
+		//TODO remove points accordingly
 	}
 	
 }
