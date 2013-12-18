@@ -43,17 +43,18 @@ public class Game extends JFrame{
 		TransferWaypoint waypoint2 = new TransferWaypoint("Right",airport, null, PI /2);
 		TransferWaypoint waypoint3 = new TransferWaypoint("Bottom", null, airport, 0);
 		TransferWaypoint waypoint4 = new TransferWaypoint("Left",airport, null, PI*3/2);
-		//TransferWaypoint waypoint5 = new TransferWaypoint("TR1", airport, null, PI/4);
+		TransferWaypoint waypoint5 = new TransferWaypoint("TR1", airport, null, PI/4);
+		
 		transferWaypoints.add(waypoint1);
 		transferWaypoints.add(waypoint2);
 		transferWaypoints.add(waypoint3);
 		transferWaypoints.add(waypoint4);
-		//transferWaypoints.add(waypoint5);
+		transferWaypoints.add(waypoint5);
 		
 		airport.setTransfers(transferWaypoints);
 		
 		testAircraft aircraft = new testAircraft("test plane", null);
-		airport.receiveFlight(aircraft, waypoint4);
+		airport.receiveFlight(aircraft, waypoint3);
 		
 	}
 		

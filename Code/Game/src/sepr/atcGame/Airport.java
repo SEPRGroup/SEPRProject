@@ -80,9 +80,10 @@ abstract class Airport extends Airspace{
 	}
 
 	@Override
-	public final void receiveFlight(Flight f, TransferWaypoint t) {
+	public final void receiveFlight(Aircraft f, TransferWaypoint t) {
 		f.setPosition(new Position(t.getPosition(this)));
-		f.setBearing(t.getBearing(this));
+		f.setBearings(t.getBearing(this)+PI);
+		
 		int i = 0;
 		while ((f != null) && (i < MAX_FLIGHTS)){
 			if (aircraft[i] == null){

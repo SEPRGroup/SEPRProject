@@ -53,8 +53,10 @@ abstract class Flight implements GameTime, Drawable {
 	public final double getBearing() {
 		return bearing;
 	}
-	public void setBearing(double bearing) {
+	protected void setBearing(double bearing) {
 		this.bearing = bearing;
+		
+		
 	}
 	
 	

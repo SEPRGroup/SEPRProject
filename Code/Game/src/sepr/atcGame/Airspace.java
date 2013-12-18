@@ -56,7 +56,7 @@ abstract class Airspace extends JPanel implements GameTime{
 	//methods	
 	public abstract void newFlight(Flight f);
 
-	public abstract void receiveFlight(Flight f, TransferWaypoint t);
+	public abstract void receiveFlight(Aircraft f, TransferWaypoint t);
 
 	public abstract void newObstacle(Flight flight);
 	
