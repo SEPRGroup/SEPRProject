@@ -2,7 +2,7 @@ package sepr.atcGame;
 
 import java.util.ArrayList;
 import javax.swing.JFrame;
-
+import java.util.Random;
 
 import static java.lang.Math.PI;
 
@@ -14,7 +14,7 @@ public class Game extends JFrame{
 	
 	private boolean paused = true;
 	private boolean gameOver = false;
-	
+	private Random randomGenerator = new Random();
 	
 	private static double nanoToGameTime(long time){
 		return time/1000000000.0;}
@@ -52,10 +52,18 @@ public class Game extends JFrame{
 		transferWaypoints.add(waypoint4);
 		transferWaypoints.add(waypoint5);
 		
+		int selectTransferWaypoint = randomGenerator.nextInt(transferWaypoints.size());		
+		TransferWaypoint initialWaypoint = transferWaypoints.get(selectTransferWaypoint);
+		
+		FlightPlan flightPlan = new FlightPlan(initialWaypoint);
+		
+		flightPlan.generateFlightPlan(airport.getWaypoints());
+		
+		
 		airport.setTransfers(transferWaypoints);
 		
-		testAircraft aircraft = new testAircraft("test plane", null);
-		airport.receiveFlight(aircraft, waypoint3);
+		testAircraft aircraft = new testAircraft("test plane", flightPlan);
+		airport.receiveFlight(aircraft, flightPlan.getInitialWaypoint());
 		
 	}
 		
@@ -86,7 +94,7 @@ public class Game extends JFrame{
 			}
 			
 			//{!} end game after 5 seconds
-			gameOver = (nanoToGameTime(gameTime) > 5.0);
+			gameOver = (nanoToGameTime(gameTime) > 3.0);
 		}
 	}
 	

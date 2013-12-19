@@ -5,9 +5,9 @@ import java.util.Queue;
 final class testAircraft extends Aircraft {
 
 	//constructor
-	public testAircraft(String id, Queue<Waypoint> flightPlan) {
+	public testAircraft(String id, FlightPlan flightPlan) {
 		super(id, flightPlan);	
-	
+		
 	}
 
 	

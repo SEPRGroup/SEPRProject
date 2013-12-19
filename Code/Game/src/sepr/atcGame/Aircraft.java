@@ -17,7 +17,7 @@ abstract class Aircraft extends Flight {
 
 
 	//constructor
-	protected Aircraft(String id, Queue<Waypoint> flightPlan) {
+	protected Aircraft(String id, FlightPlan flightPlan) {
 		super(id, flightPlan);
 		try {image = ImageIO.read(new File("src/sepr/atcGame/Images/plane.png"));}
 		catch (IOException e){};
