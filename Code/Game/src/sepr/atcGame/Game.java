@@ -1,7 +1,11 @@
 package sepr.atcGame;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+
 import javax.swing.JFrame;
+
 import java.util.Random;
 
 import static java.lang.Math.PI;
@@ -55,15 +59,39 @@ public class Game extends JFrame{
 		int selectTransferWaypoint = randomGenerator.nextInt(transferWaypoints.size());		
 		TransferWaypoint initialWaypoint = transferWaypoints.get(selectTransferWaypoint);
 		
-		FlightPlan flightPlan = new FlightPlan(initialWaypoint);
+		//where the plane exits the airspace
+		selectTransferWaypoint = randomGenerator.nextInt(transferWaypoints.size());		
+		TransferWaypoint finalWaypoint = transferWaypoints.get(selectTransferWaypoint);
 		
-		flightPlan.generateFlightPlan(airport.getWaypoints());
 		
+		Queue<Waypoint> flightPlan = new LinkedList<Waypoint>();
+		
+		Waypoint[] waypoints = airport.getWaypoints();
+		
+		int[] store = new int[3];
+		store[0] = randomGenerator.nextInt(waypoints.length);
+		
+		System.out.println("random number = " + store[0]);
+		int i;
+		for (i = 1; i <= store.length -1; i++){
+							
+			do {
+				store[i] = randomGenerator.nextInt(waypoints.length);	
+			}while(store[i-1] == store[i]);
+
+		}		
+		
+		// add waypoints to flightplan
+		for (int index: store){
+			flightPlan.add(waypoints[index]);
+		}			
+		
+		flightPlan.add(finalWaypoint);
 		
 		airport.setTransfers(transferWaypoints);
-		
+					
 		testAircraft aircraft = new testAircraft("test plane", flightPlan);
-		airport.receiveFlight(aircraft, flightPlan.getInitialWaypoint());
+		airport.receiveFlight(aircraft, initialWaypoint);
 		
 	}
 		
