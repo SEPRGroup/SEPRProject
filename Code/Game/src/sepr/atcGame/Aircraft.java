@@ -8,53 +8,53 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-	
 
-	abstract class Aircraft extends Flight {
 
-		private BufferedImage image,rotatedimage;
-		private double xIncrease,yIncrease,speed = 250;
-		private AffineTransform tx = new AffineTransform();
-		
-		public void draw(Graphics g, Point location, double scale) {
-			
-		
-			g.drawImage(rotatedimage,
-					location.x -(image.getWidth(null)/2),
-					location.y -(image.getHeight(null)/2),
-					null);
-		}
-		
-		
+abstract class Aircraft extends Flight {
+
+	private BufferedImage image, rotatedImage;
+	private double speed = 250;	//physical speed; {!}
+
+
 	//constructor
 	protected Aircraft(String id, Queue<Waypoint> flightPlan) {
 		super(id, flightPlan);
-		try{
-			image = ImageIO.read(new File("src/sepr/atcGame/Images/plane.png"));
-			rotatedimage = image;
-		}catch (IOException e){};
+		try {image = ImageIO.read(new File("src/sepr/atcGame/Images/plane.png"));}
+		catch (IOException e){};
 	}
-	
-	public final void originalPosition(Position position){
-		this.position = position;
-	}
+
 	
 	//overridden methods
 	@Override
 	public final void update(double time) { 
-		xIncrease = Math.sin(getBearing()) * speed ;
-		yIncrease = -(Math.cos(getBearing()) * speed) ;
-		
-		position.x += xIncrease*time;
-		position.y += yIncrease*time;
-		//position.x += time*250;	//move at a speed of 250 m/s {!} independent of bearing
+		double vx, vy, vz;	//velocity components
+		vx = Math.sin(getBearing()) * speed;
+		vy = Math.cos(getBearing()) * speed;
+
+		position.x += vx*time;
+		position.y -= vy*time;
+		setBearing(getBearing() +0.15*time);	//{!} test code to continuously turn right
+	}
+
+	public final void draw(Graphics g, Point location, double scale) {
+		if (rotatedImage == null){
+			AffineTransformOp op = new AffineTransformOp(
+					AffineTransform.getRotateInstance(getBearing(), image.getWidth()/2, image.getHeight()/2), 
+					AffineTransformOp.TYPE_BILINEAR);
+			rotatedImage = op.filter(image, null);
+		}
+
+		g.drawImage(rotatedImage,
+				location.x -(rotatedImage.getWidth()/2),
+				location.y -(rotatedImage.getHeight()/2),
+				null);
 	}
 
 	@Override
 	public final void takeOff(TransferWaypoint t) {
 		// TODO
 	}
-	
+
 	@Override
 	public final void land(TransferWaypoint t) {
 		// TODO
@@ -84,11 +84,11 @@ import javax.imageio.ImageIO;
 	public final void crash() {
 		// TODO
 	}
-	public void setBearings(double bearing) {//Use setBearings instead of setBearing to allow for rotation of the image
-		setBearing(bearing);
-		tx.rotate(bearing-(Math.PI/2),image.getWidth(null)/2,image.getHeight(null)/2);
-		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
-		rotatedimage = op.filter(image, null);
+	
+	@Override
+	public final void setBearing(double bearing) {
+		super.setBearing(bearing);
+		rotatedImage = null;
 	}
 
 }

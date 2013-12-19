@@ -5,7 +5,7 @@ class TransferWaypoint extends Waypoint {
 	//Variables
 	private Position position2;
 	private Airspace airspace1, airspace2; 
-	private double bearing;	//radians, 0 - 2*Pi
+	private double bearing;	//radians, 0 - 2*Pi; from airspace1->airspace2
 	
 	//constructor
 	/** Creates an waypoint that provides the linking between airspaces.
@@ -60,11 +60,19 @@ class TransferWaypoint extends Waypoint {
 		return airspace2;
 	}
 
-	public double getBearing(Airspace airspace) {
+	public double getBearingFrom(Airspace airspace) {
 		if(airspace.equals(airspace1)){
 			return bearing;}
 		else if(airspace.equals(airspace2)){
 			return bearing<Math.PI ? bearing+Math.PI : bearing-Math.PI;}
+		else return 0; //{!}
+	}
+	
+	public double getBearingTo(Airspace airspace) {
+		if(airspace.equals(airspace1)){
+			return bearing<Math.PI ? bearing+Math.PI : bearing-Math.PI;}
+		else if(airspace.equals(airspace2)){
+			return bearing;}
 		else return 0; //{!}
 	}
 }

@@ -36,7 +36,7 @@ abstract class Airport extends Airspace{
 		double h = boundaries.height/2;
 		for(TransferWaypoint t:transfers){
 			Position pos = t.getPosition(this);
-			double bearing = t.getBearing(this);
+			double bearing = t.getBearingFrom(this);
 			double a = Math.tan(bearing);
 			double x = Math.min(Math.abs(h*a), w);
 			double y = Math.min(Math.abs(w/a), h);
@@ -80,9 +80,9 @@ abstract class Airport extends Airspace{
 	}
 
 	@Override
-	public final void receiveFlight(Aircraft f, TransferWaypoint t) {
+	public final void receiveFlight(Flight f, TransferWaypoint t) {
 		f.setPosition(new Position(t.getPosition(this)));
-		f.setBearings(t.getBearing(this)+PI);
+		f.setBearing(t.getBearingTo(this));
 		
 		int i = 0;
 		while ((f != null) && (i < MAX_FLIGHTS)){
