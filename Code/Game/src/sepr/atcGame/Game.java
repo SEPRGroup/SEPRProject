@@ -26,11 +26,12 @@ public class Game extends JFrame{
 		//setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setTitle("ATC Game ¦ GAME");
 		setResizable(false);	//may change if aspect ratio is locked		
-		setLocationRelativeTo(null);
+		
 
 		generateWorld();
 		add(airport);
 		pack();
+		setLocationRelativeTo(null);
 		setMinimumSize(getSize());
 		setVisible(true);
 	}
@@ -54,7 +55,7 @@ public class Game extends JFrame{
 		airport.setTransfers(transferWaypoints);
 		
 		testAircraft aircraft = new testAircraft("test plane", null);
-		airport.receiveFlight(aircraft, waypoint5);
+		airport.receiveFlight(aircraft, waypoint3);
 		
 	}
 		
