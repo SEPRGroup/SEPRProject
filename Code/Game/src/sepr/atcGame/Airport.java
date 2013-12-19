@@ -42,7 +42,8 @@ abstract class Airport extends Airspace{
 			double y = Math.min(Math.abs(w/a), h);
 			pos.x = w +( bearing<PI ? x : -x );	//RHS ? add : sub
 			pos.y = h +( Math.abs(bearing-PI)>(PI/2) ? -y : y );	//TOP ? sub : add
-			System.out.println("set transferWaypoint " +t.getName() +" : " +pos.x +"," +pos.y);	//{!}
+			
+			//System.out.println("set transferWaypoint " +t.getName() +" : " +pos.x +"," +pos.y);	//{!}
 		}
 	}
 
