@@ -32,8 +32,8 @@ abstract class Airport extends Airspace{
 	@Override
 	public final void setTransfers(List<TransferWaypoint> transfers){
 		super.setTransfers(transfers);
-		double w = boundaries.width/2;
-		double h = boundaries.height/2;
+		double w = boundaries.width/2.0;
+		double h = boundaries.height/2.0;
 		for(TransferWaypoint t:transfers){
 			Position pos = t.getPosition(this);
 			double bearing = t.getBearingFrom(this);
@@ -55,7 +55,7 @@ abstract class Airport extends Airspace{
 	public final int getWidth(){
 		return boundaries.width;
 	}
-	
+
 	public final int getHeight(){
 		return boundaries.height;
 	}
@@ -83,7 +83,7 @@ abstract class Airport extends Airspace{
 	public final void receiveFlight(Flight f, TransferWaypoint t) {
 		f.setPosition(new Position(t.getPosition(this)));
 		f.setBearing(t.getBearingTo(this));
-		
+
 		int i = 0;
 		while ((f != null) && (i < MAX_FLIGHTS)){
 			if (aircraft[i] == null){
@@ -97,7 +97,7 @@ abstract class Airport extends Airspace{
 	public final void newObstacle(Flight flight) {
 		// TODO Auto-generated method stub
 	}
-	
+
 	@Override
 	public final void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -109,12 +109,12 @@ abstract class Airport extends Airspace{
 
 		//draw background
 		if (scaleBackground != null){
-			if(getWidth() != scaleBackground.getWidth(null)){
-				scaleBackground = background.getScaledInstance(bounds.width, bounds.height, Image.SCALE_SMOOTH);}
+			if(bounds.width != scaleBackground.getWidth(null)){
+				scaleBackground = background.getScaledInstance(bounds.width, bounds.height, Image.SCALE_SMOOTH);}			
 			g.drawImage(scaleBackground, 0, 0, null);}
 		else if(background != null){
 			scaleBackground = background.getScaledInstance(bounds.width, bounds.height, Image.SCALE_SMOOTH);
-			g.drawImage(scaleBackground, 0, 0, null);}
+			g.drawImage(scaleBackground, 0, 0, null);}	
 		else{
 			g.setColor(Color.BLACK);
 			g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height); 
@@ -150,5 +150,5 @@ abstract class Airport extends Airspace{
 			}
 		}
 	}
-	
+
 }
