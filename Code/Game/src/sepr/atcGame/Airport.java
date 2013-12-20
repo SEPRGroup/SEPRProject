@@ -23,7 +23,9 @@ abstract class Airport extends Airspace{
 		super(airspaceName);
 		this.boundaries = boundaries;
 
-		setDoubleBuffered(true);
+		this.setOpaque(true);
+		setDoubleBuffered(true);	//{!} disable if not redrawing entire screen
+
 		generateWaypoints();
 	}
 
@@ -42,7 +44,7 @@ abstract class Airport extends Airspace{
 			double y = Math.min(Math.abs(w/a), h);
 			pos.x = w +( bearing<PI ? x : -x );	//RHS ? add : sub
 			pos.y = h +( Math.abs(bearing-PI)>(PI/2) ? -y : y );	//TOP ? sub : add
-			
+
 			//System.out.println("set transferWaypoint " +t.getName() +" : " +pos.x +"," +pos.y);	//{!}
 		}
 	}
@@ -69,8 +71,7 @@ abstract class Airport extends Airspace{
 	public final void update(double time) {
 		for(Flight f:getAircraft()){
 			if(f != null){
-				f.update(time);
-			}
+				f.update(time);	}
 		}
 		repaint();
 	}

@@ -23,7 +23,7 @@ abstract class Aircraft extends Flight {
 		catch (IOException e){};
 	}
 
-	
+
 	//overridden methods
 	@Override
 	public final void update(double time) { 
@@ -84,7 +84,7 @@ abstract class Aircraft extends Flight {
 	public final void crash() {
 		// TODO
 	}
-	
+
 	@Override
 	public final void setBearing(double bearing) {
 		super.setBearing(bearing);

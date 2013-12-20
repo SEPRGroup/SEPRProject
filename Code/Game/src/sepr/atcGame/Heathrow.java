@@ -10,13 +10,10 @@ final class Heathrow extends Airport {
 	
 	//constructor
 	public Heathrow(){
-		
 		super("Heathrow Airport", new Dimension(8000, 6000));
 		
-		try{
-			setBackground(ImageIO.read(new File("src/sepr/atcGame/Images/dummy1.png")));
-		} catch (IOException e){};
-		
+		try {setBackground(ImageIO.read(new File("src/sepr/atcGame/Images/dummy1.png")));}
+		catch (IOException e){};	
 	}
 	
 	
