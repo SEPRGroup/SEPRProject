@@ -29,7 +29,7 @@ final class FrameRateMonitor{
 
 		//System.out.println(nano);
 		if (0 == pos){
-			System.out.println("fps : " +getFrameRate());}
+			System.out.println("fps:\t" +getFrameRate());}
 
 	}
 

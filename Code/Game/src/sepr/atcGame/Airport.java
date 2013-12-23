@@ -93,6 +93,8 @@ abstract class Airport extends Airspace{
 				f = null;}
 			else i++;
 		}
+		if (MAX_FLIGHTS == i){	//was not added; would exceed MAX_FLIGHTS
+			eventLost(f);}
 	}
 
 	@Override

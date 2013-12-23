@@ -13,6 +13,7 @@ import static java.lang.Math.PI;
 public class Game extends JFrame{
 
 	private Airport airport;
+	private Airspace[] airspaces;
 	private Output output;
 	private ArrayList<TransferWaypoint> transferWaypoints = new ArrayList<TransferWaypoint>();
 
@@ -45,20 +46,24 @@ public class Game extends JFrame{
 	private void generateWorld(){
 		//Generate airports
 		airport = new Heathrow();
+		airspaces = new Airspace[]
+				{new DummyAirspace("Athens"), 
+				new DummyAirspace("Dubai"), 
+				new DummyAirspace("Paris"),
+				new DummyAirspace("Sydney"),
+				new DummyAirspace("Zurich")
+				};
 
-		//Generate all possible transfers
-		transferWaypoints.add(new TransferWaypoint("Top",airport, null, 0));
-		transferWaypoints.add(new TransferWaypoint("Right",airport, null, PI/2));
-		transferWaypoints.add(new TransferWaypoint("Bottom", null, airport, 0));
-		transferWaypoints.add(new TransferWaypoint("Left",airport, null, PI*3/2));
-		transferWaypoints.add(new TransferWaypoint("TR1", airport, null, PI/4));
+		//Generate all possible transfers	{!} random bearings
+		for (int i=0; i<airspaces.length; i++){
+			Airspace a = airspaces[i];
+			transferWaypoints.add(new TransferWaypoint(a.getAirspaceName(), 
+					airport, a, 
+					(2*PI*i)/airspaces.length));
+		}
 
 		//Link airports
 		airport.setTransfers(transferWaypoints);	//should be a semi-random subset of
-
-		//{!} TEST LOGIC
-		testAircraft aircraft = new testAircraft("test plane", randomFlightPlan());
-		airport.receiveFlight(aircraft, transferWaypoints.get(3));
 	}
 
 	private Queue<Waypoint> randomFlightPlan(){		
@@ -70,10 +75,10 @@ public class Game extends JFrame{
 		indices[0] = random.nextInt(waypoints.length);
 		for (int i=1; i <= indices.length-1; i++){
 			boolean duplicate;
-			do{
+			do{	//repeat until a waypoint is generated that is not a duplicate
 				indices[i] = random.nextInt(waypoints.length);
 				duplicate = false;
-				for (int ii=0; ii<i; ii++){
+				for (int ii=0; ii<i; ii++){	//compare to existing waypoints
 					duplicate = duplicate || (indices[i] == indices[ii]);}
 			} while (duplicate);
 		}		
@@ -97,24 +102,44 @@ public class Game extends JFrame{
 
 	public void Play(){
 		paused = false;
-		long gameTime, lastTime, elapsedTime;
+		long lastTime, gameTime, elapsedTime;
+		long sinceLastFlight;
 		double elapsedGameTime;
+		Random random = new Random();
 
+		//{!} Test setup logic only
+		Queue<Flight> toAdd = new LinkedList<Flight>();	
+		for (int i=0; i<5; i++){
+			toAdd.add(new testAircraft("test"+i, randomFlightPlan()));}
+
+		//game loop
 		lastTime = System.nanoTime();
-		gameTime = 0;	
+		gameTime = 0;
+		sinceLastFlight = 0;
 		while (!gameOver){		
 			do{
 				try {Thread.sleep(1);} 
 				catch (Exception e) {};
 				elapsedTime = System.nanoTime() -lastTime;
 			} while (elapsedTime < (1000000000/FPS_MAX));
-			
+
 			lastTime += elapsedTime;			
 			fps.newFrame(elapsedTime);
 
 			if (!paused){	//update game elements
 				elapsedGameTime = nanoToGameTime(elapsedTime);
 				gameTime += elapsedTime;
+				sinceLastFlight += elapsedTime;
+
+				if (toAdd.size() > 0){
+					if (sinceLastFlight > 1500000000){
+						Flight f = toAdd.poll();
+						airport.receiveFlight(f , 
+								transferWaypoints.get( random.nextInt(transferWaypoints.size()) ));
+						System.out.println("add flight:\t" +f.getIdentifier());
+						sinceLastFlight -= 1500000000;
+					}
+				}
 
 				airport.update(elapsedGameTime);
 				airport.paintImmediately(airport.getBounds());
