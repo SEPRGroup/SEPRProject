@@ -8,15 +8,14 @@ import javax.swing.JFrame;
 
 import java.util.Random;
 
+import static java.lang.Math.PI;
 
 public class Game extends JFrame{
 
 	private Airport airport;
 	private Output output;
 	private ArrayList<TransferWaypoint> transferWaypoints = new ArrayList<TransferWaypoint>();
-	private int MAX_AIRCRAFTS = 5;
-	private testAircraft[] aircrafts = new testAircraft[MAX_AIRCRAFTS];
-	
+
 	private static final int FPS_MAX = 60;
 	private FrameRateMonitor fps = new FrameRateMonitor(FPS_MAX);
 
@@ -46,23 +45,20 @@ public class Game extends JFrame{
 	private void generateWorld(){
 		//Generate airports
 		airport = new Heathrow();
-	
-		//Generate all possible transfers		
-		for (TransferWaypointNames twpn: TransferWaypointNames.values()){			
-			transferWaypoints.add(new TransferWaypoint(twpn.getName(),airport, null, twpn.getBearing()));
-		}
+
+		//Generate all possible transfers
+		transferWaypoints.add(new TransferWaypoint("Top",airport, null, 0));
+		transferWaypoints.add(new TransferWaypoint("Right",airport, null, PI/2));
+		transferWaypoints.add(new TransferWaypoint("Bottom", null, airport, 0));
+		transferWaypoints.add(new TransferWaypoint("Left",airport, null, PI*3/2));
+		transferWaypoints.add(new TransferWaypoint("TR1", airport, null, PI/4));
 
 		//Link airports
 		airport.setTransfers(transferWaypoints);	//should be a semi-random subset of
-		
-		//Generate all possible planes
-		for (GeneratedAircrafts ga: GeneratedAircrafts.values()) {
-			aircrafts[ga.ordinal()] = new testAircraft(ga.getName(), randomFlightPlan());
-		}
-	
-		
-		// Get flights to draw on airport
-		airport.receiveFlight(aircrafts);
+
+		//{!} TEST LOGIC
+		testAircraft aircraft = new testAircraft("test plane", randomFlightPlan());
+		airport.receiveFlight(aircraft, transferWaypoints.get(3));
 	}
 
 	private Queue<Waypoint> randomFlightPlan(){		
