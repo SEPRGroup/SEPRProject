@@ -7,6 +7,7 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.List;
+import java.util.Random;
 
 import static java.lang.Math.PI;
 
@@ -15,7 +16,7 @@ abstract class Airport extends Airspace{
 	private Image background;
 	private Image scaleBackground;
 	private Dimension boundaries;	//size of airspace in metres
-
+	private Random randomGenerator = new Random();
 
 	//constructor
 	protected Airport(String airspaceName,
@@ -82,17 +83,21 @@ abstract class Airport extends Airspace{
 	}
 
 	@Override
-	public final void receiveFlight(Flight f, TransferWaypoint t) {
-		f.setPosition(new Position(t.getPosition(this)));
-		f.setBearing(t.getBearingTo(this));
-
-		int i = 0;
-		while ((f != null) && (i < MAX_FLIGHTS)){
-			if (aircraft[i] == null){
-				aircraft[i] = f;
-				f = null;}
-			else i++;
+	public final void receiveFlight(Flight[] flights) {
+		aircraft = flights;		
+		int randomTransferWaypoint;			
+		System.out.println();
+		// set starting transfer waypoint for flights
+		for (Flight f: aircraft){
+			randomTransferWaypoint = randomGenerator.nextInt(getTransfers().size());
+			f.setPosition(new Position(getTransfers().get(randomTransferWaypoint).getPosition(this)));
+			f.setBearing(getTransfers().get(randomTransferWaypoint).getBearingTo(this));
+			// print flights
+			
+			System.out.println("Flight: " + f.getIdentifier() + " generated.");
 		}
+		System.out.println();
+
 	}
 
 	@Override
