@@ -1,7 +1,10 @@
 package sepr.atcGame;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import javax.swing.JFrame;
@@ -10,18 +13,23 @@ import java.util.Random;
 
 import static java.lang.Math.PI;
 
-public class Game extends JFrame{
+public class Game extends JFrame implements ActionListener{
 
 	private Airport airport;
 	private Airspace[] airspaces;
 	private Output output;
-	private ArrayList<TransferWaypoint> transferWaypoints = new ArrayList<TransferWaypoint>();
+	private List<TransferWaypoint> transferWaypoints = new ArrayList<TransferWaypoint>();
 
 	private static final int FPS_MAX = 60;
+	private static final int FPS_DELAY = 1000/FPS_MAX;
+	private javax.swing.Timer frameTimer = new javax.swing.Timer(FPS_DELAY, this);
 	private FrameRateMonitor fps = new FrameRateMonitor(FPS_MAX);
+	private long lastTime, gameTime;
+	private boolean paused = true, gameOver = false;
 
-	private boolean paused = true;
-	private boolean gameOver = false;
+	private static Random random = new Random();
+	private long sinceLastFlight;
+	private Queue<Flight> toAdd;
 
 	private static double nanoToGameTime(long time){
 		return time/1000000000.0;}
@@ -32,7 +40,7 @@ public class Game extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //{!}
 		//setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setTitle("ATC Game ¦ GAME");
-		setResizable(false);	//may change if aspect ratio is locked		
+		setResizable(true);	//may change if aspect ratio is locked		
 
 		generateWorld();
 		add(airport);
@@ -67,7 +75,6 @@ public class Game extends JFrame{
 	}
 
 	private Queue<Waypoint> randomFlightPlan(){		
-		Random random = new Random();
 		Waypoint[] waypoints = airport.getWaypoints();
 
 		//Generate intermediate path
@@ -101,56 +108,51 @@ public class Game extends JFrame{
 	}
 
 	public void Play(){
-		paused = false;
-		long lastTime, gameTime, elapsedTime;
-		long sinceLastFlight;
-		double elapsedGameTime;
-		Random random = new Random();
-
-		//{!} Test setup logic only
-		Queue<Flight> toAdd = new LinkedList<Flight>();	
+		toAdd = new LinkedList<Flight>();	
 		for (int i=0; i<5; i++){
 			toAdd.add(new testAircraft("test"+i, randomFlightPlan()));}
-
-		//game loop
-		lastTime = System.nanoTime();
-		gameTime = 0;
 		sinceLastFlight = 0;
-		while (!gameOver){		
-			do{
-				try {Thread.sleep(1);} 
-				catch (Exception e) {};
-				elapsedTime = System.nanoTime() -lastTime;
-			} while (elapsedTime < (1000000000/FPS_MAX));
 
-			lastTime += elapsedTime;			
-			fps.newFrame(elapsedTime);
-
-			if (!paused){	//update game elements
-				elapsedGameTime = nanoToGameTime(elapsedTime);
-				gameTime += elapsedTime;
-				sinceLastFlight += elapsedTime;
-
-				if (toAdd.size() > 0){
-					if (sinceLastFlight > 1500000000){
-						Flight f = toAdd.poll();
-						airport.receiveFlight(f , 
-								transferWaypoints.get( random.nextInt(transferWaypoints.size()) ));
-						System.out.println("add flight:\t" +f.getIdentifier());
-						sinceLastFlight -= 1500000000;
-					}
-				}
-
-				airport.update(elapsedGameTime);
-				airport.paintImmediately(airport.getBounds());
-				//{!} update ATC
-				//{!} update scheduler
-			}
-
-			//{!} end game after n seconds
-			gameOver = (nanoToGameTime(gameTime) > 10.0);
-		}
+		paused = false;
+		gameTime = 0;
+		lastTime = System.nanoTime();
+		frameTimer.start();
 	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		long elapsedTime;
+		double elapsedGameTime;
+
+		elapsedTime = System.nanoTime() -lastTime;
+		lastTime += elapsedTime;	
+		gameTime += elapsedTime;
+		fps.newFrame(elapsedTime);
+		elapsedGameTime = nanoToGameTime(elapsedTime);
+
+		//Game logic
+
+		sinceLastFlight += elapsedTime;
+		if (toAdd.size() > 0){	//{!} test logic
+			if (sinceLastFlight > 1500000000){
+				Flight f = toAdd.poll();
+				airport.receiveFlight(f, 
+						transferWaypoints.get( random.nextInt(transferWaypoints.size()) ));
+				System.out.println("add flight:\t" +f.getIdentifier());
+				sinceLastFlight -= 1500000000;
+			}
+		}
+
+		airport.update(elapsedGameTime);
+		//{!} update ATC
+		//{!} update scheduler
+
+		//{!} end game after n seconds
+		gameOver = (nanoToGameTime(gameTime) > 60.0);
+		if (gameOver){
+			frameTimer.stop();}
+	}
+
 
 	//getters/setters
 	public void setOutput(Output output) {
