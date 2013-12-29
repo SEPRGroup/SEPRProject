@@ -6,11 +6,11 @@ import java.util.Queue;
 abstract class Flight implements GameTime, Drawable {
 	// variables
 	private String identifier;
-	private FlightStatus status;  //FlightStatus is a user defined data type
+	protected FlightStatus status;  //FlightStatus is a user defined data type
 	protected Position position;
-	private Queue<Waypoint> flightPlan;
-	private FlightConditions conditions;
-	private double bearing;	//radians
+	protected final Queue<Waypoint> flightPlan;
+	protected FlightConditions conditions;
+	protected double bearing;	//radians
 	
 	
 	// constructor

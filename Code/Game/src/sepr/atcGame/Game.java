@@ -29,7 +29,7 @@ public class Game extends JFrame implements ActionListener{
 
 	private static Random random = new Random();
 	private long sinceLastFlight;
-	private Queue<Flight> toAdd;
+	private Queue<Flight> toAdd;	//{!}
 
 	private static double nanoToGameTime(long time){
 		return time/1000000000.0;}

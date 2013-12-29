@@ -8,12 +8,28 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import static sepr.atcGame.FlightStatus.*;
 
 
 abstract class Aircraft extends Flight {
 
 	private BufferedImage image, rotatedImage;
-	private double speed = 250;	//physical speed; {!}
+	
+	//static characteristics
+	protected double
+		minAlt, cruiseAlt, maxAlt,	//position:	m	
+		minV, cruiseV, maxV, minClimb, maxClimb, maxTurn,	//velocity:	m/s , rad/s
+		a, aClimb, aTurn;	//acceleration:	m/s/s , rad/s/s
+
+	//dynamic characteristics
+	private double
+		v = 0,	//physical speed:	m/s
+		vClimb = 0,	//current climb rate:	m/s
+		vTurn = 0;	//current turn rate:	rad/s
+
+	//target tracking variables
+	private double 
+		tAlt, tV, tBearing;
 
 
 	//constructor
@@ -21,19 +37,71 @@ abstract class Aircraft extends Flight {
 		super(id, flightPlan);
 		try {image = ImageIO.read(new File("src/sepr/atcGame/Images/plane.png"));}
 		catch (IOException e){};
+
+		status = FlightStatus.WAITING;
 	}
 
 
 	//overridden methods
 	@Override
 	public final void update(double time) { 
-		double vx, vy, vz;	//velocity components
-		vx = Math.sin(getBearing()) * speed;
-		vy = Math.cos(getBearing()) * speed;
-
-		position.x += vx*time;
-		position.y -= vy*time;
-		setBearing(getBearing() +0.15*time);	//{!} test code to continuously turn right
+		switch (status){
+		case COMPLYING:
+			if (v != tV){
+				if (v < tV){
+					v += a*time;
+					v = Math.min(v, maxV);
+				}
+				else{
+					v -= a*time;
+					v = Math.max(v, minV);
+				}
+			}
+			if (position.altitude != tAlt){
+				if (position.altitude < tAlt){
+					vClimb += aClimb*time;
+					vClimb = Math.min(vClimb, maxClimb);
+					}
+				else{
+					vClimb -= aClimb*time;
+					vClimb = Math.max(vClimb, minClimb);
+				}
+			}
+			else vClimb = 0;
+			if (bearing != tBearing){
+				if (bearing < tBearing){	//{!} test if should turn left or right
+					vTurn += aTurn*time;
+					vTurn = Math.min(vTurn, maxTurn);
+					}
+				else{
+					vTurn -= aTurn*time;
+					vTurn = Math.max(vTurn, -maxTurn);
+				}
+				rotatedImage = null;
+			}
+			else vTurn = 0;
+			//execute cruising behaviour
+		case CRUISING:
+			//update positions
+			double vx, vy;	//velocity components
+			bearing += vTurn*time; 
+			vx = Math.sin(bearing) * v;
+			vy = Math.cos(bearing) * v;
+			position.x += vx*time;
+			position.y -= vy*time;
+			position.altitude += vClimb;
+			break;
+		case WAITING: break;
+		case CRASHING:
+			break;
+		case LANDING:
+			break;
+		case TAKEOFF:
+			break;
+		case TAXIING:
+			break;
+					
+		}
 	}
 
 	public final void draw(Graphics g, Point location, double scale) {
@@ -52,42 +120,54 @@ abstract class Aircraft extends Flight {
 
 	@Override
 	public final void takeOff(TransferWaypoint t) {
-		// TODO
+		status = FlightStatus.TAKEOFF;
 	}
 
 	@Override
 	public final void land(TransferWaypoint t) {
-		// TODO
+		status = FlightStatus.LANDING;
 	}
 
 	@Override
 	public final void turnTo(double bearing) {
-		// TODO
+		tBearing = bearing;
+		if (CRUISING == status){
+			status = COMPLYING;}
 	}
 
 	@Override
 	public final void toAltitude(double altitude) {
-		// TODO
+		tAlt = altitude;
+		if (CRUISING == status){
+			status = COMPLYING;}
 	}
 
 	@Override
 	public final void toSpeed(double speed) {
-		// TODO
+		tV = speed;
+		if (CRUISING == status){
+			status = COMPLYING;}
 	}
 
 	@Override
 	public final void abort() {
-		// TODO
+		tAlt =cruiseAlt;
+		tBearing = bearing;
+		tV = cruiseV;
+		status = COMPLYING;
 	}
 
 	@Override
 	public final void crash() {
-		// TODO
+		status = FlightStatus.CRASHING;
 	}
 
 	@Override
 	public final void setBearing(double bearing) {
 		super.setBearing(bearing);
+		//tBearing = bearing; {!} disabled while setBearing is used by Airspace
+		if (CRUISING == status){
+			status = COMPLYING;}
 		rotatedImage = null;
 	}
 

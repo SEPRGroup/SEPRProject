@@ -6,6 +6,9 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.ComponentAdapter;
 import java.util.List;
 
 import static java.lang.Math.PI;
@@ -16,6 +19,13 @@ abstract class Airport extends Airspace{
 	private Image scaleBackground;
 	private Dimension boundaries;	//size of airspace in metres
 
+	private ComponentListener resizeListener = new ComponentAdapter(){
+		public void componentResized(ComponentEvent arg0) {
+			scaleBackground = null;
+			//{!} needs to lock ratio
+		}
+	};
+
 
 	//constructor
 	protected Airport(String airspaceName,
@@ -25,6 +35,7 @@ abstract class Airport extends Airspace{
 
 		this.setOpaque(true);
 		setDoubleBuffered(true);	//{!} disable if not redrawing entire screen
+		addComponentListener(resizeListener);
 
 		generateWaypoints();
 	}
@@ -112,9 +123,7 @@ abstract class Airport extends Airspace{
 		Position pos;
 
 		//draw background
-		if (scaleBackground != null){
-			if(bounds.width != scaleBackground.getWidth(null)){
-				scaleBackground = background.getScaledInstance(bounds.width, bounds.height, Image.SCALE_SMOOTH);}			
+		if (scaleBackground != null){			
 			g.drawImage(scaleBackground, 0, 0, null);}
 		else if(background != null){
 			scaleBackground = background.getScaledInstance(bounds.width, bounds.height, Image.SCALE_SMOOTH);
