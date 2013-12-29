@@ -1,7 +1,7 @@
 package sepr.atcGame;
 
 
-final class Position {
+public final class Position { //Had to change from final class type to public to test
 	//variables
 	public double x, y, altitude;
 	
