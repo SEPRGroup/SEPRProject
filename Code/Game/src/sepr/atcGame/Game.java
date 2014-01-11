@@ -23,7 +23,7 @@ public class Game extends JFrame implements ActionListener{
 	private static final int FPS_MAX = 60;
 	private static final int FPS_DELAY = 1000/FPS_MAX;
 	private javax.swing.Timer frameTimer = new javax.swing.Timer(FPS_DELAY, this);
-	private FrameRateMonitor fps = new FrameRateMonitor(FPS_MAX);
+	private FrameRateMonitor fps = new FrameRateMonitor(FPS_MAX *5);
 	private long lastTime, gameTime;
 	private boolean paused = true, gameOver = false;
 
@@ -150,7 +150,9 @@ public class Game extends JFrame implements ActionListener{
 		//{!} end game after n seconds
 		gameOver = (nanoToGameTime(gameTime) > 60.0);
 		if (gameOver){
-			frameTimer.stop();}
+			frameTimer.stop();
+			System.out.println("[END]");
+		}
 	}
 
 

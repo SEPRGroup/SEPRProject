@@ -9,12 +9,16 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import static sepr.atcGame.FlightStatus.*;
+import static java.lang.Math.PI;
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.abs;
 
 
 abstract class Aircraft extends Flight {
 
 	private BufferedImage image, rotatedImage;
-	
+
 	//static characteristics
 	protected double
 		minAlt, cruiseAlt, maxAlt,	//position:	m	
@@ -47,39 +51,70 @@ abstract class Aircraft extends Flight {
 	public final void update(double time) { 
 		switch (status){
 		case COMPLYING:
+			boolean changed = false;
 			if (v != tV){
+				changed = true;
+				double dv = 0.5*(tV - v);	//arbitrary constant to limit motion;
 				if (v < tV){
-					v += a*time;
-					v = Math.min(v, maxV);
-				}
+					dv = min(dv, a);}
 				else{
-					v -= a*time;
-					v = Math.max(v, minV);
+					dv = max(-dv, -a);
+				}
+				v += dv*time;
+				if ( abs(tV-v) < 0.1){
+					v = tV;	//end manoeuvres
+					//System.out.println(getIdentifier() +"\thas completed accelerating");
 				}
 			}
 			if (position.altitude != tAlt){
+				changed = true;
+				double dalt = 0.5*(tAlt - position.altitude);	//arbitrary constant to limit motion
 				if (position.altitude < tAlt){
 					vClimb += aClimb*time;
-					vClimb = Math.min(vClimb, maxClimb);
-					}
+					vClimb = min(vClimb, maxClimb);	//cap climb rate
+					vClimb = min(vClimb, dalt);	//cap to smooth climb
+				}
 				else{
 					vClimb -= aClimb*time;
-					vClimb = Math.max(vClimb, minClimb);
+					vClimb = max(vClimb, minClimb);	//cap climb rate
+					vClimb = max(vClimb, -dalt);	//cap to smooth climb
+				}
+				if ( abs(tAlt-position.altitude) < 0.1){
+					vClimb = 0;
+					position.altitude = tAlt;	//end manoeuvres
+					//System.out.println(getIdentifier() +"\thas completed climbing");
 				}
 			}
-			else vClimb = 0;
 			if (bearing != tBearing){
-				if (bearing < tBearing){	//{!} test if should turn left or right
+				changed = true;
+				double dturn = tBearing -bearing;
+				if ( ((dturn>=0) && (dturn<=PI)) || (dturn<=-PI) ){	//turn right
+					if (dturn < 0){
+						dturn += 2*PI;}	//normalize, 0 to PI
+					dturn *= 0.5;	//arbitrary constant to limit motion
 					vTurn += aTurn*time;
-					vTurn = Math.min(vTurn, maxTurn);
-					}
-				else{
+					vTurn = min(vTurn, maxTurn);	//cap to limit rotation
+					vTurn = min(vTurn, dturn);	//cap to smooth rotation
+				}
+				else{	//turn left
+					if (dturn > 0){
+						dturn = dturn -2*PI;}	//normalize, -PI to 0
+					dturn *= 0.5;	//arbitrary constant to limit motion
 					vTurn -= aTurn*time;
-					vTurn = Math.max(vTurn, -maxTurn);
+					vTurn = max(vTurn, -maxTurn);	//cap to limit rotation
+					vTurn = max(vTurn, dturn);	//cap to smooth rotation
 				}
 				rotatedImage = null;
+				if ( (abs(tBearing -bearing) < 0.01) || (abs(tBearing+2*PI -bearing) < 0.05)){
+					vTurn = 0;
+					bearing = tBearing;	//end manoeuvres
+					//System.out.println(getIdentifier() +"\thas completed turning");
+				}
 			}
-			else vTurn = 0;
+			if (!changed){
+				status = CRUISING;
+				System.out.println(getIdentifier() +"\thas completed manoeuvres");
+			}
 			//execute cruising behaviour
 		case CRUISING:
 			//update positions
@@ -100,7 +135,7 @@ abstract class Aircraft extends Flight {
 			break;
 		case TAXIING:
 			break;
-					
+
 		}
 	}
 
@@ -137,6 +172,7 @@ abstract class Aircraft extends Flight {
 
 	@Override
 	public final void toAltitude(double altitude) {
+		//{!} min/max checks
 		tAlt = altitude;
 		if (CRUISING == status){
 			status = COMPLYING;}
@@ -144,6 +180,7 @@ abstract class Aircraft extends Flight {
 
 	@Override
 	public final void toSpeed(double speed) {
+		//{!} min/max checks
 		tV = speed;
 		if (CRUISING == status){
 			status = COMPLYING;}
