@@ -145,6 +145,11 @@ abstract class Aircraft extends Flight {
 					AffineTransform.getRotateInstance(getBearing(), image.getWidth()/2, image.getHeight()/2), 
 					AffineTransformOp.TYPE_BILINEAR);
 			rotatedImage = op.filter(image, null);
+			
+			Graphics g2 = rotatedImage.getGraphics();
+			g2.setColor(Color.black); 
+			g2.drawString(String.valueOf(position.altitude), 10, 10);
+			g2.drawImage(rotatedImage,0,0,null);
 		}
 
 		g.drawImage(rotatedImage,
