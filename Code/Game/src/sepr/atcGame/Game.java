@@ -1,5 +1,7 @@
 package sepr.atcGame;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -8,6 +10,8 @@ import java.util.List;
 import java.util.Queue;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import java.util.Random;
 
@@ -26,11 +30,14 @@ public class Game extends JFrame implements ActionListener{
 	private FrameRateMonitor fps = new FrameRateMonitor(FPS_MAX *5);
 	private long lastTime, gameTime;
 	private boolean paused = true, gameOver = false;
-
+	
 	private static Random random = new Random();
 	private long sinceLastFlight;
 	private Queue<Flight> toAdd;	//{!}
 
+	private JPanel timerPanel = new JPanel();
+	
+	private JLabel timerDisplay = new JLabel();
 	private static double nanoToGameTime(long time){
 		return time/1000000000.0;}
 
@@ -40,9 +47,15 @@ public class Game extends JFrame implements ActionListener{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //{!}
 		//setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setTitle("ATC Game ¦ GAME");
-		setResizable(true);	//may change if aspect ratio is locked		
-
+		setResizable(true);	//may change if aspect ratio is locked
+		timerDisplay.setText("Time : 0");
+		
+		timerPanel.add(timerDisplay);
+		timerPanel.setBackground(Color.WHITE);
+		add(timerPanel,BorderLayout.PAGE_START);
+		
 		generateWorld();
+		
 		add(airport);
 		pack();
 		setLocationRelativeTo(null);
@@ -123,13 +136,15 @@ public class Game extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent arg0) {
 		long elapsedTime;
 		double elapsedGameTime;
-
+		String gameTimeString;
+		
 		elapsedTime = System.nanoTime() -lastTime;
 		lastTime += elapsedTime;	
 		gameTime += elapsedTime;
 		fps.newFrame(elapsedTime);
 		elapsedGameTime = nanoToGameTime(elapsedTime);
-
+		gameTimeString = String.valueOf(nanoToGameTime(gameTime));
+		timerDisplay.setText("Time : "+ gameTimeString);
 		//Game logic
 
 		sinceLastFlight += elapsedTime;
