@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 
-class ATC extends JPanel implements GameTime{
+public class ATC extends JPanel implements GameTime{
 
 	private String name;
 	private Airspace airspace;

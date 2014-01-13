@@ -6,7 +6,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 
-final class Heathrow extends Airport {
+public final class Heathrow extends Airport {
 	
 	//constructor
 	public Heathrow(){

@@ -5,7 +5,7 @@ import java.util.List;
 import javax.swing.JPanel;
 
 
-abstract class Airspace extends JPanel implements GameTime{
+public abstract class Airspace extends JPanel implements GameTime{
 	//constants
 	protected static final int MAX_FLIGHTS = 5;
 	protected static final int MAX_WAYPOINTS = 5;

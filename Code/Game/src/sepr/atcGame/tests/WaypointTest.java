@@ -26,7 +26,10 @@ public class WaypointTest {
 	public void testWaypoint() {
 		// MH: Test for the Constructor needs to go here, not entirely sure how we can test this yet.
 		// MH: Maybe by checking that attributes are private?
-		fail("Not yet implemented");
+		
+		// Test that the Waypoint has been initiated correctly (same as getPosition test)
+		assertEquals(newPosition, instance.getPosition());
+
 	}
 	
 		
@@ -46,7 +49,7 @@ public class WaypointTest {
 
 	@Test
 	public void testGetPosition() {
-		// Put both to string so can equal each other
+		
 		assertEquals(newPosition, instance.getPosition());
 		
 	}
