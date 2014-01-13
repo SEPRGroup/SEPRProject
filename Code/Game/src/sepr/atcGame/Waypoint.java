@@ -8,7 +8,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 
-class Waypoint implements Drawable{
+public class Waypoint implements Drawable{
 	private String name;
 	private Position position;
 	private Image image = null;
