@@ -6,9 +6,9 @@ package sepr.atcGame.tests;
 /*  DATE			NAME			FAILURE
  * ------------------------------------------------------------------------------------------------------------------------------------------
  * ------------------------------------------------------------------------------------------------------------------------------------------
- * 
- * 
- * 
+ * 14/01/2014		Stephen			Cannot compare input image with background image of 'Heathrow' instance
+ * 14/01/2014		Stephen			Even though objects are the same due to 'toString' method of 'Waypoint' doesn't
+ * 									think that each object is equal to each other. In theory should work!
  * 
  * 
  * 

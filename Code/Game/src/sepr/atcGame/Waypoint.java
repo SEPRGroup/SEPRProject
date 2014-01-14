@@ -45,5 +45,11 @@ public class Waypoint implements Drawable{
 	public void setPosition(Position position) {
 		this.position = position;
 	}
+	
+	@Override
+	public String toString() {
+		String s = this.name + " | " + position.toString(); 
+		return s;
+	}
 		
 }

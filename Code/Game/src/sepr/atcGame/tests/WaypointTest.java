@@ -49,7 +49,8 @@ public class WaypointTest {
 
 	@Test
 	public void testGetPosition() {
-		
+		// Both position objects are the same so no failures
+		System.out.println("Actual: " + instance.getPosition() + " | Dummy: " + newPosition );
 		assertEquals(newPosition, instance.getPosition());
 		
 	}

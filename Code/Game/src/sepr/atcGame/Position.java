@@ -40,4 +40,10 @@ public final class Position { //Had to change from final class type to public to
 	public void setAltitude(double altitude) {
 		this.altitude = altitude;
 	}
+	
+	@Override
+	public String toString(){
+		String s = "X: " + x + ", Y: " + y + ", Altidute: " + altitude;
+		return s;
+	}
 }
