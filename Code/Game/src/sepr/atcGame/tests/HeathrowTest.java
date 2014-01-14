@@ -43,8 +43,10 @@ public class HeathrowTest {
 			System.out.println("Actual Waypoint:" + w);
 		}
 		
+		
+		
 		// Not sure why this isn't working as they are exactly the same
-		assertArrayEquals(newWaypoints, instance.getWaypoints());
+		assertEquals(newWaypoints, instance.getWaypoints());
 	}
 
 	// Not sure how to check if the image came in??
