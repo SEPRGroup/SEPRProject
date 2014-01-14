@@ -146,13 +146,15 @@ abstract class Aircraft extends Flight {
 					AffineTransform.getRotateInstance(getBearing(), image.getWidth()/2, image.getHeight()/2), 
 					AffineTransformOp.TYPE_BILINEAR);
 			rotatedImage = op.filter(image, null);
+			
+		}
+		if(altitudeImage == null){
 			altitudeImage = new BufferedImage(rotatedImage.getWidth(), 20, BufferedImage.TYPE_INT_ARGB);
 			Graphics g2 = altitudeImage.getGraphics();
 			g2.setColor(Color.black); 
 			g2.drawString(String.valueOf(position.altitude), 10, 10);
 			g2.drawImage(altitudeImage,0,0,null);
 		}
-		
 		g.drawImage(rotatedImage,
 				location.x -(rotatedImage.getWidth()/2),
 				location.y -(rotatedImage.getHeight()/2),
@@ -201,6 +203,7 @@ abstract class Aircraft extends Flight {
 		tAlt = altitude;
 		if (CRUISING == status){
 			status = COMPLYING;}
+		altitudeImage = null;
 	}
 
 	@Override
@@ -231,7 +234,7 @@ abstract class Aircraft extends Flight {
 		if (CRUISING == status){
 			status = COMPLYING;}
 		rotatedImage = null;
-		altitudeImage = null;
+		//altitudeImage = null;
 	}
 
 }
