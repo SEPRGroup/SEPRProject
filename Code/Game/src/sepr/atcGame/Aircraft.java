@@ -17,7 +17,7 @@ import static java.lang.Math.abs;
 
 abstract class Aircraft extends Flight {
 
-	private BufferedImage image, rotatedImage;
+	private BufferedImage image, rotatedImage,altitudeImage;
 
 	//static characteristics
 	protected double
@@ -105,6 +105,7 @@ abstract class Aircraft extends Flight {
 					vTurn = max(vTurn, dturn);	//cap to smooth rotation
 				}
 				rotatedImage = null;
+				altitudeImage = null;
 				if ( (abs(tBearing -bearing) < 0.01) || (abs(tBearing+2*PI -bearing) < 0.05)){
 					vTurn = 0;
 					bearing = tBearing;	//end manoeuvres
@@ -145,17 +146,36 @@ abstract class Aircraft extends Flight {
 					AffineTransform.getRotateInstance(getBearing(), image.getWidth()/2, image.getHeight()/2), 
 					AffineTransformOp.TYPE_BILINEAR);
 			rotatedImage = op.filter(image, null);
-			
-			Graphics g2 = rotatedImage.getGraphics();
+			altitudeImage = new BufferedImage(rotatedImage.getWidth(), 20, BufferedImage.TYPE_INT_ARGB);
+			Graphics g2 = altitudeImage.getGraphics();
 			g2.setColor(Color.black); 
 			g2.drawString(String.valueOf(position.altitude), 10, 10);
-			g2.drawImage(rotatedImage,0,0,null);
+			g2.drawImage(altitudeImage,0,0,null);
 		}
-
+		
 		g.drawImage(rotatedImage,
 				location.x -(rotatedImage.getWidth()/2),
 				location.y -(rotatedImage.getHeight()/2),
 				null);
+		
+		if (bearing >1.5 * Math.PI){//draw data labels(eg. altitude) at top of image
+			//System.out.println(bearing+ "\n");
+			g.drawImage(altitudeImage,
+					location.x -(altitudeImage.getWidth()/2),
+					location.y -(rotatedImage.getHeight()/2)-(altitudeImage.getHeight()/2),
+					null);
+		}else if(bearing < Math.PI/2){
+			g.drawImage(altitudeImage,
+					location.x -(altitudeImage.getWidth()/2),
+					location.y -(rotatedImage.getHeight()/2)-(altitudeImage.getHeight()/2),
+					null);
+			
+		}else{//draw data labels(eg. altitude) at bottom of image
+			g.drawImage(altitudeImage,
+					location.x -(altitudeImage.getWidth()/2),
+					location.y +(rotatedImage.getHeight()/2)+(altitudeImage.getHeight()/2),
+					null);
+		}
 	}
 
 	@Override
@@ -211,6 +231,7 @@ abstract class Aircraft extends Flight {
 		if (CRUISING == status){
 			status = COMPLYING;}
 		rotatedImage = null;
+		altitudeImage = null;
 	}
 
 }
