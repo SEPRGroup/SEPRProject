@@ -89,13 +89,20 @@ abstract class Airport extends Airspace{
 
 	@Override
 	public final void newFlight(Flight f) {
-		// TODO Auto-generated method stub
+		int i = 0;
+		while ((f != null) && (i < MAX_FLIGHTS)){
+			if (aircraft[i] == null){
+				aircraft[i] = f;
+				f = null;}
+			else i++;
+		}
+		if (MAX_FLIGHTS == i){	//was not added; would exceed MAX_FLIGHTS
+			eventLost(f);}
 	}
 
 	@Override
 	public final void receiveFlight(Flight f, TransferWaypoint t) {
-		f.setPosition(new Position(t.getPosition(this)));
-		f.setBearing(t.getBearingTo(this));
+		f.transition(this, t);
 
 		int i = 0;
 		while ((f != null) && (i < MAX_FLIGHTS)){

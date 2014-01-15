@@ -14,17 +14,15 @@ class TransferWaypoint extends Waypoint {
 	//constructor
 	/** Creates an waypoint that provides the linking between airspaces.
 	 * 
-	 * @param tranferPosition 
-	 * @param airspace1Name
-	 * @param airspace2Name
-	 * @param transferBearing
-	 * @param waypointName Name for the waypoint
-	 * @param waypointPosition Position which the waypoint is to be created at in the airspace
+	 * @param name :	name of waypoint
+	 * @param airspace1
+	 * @param airspace2
+	 * @param bearing	: bearing from airspace1 to airspace2
 	 */
 	public TransferWaypoint(String name, Airspace airspace1, Airspace airspace2,
 			double bearing){
-		super(name, new Position(-1,-1,-1));	
-		position2 = new Position(-1,-1,-1);	
+		super(name, new Position(-1,-1,-1));	//{!}	
+		position2 = new Position(-1,-1,-1);		//{!}
 		this.airspace1 = airspace1;
 		this.airspace2 = airspace2;
 		this.bearing = bearing;

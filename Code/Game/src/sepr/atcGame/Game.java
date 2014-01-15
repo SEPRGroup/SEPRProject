@@ -90,6 +90,10 @@ public class Game extends JFrame implements ActionListener{
 
 	private Queue<Waypoint> randomFlightPlan(){		
 		Waypoint[] waypoints = airport.getWaypoints();
+		List<TransferWaypoint> transfers = airport.getTransfers();
+		
+		//Generate starting waypoint
+		TransferWaypoint source = transfers.get(random.nextInt(transfers.size()));
 
 		//Generate intermediate path
 		int[] indices = new int[3];
@@ -109,11 +113,13 @@ public class Game extends JFrame implements ActionListener{
 
 		//construct flightplan
 		Queue<Waypoint> flightPlan = new LinkedList<Waypoint>();
+		flightPlan.add(source);
 		for (int index: indices){
 			flightPlan.add(waypoints[index]);}
 		flightPlan.add(destination);
 
 		//{!} print flight plan
+		System.out.print(source.getName() +", ");
 		for (int i=0; i < indices.length; i++){
 			System.out.print(waypoints[indices[i]].getName() +", ");}
 		System.out.println(destination.getName());
@@ -150,9 +156,18 @@ public class Game extends JFrame implements ActionListener{
 		sinceLastFlight += elapsedTime;
 		if (toAdd.size() > 0){	//{!} test logic
 			if (sinceLastFlight > 1500000000){
-				Flight f = toAdd.poll();
-				airport.receiveFlight(f, 
-						transferWaypoints.get( random.nextInt(transferWaypoints.size()) ));
+				Aircraft f = (Aircraft)toAdd.poll();
+				{
+					f.init(f.cruiseV, 200);
+					airport.receiveFlight(f, 
+							(TransferWaypoint)f.getFlightPlan().poll());
+					f.turnTo(0);
+					f.toAltitude(300);
+				}
+				/*{
+					airport.newFlight(f);
+					f.takeOff(airport, (TransferWaypoint)f.getFlightPlan().poll());
+				}*/
 				System.out.println("add flight:\t" +f.getIdentifier());
 				sinceLastFlight -= 1500000000;
 			}

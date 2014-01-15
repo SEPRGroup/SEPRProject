@@ -21,7 +21,7 @@ abstract class Aircraft extends Flight {
 	private BufferedImage image, rotatedImage;	//,labelImage;
 
 	//static characteristics
-	protected double
+	public double
 		minAlt, cruiseAlt, maxAlt,	//position:	m	
 		minV, cruiseV, maxV, minClimb, maxClimb, maxTurn,	//velocity:	m/s , rad/s
 		a, aClimb, aTurn;	//acceleration:	m/s/s , rad/s/s
@@ -51,11 +51,11 @@ abstract class Aircraft extends Flight {
 	@Override
 	public final void update(double time) { 
 		switch (status){
-		case COMPLYING:
+		case COMPLYING: {
 			boolean changed = false;
 			if (v != tV){
 				changed = true;
-				double dv = 0.5*(tV - v);	//arbitrary constant to limit motion;
+				double dv = 0.7*(tV - v);	//arbitrary constant to limit motion;
 				if (v < tV){
 					dv = min(dv, a);}
 				else{
@@ -69,7 +69,7 @@ abstract class Aircraft extends Flight {
 			}
 			if (position.altitude != tAlt){
 				changed = true;
-				double dalt = 0.5*(tAlt - position.altitude);	//arbitrary constant to limit motion
+				double dalt = 0.7*(tAlt - position.altitude);	//arbitrary constant to limit motion
 				if (position.altitude < tAlt){
 					vClimb += aClimb*time;
 					vClimb = min(vClimb, maxClimb);	//cap climb rate
@@ -93,7 +93,7 @@ abstract class Aircraft extends Flight {
 				if ( ((dturn>=0) && (dturn<=PI)) || (dturn<=-PI) ){	//turn right
 					if (dturn < 0){
 						dturn += 2*PI;}	//normalize, 0 to PI
-					dturn *= 0.5;	//arbitrary constant to limit motion
+					dturn *= 0.7;	//arbitrary constant to limit motion
 					vTurn += aTurn*time;
 					vTurn = min(vTurn, maxTurn);	//cap to limit rotation
 					vTurn = min(vTurn, dturn);	//cap to smooth rotation
@@ -101,7 +101,7 @@ abstract class Aircraft extends Flight {
 				else{	//turn left
 					if (dturn > 0){
 						dturn = dturn -2*PI;}	//normalize, -PI to 0
-					dturn *= 0.5;	//arbitrary constant to limit motion
+					dturn *= 0.7;	//arbitrary constant to limit motion
 					vTurn -= aTurn*time;
 					vTurn = max(vTurn, -maxTurn);	//cap to limit rotation
 					vTurn = max(vTurn, dturn);	//cap to smooth rotation
@@ -119,7 +119,8 @@ abstract class Aircraft extends Flight {
 				System.out.println(getIdentifier() +"\thas completed manoeuvres");
 			}
 			//execute cruising behaviour
-		case CRUISING:
+		}
+		case CRUISING: {
 			//update positions
 			double vx, vy;	//velocity components
 			bearing += vTurn*time; 
@@ -129,13 +130,26 @@ abstract class Aircraft extends Flight {
 			position.y -= vy*time;
 			position.altitude += vClimb*time;
 			break;
+		}
 		case WAITING: break;
 		case CRASHING:
 			break;
 		case LANDING:
 			break;
-		case TAKEOFF:
+		case TAKEOFF: {
+			double vx, vy;	//velocity components
+			v += a*time;
+			vx = Math.sin(bearing) * v;
+			vy = Math.cos(bearing) * v;
+			position.x += vx*time;
+			position.y -= vy*time;
+			if (v >= minV){
+				tV = cruiseV;
+				tAlt = cruiseAlt;
+				status = COMPLYING;
+			}
 			break;
+		}
 		case TAXIING:
 			break;
 
@@ -146,7 +160,7 @@ abstract class Aircraft extends Flight {
 		//calculate rotated image if invalidated
 		if (rotatedImage == null){
 			AffineTransformOp op = new AffineTransformOp(
-					AffineTransform.getRotateInstance(getBearing(), image.getWidth()/2, image.getHeight()/2), 
+					AffineTransform.getRotateInstance(bearing, image.getWidth()/2, image.getHeight()/2), 
 					AffineTransformOp.TYPE_BILINEAR);
 			rotatedImage = op.filter(image, null);		
 		}
@@ -167,29 +181,43 @@ abstract class Aircraft extends Flight {
 			g.drawString(dataString, location.x -w, location.y +h +13);
 		}
 
-		/*if (bearing >1.5 * Math.PI){//draw data labels(eg. altitude) at top of image
-			//System.out.println(bearing+ "\n");
-			g.drawImage(altitudeImage,
-					location.x -(altitudeImage.getWidth()/2),
-					location.y -(rotatedImage.getHeight()/2)-(altitudeImage.getHeight()/2),
-					null);
-		}else if(bearing < Math.PI/2){
-			g.drawImage(altitudeImage,
-					location.x -(altitudeImage.getWidth()/2),
-					location.y -(rotatedImage.getHeight()/2)-(altitudeImage.getHeight()/2),
-					null);
-
-		}else{//draw data labels(eg. altitude) at bottom of image
-			g.drawImage(altitudeImage,
-					location.x -(altitudeImage.getWidth()/2),
-					location.y +(rotatedImage.getHeight()/2)+(altitudeImage.getHeight()/2),
-					null);
-		}*/
 	}
 
 	@Override
-	public final void takeOff(TransferWaypoint t) {
-		status = FlightStatus.TAKEOFF;
+	public final void transition(Airspace a, TransferWaypoint t){
+		//set position, preserving old altitude
+		bearing = t.getBearingTo(a);
+		Position pos = new Position(t.getPosition(a));
+		pos.altitude = position.altitude;
+		position = pos;
+		//place plane 2 second's worth of distance from edge of screen
+		pos.x -= 2 * Math.sin(bearing) *v;
+		pos.y += 2 * Math.cos(bearing) *v;
+
+		//clear old instructions
+		tAlt = position.altitude;
+		tBearing = bearing;
+		tV = v;	
+		status = CRUISING;
+	}
+
+	public final void init(double speed, double altitude){
+		if (WAITING == status){
+			v = speed;
+			position.altitude = altitude;
+			System.out.println(getIdentifier() +" init");
+		}
+		else ;	//{!} error
+	}
+
+	@Override
+	public final void takeOff(Airspace a, TransferWaypoint t) {
+		if (WAITING == status){
+			position = new Position(t.getPosition(a));
+			bearing = t.getBearingTo(a);
+			status = TAKEOFF;
+		}
+		else ;//{!}error
 	}
 
 	@Override
@@ -206,18 +234,22 @@ abstract class Aircraft extends Flight {
 
 	@Override
 	public final void toAltitude(double altitude) {
-		//{!} min/max checks
-		tAlt = altitude;
-		if (CRUISING == status){
-			status = COMPLYING;}
+		if ((altitude >= minAlt) && (altitude <= maxAlt)){
+			tAlt = altitude;
+			if (CRUISING == status){
+				status = COMPLYING;}
+		}
+		else System.out.println(getIdentifier() +" cannot go to this altitude");	//{!} error
 	}
 
 	@Override
 	public final void toSpeed(double speed) {
-		//{!} min/max checks
-		tV = speed;
-		if (CRUISING == status){
-			status = COMPLYING;}
+		if ((speed >= minV) && (speed <= maxV)){
+			tV = speed;
+			if (CRUISING == status){
+				status = COMPLYING;}
+		}
+		else System.out.println(getIdentifier() +" cannot go to this speed");;	//{!} error
 	}
 
 	@Override
@@ -230,17 +262,7 @@ abstract class Aircraft extends Flight {
 
 	@Override
 	public final void crash() {
-		status = FlightStatus.CRASHING;
-	}
-
-	@Override
-	public final void setBearing(double bearing) {
-		super.setBearing(bearing);
-		//tBearing = bearing; {!} disabled while setBearing is used by Airspace
-		if (CRUISING == status){
-			status = COMPLYING;}
-		rotatedImage = null;
-		//altitudeImage = null;
+		status = CRASHING;
 	}
 
 }

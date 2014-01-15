@@ -9,7 +9,7 @@ abstract class Flight implements GameTime, Drawable {
 	protected FlightStatus status;  //FlightStatus is a user defined data type
 	protected Position position;
 	protected final Queue<Waypoint> flightPlan;
-	protected FlightConditions conditions;
+	private FlightConditions conditions;
 	protected double bearing;	//radians
 	
 	
@@ -17,9 +17,8 @@ abstract class Flight implements GameTime, Drawable {
  	protected Flight(String id, Queue<Waypoint> flightPlan){
 		identifier = id;
 		this.flightPlan = flightPlan;
-		this.position = new Position(-1, -1, -1);
+		position = new Position(-1, -1, -1);	//invalid position
 	}
-	
  	
 	//getters and setters
  	public final FlightConditions getCondition() {
@@ -36,11 +35,7 @@ abstract class Flight implements GameTime, Drawable {
 	public final FlightStatus getStatus() {
 		return status;
 	}
-	
-	public final void setPosition(Position position){
-		this.position = position;
-	}
-	
+
 	public final Position getPosition() {
 		return position;
 	}
@@ -53,18 +48,17 @@ abstract class Flight implements GameTime, Drawable {
 	public final double getBearing() {
 		return bearing;
 	}
-	
-	public void setBearing(double bearing) {
-		this.bearing = bearing;		
-	}
-	
-	
+
+
 	// methods
 	public final void nextWaypoint(){
 		flightPlan.poll();
 	}
 	
-	public abstract void takeOff(TransferWaypoint t);
+	public abstract void init(double speed, double altitude);
+	
+	public abstract void transition(Airspace a, TransferWaypoint t);
+	public abstract void takeOff(Airspace a, TransferWaypoint t);
 	public abstract void land(TransferWaypoint t);
 	public abstract void turnTo(double bearing);
 	public abstract void toAltitude(double altitude);
