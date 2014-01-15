@@ -1,5 +1,9 @@
 package sepr.atcGame;
 
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Point;
+
 
 class TransferWaypoint extends Waypoint {
 	//Variables
@@ -26,7 +30,47 @@ class TransferWaypoint extends Waypoint {
 		this.bearing = bearing;
 	}
 	
-	
+	public void draw(Graphics g, Point location, double scale) {	 
+		//precalculate useful positioning values 
+		int w=image.getWidth(null), h=image.getHeight(null)/2;
+		g.drawImage(image, location.x - w, location.y - h, null);
+		
+		{	//label attributes
+			Font dataFont = new Font(Font.MONOSPACED, Font.PLAIN, 12);
+			String idString = (getName());
+			String dataString = String.format("\u21A5%1$4d", 
+					Math.round(this.getPosition().altitude));
+			//unused bearing code:	 \u21BB%3$03d	, round(Math.toDegrees(bearing))
+			g.setFont(dataFont);
+			//test on which edge of the screen the waypoint lies, nested to prevent labels being drawn twice in cases where the waypoint lies on corners or near corners
+			if(location.x == 0){//Waypoint is on left of screen so print to the right
+				g.drawString(idString, location.x +w/2 - 10 , location.y +h +7);	
+				g.drawString(dataString, location.x +w/2 -10, location.y +h +18);
+			}else{
+			
+				if(location.y == 0){//Waypoint is at top of screen so print to the bottom
+					g.drawString(idString, location.x -w/2 - 15 , location.y +h +7);	
+					g.drawString(dataString, location.x -w, location.y +h +18);
+				}else{
+			
+					if(location.x == airspace1.getBounds().getWidth()){//waypoint is on right side of screen so print to the left
+						g.drawString(idString, location.x -w/2 - 52, location.y);	
+						g.drawString(dataString, location.x -w/2 - 52, location.y +10 );
+					}else{
+						if(location.y == airspace1.getBounds().getHeight()|| location.y > airspace1.getBounds().getHeight()-20){//waypoint is on the bottom side of screen so print to the top
+							g.drawString(idString, location.x -w/2 - 15 , location.y -h -18);	
+							g.drawString(dataString, location.x -w, location.y -h -7);
+						}
+					}
+				}
+			}
+				
+				//g.drawString(idString, location.x -w/2 - 15 , location.y +h +7);	
+				//g.drawString(dataString, location.x -w, location.y +h +18);
+			
+		
+		}
+	}
 	//getters and setters
 	public Position getPosition(Airspace airspace) {
 		if(airspace.equals(airspace1)){
