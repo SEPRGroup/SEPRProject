@@ -43,7 +43,6 @@ abstract class Aircraft extends Flight {
 		super(id, flightPlan);
 		try {image = ImageIO.read(new File("src/sepr/atcGame/Images/plane.png"));}
 		catch (IOException e){};
-
 		status = FlightStatus.WAITING;
 	}
 
