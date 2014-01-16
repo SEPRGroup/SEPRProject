@@ -12,18 +12,18 @@ import sepr.atcGame.UI.Main;
 public class MenuButton extends JLabel {
 	
 	private Font font = new Font("Bauhaus 93",Font.PLAIN, 50);
-	private LineBorder border = new LineBorder(new Color(173,255,47), 2, true);
+	
 	
 	
 	public MenuButton(String textName)
 	{		
 		this.setText(textName);	
-		this.setBackground(Color.green);
+		this.setBackground(Color.white);
 		this.setFont(font);	
 		this.setForeground(Color.white);
 		this.setHorizontalAlignment(SwingConstants.CENTER);
 		this.setVerticalAlignment(SwingConstants.CENTER);
-		this.setBorder(border);
+	
 	}
 	
 		
