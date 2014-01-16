@@ -12,7 +12,7 @@ public final class Heathrow extends Airport {
 	public Heathrow(){
 		super("Heathrow Airport", new Dimension(8000, 6000));
 		
-		try {setBackground(ImageIO.read(new File("src/sepr/atcGame/Images/dummy1.png")));}
+		try {setBackground(ImageIO.read(new File("src/sepr/atcGame/Images/dummy1.jpg")));}
 		catch (IOException e){};	
 	}
 	
