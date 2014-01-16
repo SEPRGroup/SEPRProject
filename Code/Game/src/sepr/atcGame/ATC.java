@@ -1,5 +1,6 @@
 package sepr.atcGame;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class ATC extends JPanel implements GameTime{
 	public ATC(String name, Airspace airspace) {
 		this.name = name;
 		this.airspace = airspace;
+		this.setPreferredSize(new Dimension(200,300));
 	}
 	
 	

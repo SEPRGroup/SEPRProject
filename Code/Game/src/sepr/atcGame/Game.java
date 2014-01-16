@@ -35,8 +35,10 @@ public class Game extends JFrame implements ActionListener{
 	private long sinceLastFlight;
 	private Queue<Flight> toAdd;	//{!}
 
+	private ATC activeFlights = new ATC("bob",airport);
 	private JPanel timerPanel = new JPanel();
 	private JLabel timerDisplay = new JLabel();
+	
 
 
 	private static double nanoToGameTime(long time){
@@ -54,9 +56,9 @@ public class Game extends JFrame implements ActionListener{
 		timerPanel.add(timerDisplay);
 		timerPanel.setBackground(Color.WHITE);
 		add(timerPanel,BorderLayout.PAGE_START);
-
+		
 		generateWorld();
-
+		add(activeFlights,BorderLayout.EAST);
 		add(airport);
 		pack();
 		setLocationRelativeTo(null);

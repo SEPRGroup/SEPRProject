@@ -3,7 +3,7 @@ package sepr.atcGame;
 import java.awt.Graphics;
 import java.util.Queue;
 
-abstract class Flight implements GameTime, Drawable {
+public abstract class Flight implements GameTime, Drawable {
 	// variables
 	private String identifier;
 	protected FlightStatus status;  //FlightStatus is a user defined data type
