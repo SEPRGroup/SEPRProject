@@ -3,13 +3,16 @@ package sepr.atcGame.UI;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.JLabel;
 
 import sepr.atcGame.Game;
@@ -27,6 +30,7 @@ public class Main {
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("ATC Game | MENU");
+		frame.setSize(810, 610);
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
@@ -56,7 +60,7 @@ class ImagePanel extends JPanel {
 		setPreferredSize(size);
 		setMinimumSize(size);
 		setMaximumSize(size);
-		setLayout(new FlowLayout(FlowLayout.CENTER, 500, 80));
+		setLayout(new FlowLayout(FlowLayout.CENTER, 500, 50));
 
 		Airport.setVisible(false);
 		add(Airport);
@@ -92,25 +96,48 @@ class ImagePanel extends JPanel {
 	public void selectedOption(MenuOptions menuOption)
 	{
 		switch (menuOption){
-		case START:
-			MenuOptions.START.menuButton.setVisible(false);
-			showMenus(1, 2);
-			break;
-		case PLAY:				
-			Game game = new Game(GameDifficulty.EASY);
-			setVisible(false);
-			game.Play();
-			break;
-		case CHOOSEAIRPORT:
-			closeMenus(1, 2);				
-			setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
-			Airport.setVisible(true);
-			showMenus(3,6);
-			break;
-		case EXIT:
-			System.exit(0);
-			break;	
-		}	
+			case START:
+				MenuOptions.START.menuButton.setVisible(false);
+				showMenus(1, 4);
+				break;
+			case PLAY:				
+				Game game = new Game(GameDifficulty.EASY);
+				
+				setVisible(false);
+				
+				game.Play();
+				break;
+			case CHOOSEAIRPORT:
+				closeMenus(1, 5);				
+				setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+				Airport.setVisible(true);
+				showMenus(8, 10);
+				break;
+			case SELECTDIFFICULTY:
+				closeMenus(1, 4);
+				showMenus(5, 7);
+				MenuOptions.BACK.menuButton.setVisible(true);
+				break;
+			case EXIT:
+				System.exit(0);				
+				break;
+			case EASY:				
+				break;
+			case MEDIUM:
+				break;
+			case HARD:
+				break;
+			case AIRPORT1:
+				break;
+			case AIRPORT2:				
+				break;
+			case BACK:
+				closeMenus(5, 10);
+				Airport.setVisible(false);
+				setLayout(new FlowLayout(FlowLayout.CENTER, 500, 50));
+				showMenus(1, 4);
+				break;
+		}
 	}
 
 	private class mListener extends MouseAdapter
@@ -124,7 +151,7 @@ class ImagePanel extends JPanel {
 		}			
 
 		public void mouseEntered(MouseEvent arg0) {
-			menuOption.menuButton.setForeground(fgColor);
+			menuOption.menuButton.getMenuText().setForeground(fgColor);
 			if(menuOption.equals(MenuOptions.AIRPORT1)){
 				Airport.setIcon(Air1);
 			}
@@ -134,14 +161,14 @@ class ImagePanel extends JPanel {
 		}
 
 		public void mouseExited(MouseEvent arg0){
-			menuOption.menuButton.setForeground(new Color(0,0,255));
+			menuOption.menuButton.getMenuText().setForeground(new Color(0,0,255));
 			if(menuOption.equals(MenuOptions.AIRPORT2) || menuOption.equals(MenuOptions.AIRPORT1)){
 				Airport.setIcon(Air);
 			}
 		}
 
 		public void mouseClicked(MouseEvent arg0){
-			menuOption.menuButton.setForeground(fgColor);
+			menuOption.menuButton.getMenuText().setForeground(fgColor);
 			selectedOption(menuOption);
 			if(menuOption.equals(MenuOptions.AIRPORT1)){
 				Air = Air1;

@@ -1,31 +1,69 @@
 package sepr.atcGame.UI;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
-import sepr.atcGame.UI.Main;
 
 
-public class MenuButton extends JLabel {
+
+public class MenuButton extends JPanel {
 	
-	private Font font = new Font("Bauhaus 93",Font.PLAIN, 20);
-	private Color color = new Color(0,0,255);
-	private ImageIcon cloud = new ImageIcon("src/sepr/atcGame/Images/cloud.png");
+	
+	
+	private Image img = new ImageIcon("src/sepr/atcGame/Images/menu_label.png").getImage();
+	private FontMetrics fm;
+	private Image scaleBackground;
+	private Dimension size;
+	private MenuText menuText;
 	
 	public MenuButton(String textName)
 	{		
-		this.setText(textName);	
-		this.setBackground(color);
-		this.setIcon(cloud);
-		this.setIconTextGap(-75);
-		this.setFont(font);	
-		this.setForeground(color);
-		this.setHorizontalAlignment(SwingConstants.CENTER);
-		this.setVerticalAlignment(SwingConstants.CENTER);
+		setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+		
+		menuText = new MenuText(textName);
+		
+		this.fm = menuText.getFontMetrics(menuText.getFont());
+		size = new Dimension(fm.getHeight(), fm.stringWidth(textName));	
+		add(menuText);
+		repaint();
+	}
 	
+	public MenuText getMenuText(){
+		return menuText; 
+	}
+	
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		
+		
+		Rectangle bounds = getBounds();
+		
+		
+		if (scaleBackground != null){			
+			g.drawImage(scaleBackground, 0, 0, null);}
+		else if(img != null){
+			scaleBackground = img.getScaledInstance(bounds.width, bounds.height, Image.SCALE_SMOOTH);
+			g.drawImage(scaleBackground, 0, 0, null);}	
+		else{
+			g.setColor(Color.BLACK);
+			g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height); 
+		}
+	}
+	
+	class MenuText extends JLabel {
+		
+		private Color color = new Color(0,0,255);
+		private Font font = new Font("Bauhaus 93",Font.PLAIN, 35);
+		
+		
+		public MenuText(String text){
+			this.setForeground(color);
+			this.setFont(font);
+			this.setText(text);
+			this.setVisible(true);
+		}
+		
 	}
 	
 		

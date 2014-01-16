@@ -47,7 +47,7 @@ public class Game extends JFrame implements ActionListener{
 	public Game(GameDifficulty difficulty) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //{!}
 		//setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setTitle("ATC Game ¦ GAME");
+		setTitle("ATC Game | GAME");
 		setResizable(true);	//may change if aspect ratio is locked
 		timerDisplay.setText("Time : 0");
 
