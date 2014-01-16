@@ -48,14 +48,13 @@ abstract class Airport extends Airspace{
 		double w = boundaries.width/2.0;
 		double h = boundaries.height/2.0;
 		for(TransferWaypoint t:transfers){
-			Position pos = t.getPosition(this);
+			Position pos = t.getPosition(this);	//take mutable copy
 			double bearing = t.getBearingFrom(this);
 			double a = Math.tan(bearing);
 			double x = Math.min(Math.abs(h*a), w);
 			double y = Math.min(Math.abs(w/a), h);
 			pos.x = w +( bearing<PI ? x : -x );	//RHS ? add : sub
 			pos.y = h +( Math.abs(bearing-PI)>(PI/2) ? -y : y );	//TOP ? sub : add
-
 			//System.out.println("set transferWaypoint " +t.getName() +" : " +pos.x +"," +pos.y);	//{!}
 		}
 	}

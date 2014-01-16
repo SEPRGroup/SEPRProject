@@ -17,9 +17,8 @@ import static java.lang.Math.round;
 
 
 abstract class Aircraft extends Flight {
-
 	private BufferedImage image, rotatedImage;	//,labelImage;
-
+	
 	//static characteristics
 	public double
 		minAlt, cruiseAlt, maxAlt,	//position:	m	
@@ -36,6 +35,8 @@ abstract class Aircraft extends Flight {
 	private double 
 		tAlt, tV, tBearing;
 
+	protected static Font dataFont = new Font(Font.MONOSPACED, Font.PLAIN, 12);
+	
 
 	//constructor
 	protected Aircraft(String id, Queue<Waypoint> flightPlan) {
@@ -171,7 +172,6 @@ abstract class Aircraft extends Flight {
 		g.drawImage(rotatedImage, location.x -w, location.y -h,	null);
 
 		{	//label attributes
-			Font dataFont = new Font(Font.MONOSPACED, Font.PLAIN, 12);
 			String idString = ('\u2708' +getIdentifier());
 			String dataString = String.format("\u21A5%1$4d \u2192%2$3d", 
 					Math.round(position.altitude), round(v));

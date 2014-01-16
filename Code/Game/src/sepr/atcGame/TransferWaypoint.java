@@ -1,8 +1,9 @@
 package sepr.atcGame;
 
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
+
+import static java.lang.Math.PI;
 
 
 class TransferWaypoint extends Waypoint {
@@ -28,47 +29,63 @@ class TransferWaypoint extends Waypoint {
 		this.bearing = bearing;
 	}
 	
+	@Override
 	public void draw(Graphics g, Point location, double scale) {	 
 		//precalculate useful positioning values 
-		int w=image.getWidth(null), h=image.getHeight(null)/2;
-		g.drawImage(image, location.x - w, location.y - h, null);
+		int w=image.getWidth(null)/2, h=image.getHeight(null)/2;
+		//draw image
+		g.drawImage(image, location.x -w, location.y -h, null);
 		
 		{	//label attributes
-			Font dataFont = new Font(Font.MONOSPACED, Font.PLAIN, 12);
 			String idString = (getName());
 			String dataString = String.format("\u21A5%1$4d", 
 					Math.round(this.getPosition().altitude));
-			//unused bearing code:	 \u21BB%3$03d	, round(Math.toDegrees(bearing))
 			g.setFont(dataFont);
-			//test on which edge of the screen the waypoint lies, nested to prevent labels being drawn twice in cases where the waypoint lies on corners or near corners
-			if(location.x == 0){//Waypoint is on left of screen so print to the right
-				g.drawString(idString, location.x +w/2 - 10 , location.y +h +7);	
-				g.drawString(dataString, location.x +w/2 -10, location.y +h +18);
-			}else{
 			
-				if(location.y == 0){//Waypoint is at top of screen so print to the bottom
-					g.drawString(idString, location.x -w/2 - 15 , location.y +h +7);	
-					g.drawString(dataString, location.x -w, location.y +h +18);
-				}else{
-			
-					if(location.x == airspace1.getBounds().getWidth()){//waypoint is on right side of screen so print to the left
-						g.drawString(idString, location.x -w/2 - 52, location.y);	
-						g.drawString(dataString, location.x -w/2 - 52, location.y +10 );
-					}else{
-						if(location.y == airspace1.getBounds().getHeight()|| location.y > airspace1.getBounds().getHeight()-20){//waypoint is on the bottom side of screen so print to the top
-							g.drawString(idString, location.x -w/2 - 15 , location.y -h -18);	
-							g.drawString(dataString, location.x -w, location.y -h -7);
-						}
-					}
-				}
+			Boolean AtoB;	//if the position is consistent with being AtoB for this airspace
+			if ((0 < bearing) && (PI/2 > bearing)){
+				AtoB = (location.x != 0); 
+			}else if ((PI/2 <= bearing) && (PI >= bearing)){
+				AtoB = (location.x != 0) && (location.y != 0); 
+			}else if ((PI < bearing) && (3*PI/2 > bearing)){
+				AtoB = location.y != 0; 
+			}else {
+				AtoB = (location.x == 0) || (location.y == 0); 
 			}
-				
-				//g.drawString(idString, location.x -w/2 - 15 , location.y +h +7);	
-				//g.drawString(dataString, location.x -w, location.y +h +18);
+			double dir;	//the direction to draw the text in
+			if (AtoB) {
+				dir = bearing<Math.PI ? bearing+Math.PI : bearing-Math.PI;	//draw in opposite direction to bearing
+			} else {
+				dir = bearing;
+			}
 			
-		
+			int oX, oY, //x and y offsets of centre of text from location
+				eX = 15, eY = 11;	//expected half-width, half-height of text
+			oX = (int)(Math.round(Math.sin(dir)*(w+eX)));	//where 15 is 1/2 the expected width of the text
+			oY = (int)(Math.round(-Math.cos(dir)*(h+eY)));	//where 11 is 1/2 the expected height of the text
+			g.drawString(idString, location.x +oX -eX, location.y +oY);
+			g.drawString(dataString, location.x +oX -eX, location.y +oY +eY);
+	
+			
+			/*	[for square icons]
+			//test on which edge of the screen the waypoint lies 
+			if (location.x == 0){//Waypoint is on left of screen so print to the right
+				g.drawString(idString, location.x +w/2 -10 , location.y +h +7);	
+				g.drawString(dataString, location.x +w/2 -10, location.y +h +18);
+			}else if (location.y == 0){//Waypoint is at top of screen so print to the bottom
+				g.drawString(idString, location.x -w/2 -15 , location.y +h +7);	
+				g.drawString(dataString, location.x -w, location.y +h +18);
+			}else if (location.x == airspace1.getBounds().getWidth()){//waypoint is on right side of screen so print to the left
+				g.drawString(idString, location.x -w/2 - 52, location.y);	
+				g.drawString(dataString, location.x -w/2 - 52, location.y +10 );
+			}else if (location.y == airspace1.getBounds().getHeight()|| location.y > airspace1.getBounds().getHeight()-20){//waypoint is on the bottom side of screen so print to the top
+				g.drawString(idString, location.x -w/2 - 15 , location.y -h -18);	
+				g.drawString(dataString, location.x -w, location.y -h -7);
+			}*/
 		}
 	}
+	
+	
 	//getters and setters
 	public Position getPosition(Airspace airspace) {
 		if(airspace.equals(airspace1)){
@@ -107,7 +124,7 @@ class TransferWaypoint extends Waypoint {
 			return bearing;}
 		else if(airspace.equals(airspace2)){
 			return bearing<Math.PI ? bearing+Math.PI : bearing-Math.PI;}
-		else return 0; //{!}
+		else return -1; //{!}
 	}
 	
 	public double getBearingTo(Airspace airspace) {
@@ -115,6 +132,6 @@ class TransferWaypoint extends Waypoint {
 			return bearing<Math.PI ? bearing+Math.PI : bearing-Math.PI;}
 		else if(airspace.equals(airspace2)){
 			return bearing;}
-		else return 0; //{!}
+		else return -1; //{!}
 	}
 }

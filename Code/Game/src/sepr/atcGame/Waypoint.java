@@ -16,6 +16,8 @@ public class Waypoint implements Drawable{
 	private Position position;
 	protected Image image = null;
 	
+	protected static Font dataFont = new Font(Font.MONOSPACED, Font.PLAIN, 12);
+	
 	
 	//constructor
 	public Waypoint(String name, Position position){
@@ -30,23 +32,17 @@ public class Waypoint implements Drawable{
 	//methods
 	public void draw(Graphics g, Point location, double scale) {	 
 		//precalculate useful positioning values 
-		int w=image.getWidth(null), h=image.getHeight(null)/2;
-		g.drawImage(image, location.x - w, location.y - h, null);
+		int w=image.getWidth(null)/2, h=image.getHeight(null)/2;
+		//draw image
+		g.drawImage(image, location.x -w, location.y -h, null);
 		
 		{	//label attributes
-			Font dataFont = new Font(Font.MONOSPACED, Font.PLAIN, 12);
 			String idString = (getName());
 			String dataString = String.format("\u21A5%1$4d", 
 					Math.round(position.altitude));
-			//unused bearing code:	 \u21BB%3$03d	, round(Math.toDegrees(bearing))
 			g.setFont(dataFont);
-			if(this instanceof TransferWaypoint){
-				
-			}else{
-				g.drawString(idString, location.x -w/2 - 15 , location.y +h +7);	
-				g.drawString(dataString, location.x -w, location.y +h +18);
-			}
-		
+			g.drawString(idString, location.x -w/2, location.y +h +7);	
+			g.drawString(dataString, location.x -w/2, location.y +h +17);
 		}
 	}
 	
