@@ -133,9 +133,12 @@ public class RadialMenu extends JComponent{
 		case FLOWER:{
 			Polygon p = new Polygon();
 			int num = names.size();
+			double posR = Math.toRadians(offset -spacing/2.0);
+			double sizeR = 2*Math.PI /num;
 			for (int i=0; i<num; i++){
-				p.addPoint(radius +(int)Math.round(holeRadius*Math.sin(i*2*Math.PI /num)), 
-						radius -(int)Math.round(holeRadius*Math.cos(i*2*Math.PI /num)));
+				p.addPoint(radius +(int)Math.round(holeRadius*Math.sin(posR)), 
+						radius -(int)Math.round(holeRadius*Math.cos(posR)));
+				posR += sizeR;
 			}
 			Area b = new Area(p);
 			a.subtract(b);	//subtract inner polygo to leave petals
