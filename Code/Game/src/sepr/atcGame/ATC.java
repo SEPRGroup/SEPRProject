@@ -15,7 +15,7 @@ public class ATC extends JPanel implements GameTime{
 	private String name;
 	private Airspace airspace;
 	
-	private static final double CHECK_PERIOD = 1;
+	private static final double CHECK_PERIOD = 5;
 	private double sinceLastCheck = 0;
 	
 	List<ATCListener> listeners = new ArrayList<ATCListener>();

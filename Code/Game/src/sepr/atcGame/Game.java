@@ -11,6 +11,7 @@ import java.util.Queue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 import java.util.Random;
@@ -21,7 +22,6 @@ public class Game extends JFrame implements ActionListener{
 
 	private Airport airport;
 	private Airspace[] airspaces;
-	private Output output;
 	private List<TransferWaypoint> transferWaypoints = new ArrayList<TransferWaypoint>();
 
 	private static final int FPS_MAX = 60;
@@ -35,7 +35,9 @@ public class Game extends JFrame implements ActionListener{
 	private long sinceLastFlight;
 	private Queue<Flight> toAdd;	//{!}
 
-	private ATC activeFlights = new ATC("bob",airport);
+	private ATC activeFlights;
+	private RadialMenu menu = new RadialMenu();
+	private testOutput output = new testOutput();
 	private JPanel timerPanel = new JPanel();
 	private JLabel timerDisplay = new JLabel();
 	
@@ -57,7 +59,13 @@ public class Game extends JFrame implements ActionListener{
 		timerPanel.setBackground(Color.WHITE);
 		add(timerPanel,BorderLayout.PAGE_START);
 		
+		{	//{!} test logic for radial menu
+			getRootPane().getLayeredPane().add(menu, JLayeredPane.MODAL_LAYER);
+		}
+		
 		generateWorld();
+		activeFlights = new ATC("bob",airport);
+		activeFlights.addListener(output);
 		add(activeFlights,BorderLayout.EAST);
 		add(airport);
 		pack();
@@ -176,7 +184,7 @@ public class Game extends JFrame implements ActionListener{
 		}
 
 		airport.update(elapsedGameTime);
-		//{!} update ATC
+		activeFlights.update(elapsedGameTime);
 		//{!} update scheduler
 
 		{	//update score panel
@@ -190,12 +198,6 @@ public class Game extends JFrame implements ActionListener{
 			frameTimer.stop();
 			System.out.println("[END]");
 		}
-	}
-
-
-	//getters/setters
-	public void setOutput(Output output) {
-		this.output = output;
 	}
 
 }
