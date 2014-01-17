@@ -3,6 +3,7 @@ package sepr.atcGame.UI;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -11,13 +12,13 @@ public class MenuButton extends JPanel {
 
 	private Image scaleBackground;
 	private MenuText menuText;
-
+	private File font_file = new File("src/sepr/atcGame/Images/backlash.ttf");
 	private static Image img;
-
+	 
 
 	public MenuButton(String textName)
 	{	
-		setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+		setLayout(new FlowLayout(FlowLayout.CENTER, 40, 30));
 		setOpaque(false);
 
 		menuText = new MenuText(textName);
@@ -45,12 +46,17 @@ public class MenuButton extends JPanel {
 	public class MenuText extends JLabel {
 
 		private Color color = new Color(0,0,255);
-		private Font font = new Font("Bauhaus 93",Font.PLAIN, 35);
+		private Font font;
 
 		public MenuText(String text){
 			super(text);
-			this.setForeground(color);
-			this.setFont(font);
+			try{font = Font.createFont(Font.TRUETYPE_FONT, font_file);}
+			catch (IOException | FontFormatException e){};
+			Font resizedFont = font.deriveFont(30f);
+			
+			this.setForeground(Color.WHITE);
+			
+			this.setFont(resizedFont);
 		}
 
 	}

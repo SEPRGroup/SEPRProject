@@ -88,7 +88,7 @@ class ImagePanel extends JPanel {
 	private void closeMenus(int firstLabel, int lastLabel)
 	{
 		for(int i = firstLabel; i <= lastLabel; i++){
-			MenuOptions.values()[i].menuButton.setVisible(false);
+			MenuOptions.values()[i].menuButton.setVisible(false); 
 		}
 	}
 
@@ -151,7 +151,7 @@ class ImagePanel extends JPanel {
 		}			
 
 		public void mouseEntered(MouseEvent arg0) {
-			menuOption.menuButton.getMenuText().setForeground(fgColor);
+			menuOption.menuButton.getMenuText().setForeground(Color.BLACK);
 			if(menuOption.equals(MenuOptions.AIRPORT1)){
 				Airport.setIcon(Air1);
 			}
@@ -161,14 +161,14 @@ class ImagePanel extends JPanel {
 		}
 
 		public void mouseExited(MouseEvent arg0){
-			menuOption.menuButton.getMenuText().setForeground(new Color(0,0,255));
+			menuOption.menuButton.getMenuText().setForeground(Color.WHITE);
 			if(menuOption.equals(MenuOptions.AIRPORT2) || menuOption.equals(MenuOptions.AIRPORT1)){
 				Airport.setIcon(Air);
 			}
 		}
 
 		public void mouseClicked(MouseEvent arg0){
-			menuOption.menuButton.getMenuText().setForeground(fgColor);
+			menuOption.menuButton.getMenuText().setForeground(Color.BLACK);
 			selectedOption(menuOption);
 			if(menuOption.equals(MenuOptions.AIRPORT1)){
 				Air = Air1;
