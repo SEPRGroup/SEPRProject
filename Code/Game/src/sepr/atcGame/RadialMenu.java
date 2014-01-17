@@ -29,10 +29,10 @@ public class RadialMenu extends JComponent{
 	offset = spacing/2;	//degrees that start of first button is offset from 12 o'clock
 	private int
 	style = FLOWER,
-	holeRadius = 75,	//pixel radius of centre hole
-	buttonSize = 70,	//pixel width of buttons
+	holeRadius = 45,	//pixel radius of centre hole
+	buttonSize = 40,	//pixel width of buttons
 	radius;
-	private Font font = new Font(Font.SERIF, Font.BOLD, 14);
+	private Font font = new Font(Font.SERIF, Font.BOLD, 11);
 
 	public static final int DONUT = 0, FLOWER = 1;
 

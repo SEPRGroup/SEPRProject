@@ -23,6 +23,7 @@ public class Game extends JFrame implements ActionListener{
 	private Airport airport;
 	private Airspace[] airspaces;
 	private List<TransferWaypoint> transferWaypoints = new ArrayList<TransferWaypoint>();
+	private static List<Queue<Waypoint>> flightPlans = new ArrayList<Queue<Waypoint>>();
 
 	private static final int FPS_MAX = 60;
 	private static final int FPS_DELAY = 1000/FPS_MAX;
@@ -71,6 +72,60 @@ public class Game extends JFrame implements ActionListener{
 		pack();
 		setLocationRelativeTo(null);
 		setMinimumSize(getSize());
+		{
+			Waypoint[] intermediate = airport.getWaypoints();
+			List<TransferWaypoint> transfers = airport.getTransfers();
+			
+			//new flight plan - Athens, Juliett, Charlie
+			Queue<Waypoint> flightPlan = new LinkedList<Waypoint>();
+			flightPlan.add(transfers.get(0)); flightPlan.add(intermediate[9]); flightPlan.add(intermediate[2]);
+			flightPlans.add(flightPlan);
+			
+			//new flight plan - Athens, Foxtrot, Alpha, Bravo
+			flightPlan = new LinkedList<Waypoint>();
+			flightPlan.add(transfers.get(0)); flightPlan.add(intermediate[5]); flightPlan.add(intermediate[0]); flightPlan.add(intermediate[1]);
+			flightPlans.add(flightPlan);
+			
+			//new flight plan - Dubai, Echo, Juliett, Foxtrot, Bravo
+			flightPlan = new LinkedList<Waypoint>();
+			flightPlan.add(transfers.get(1)); flightPlan.add(intermediate[4]); flightPlan.add(intermediate[9]); flightPlan.add(intermediate[5]); flightPlan.add(intermediate[1]);
+			flightPlans.add(flightPlan);
+			
+			//new flight plan - Dubai, Echo, Charlie
+			flightPlan = new LinkedList<Waypoint>();
+			flightPlan.add(transfers.get(1)); flightPlan.add(intermediate[4]); flightPlan.add(intermediate[2]);
+			flightPlans.add(flightPlan);
+			
+			//new flight plan - Paris, Delta, Indigo, Charlie
+			flightPlan = new LinkedList<Waypoint>();
+			flightPlan.add(transfers.get(2)); flightPlan.add(intermediate[3]); flightPlan.add(intermediate[8]); flightPlan.add(intermediate[2]);
+			flightPlans.add(flightPlan);
+			
+			//new flight plan - Paris, Hotel, Echo, Juliett, Bravo
+			flightPlan = new LinkedList<Waypoint>();
+			flightPlan.add(transfers.get(2)); flightPlan.add(intermediate[7]); flightPlan.add(intermediate[4]); flightPlan.add(intermediate[9]); flightPlan.add(intermediate[1]);
+			flightPlans.add(flightPlan);
+			
+			//new flight plan - Sydney, Delta, Golf, Bravo
+			flightPlan = new LinkedList<Waypoint>();
+			flightPlan.add(transfers.get(3)); flightPlan.add(intermediate[3]); flightPlan.add(intermediate[6]); flightPlan.add(intermediate[1]);
+			flightPlans.add(flightPlan);
+			
+			//new flight plan - Sydney, Delta, Indigo, Charlie
+			flightPlan = new LinkedList<Waypoint>();
+			flightPlan.add(transfers.get(3)); flightPlan.add(intermediate[3]); flightPlan.add(intermediate[8]); flightPlan.add(intermediate[2]);
+			flightPlans.add(flightPlan);
+
+			//new flight plan -Zurich, Alpha, Foxtrot, Juliett, Charlie
+			flightPlan = new LinkedList<Waypoint>();
+			flightPlan.add(transfers.get(4)); flightPlan.add(intermediate[0]); flightPlan.add(intermediate[5]); flightPlan.add(intermediate[9]); flightPlan.add(intermediate[2]);
+			flightPlans.add(flightPlan);
+			
+			//new flight plan -Zurich, Golf, Bravo
+			flightPlan = new LinkedList<Waypoint>();
+			flightPlan.add(transfers.get(4)); flightPlan.add(intermediate[6]); flightPlan.add(intermediate[1]);
+			flightPlans.add(flightPlan);
+		}
 		setVisible(true);
 	}
 
@@ -99,41 +154,10 @@ public class Game extends JFrame implements ActionListener{
 	}
 
 	private Queue<Waypoint> randomFlightPlan(){		
-		Waypoint[] waypoints = airport.getWaypoints();
-		List<TransferWaypoint> transfers = airport.getTransfers();
 		
-		//Generate starting waypoint
-		TransferWaypoint source = transfers.get(random.nextInt(transfers.size()));
-
-		//Generate intermediate path
-		int[] indices = new int[3];
-		indices[0] = random.nextInt(waypoints.length);
-		for (int i=1; i <= indices.length-1; i++){
-			boolean duplicate;
-			do{	//repeat until a waypoint is generated that is not a duplicate
-				indices[i] = random.nextInt(waypoints.length);
-				duplicate = false;
-				for (int ii=0; ii<i; ii++){	//compare to existing waypoints
-					duplicate = duplicate || (indices[i] == indices[ii]);}
-			} while (duplicate);
-		}		
-
-		TransferWaypoint destination = transferWaypoints.get(
-				random.nextInt(transferWaypoints.size()));
-
-		//construct flightplan
-		Queue<Waypoint> flightPlan = new LinkedList<Waypoint>();
-		flightPlan.add(source);
-		for (int index: indices){
-			flightPlan.add(waypoints[index]);}
-		flightPlan.add(destination);
-
-		//{!} print flight plan
-		System.out.print(source.getName() +", ");
-		for (int i=0; i < indices.length; i++){
-			System.out.print(waypoints[indices[i]].getName() +", ");}
-		System.out.println(destination.getName());
-
+		Queue<Waypoint> flightPlan = new LinkedList<Waypoint>( flightPlans.get(random.nextInt(flightPlans.size())));
+		System.out.println(flightPlan.toString());
+		
 		return flightPlan;
 	}
 
@@ -167,17 +191,17 @@ public class Game extends JFrame implements ActionListener{
 		if (toAdd.size() > 0){	//{!} test logic
 			if (sinceLastFlight > 1500000000){
 				Aircraft f = (Aircraft)toAdd.poll();
-				{
+				/*{
 					f.init(f.cruiseV, 200);
 					airport.receiveFlight(f, 
 							(TransferWaypoint)f.getFlightPlan().poll());
 					f.turnTo(0);
 					f.toAltitude(300);
-				}
-				/*{
+				}*/
+				{
 					airport.newFlight(f);
 					f.takeOff(airport, (TransferWaypoint)f.getFlightPlan().poll());
-				}*/
+				}
 				System.out.println("add flight:\t" +f.getIdentifier());
 				sinceLastFlight -= 1500000000;
 			}

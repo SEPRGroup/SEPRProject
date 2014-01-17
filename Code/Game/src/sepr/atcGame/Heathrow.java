@@ -21,11 +21,18 @@ public final class Heathrow extends Airport {
 	@Override
 	protected void generateWaypoints() {
 		// TODO generate and place internal Waypoints, landing zones
-		for(int i = 0 ; i < MAX_WAYPOINTS; i++){
-			waypoints[i] = new Waypoint("waypoint" +i,
-					new Position((i)*getWidth()/(MAX_WAYPOINTS)+400, (Math.sin(Math.toRadians(i*360/MAX_WAYPOINTS))+1)*(getHeight()/3)+200, 5000) );
-			
-		}
+		waypoints[0] = new Waypoint("Alpha", new Position(1100,1500,500));
+		waypoints[1] = new Waypoint("Bravo", new Position(2000,3070,200));
+		waypoints[2] = new Waypoint("Charlie", new Position(6000,3070,200));
+		waypoints[3] = new Waypoint("Delta", new Position(3500,5200,1000));
+		waypoints[4] = new Waypoint("Echo", new Position(6500,1000,600));
+		waypoints[5] = new Waypoint("Foxtrot", new Position(2690,1100,700));
+		waypoints[6] = new Waypoint("Golf", new Position(920,4330,900));
+		waypoints[7] = new Waypoint("Hotel", new Position(7020,4240,600));
+		waypoints[8] = new Waypoint("Indigo", new Position(5100,4130,400));
+		waypoints[9] = new Waypoint("Juliett", new Position(5050,1300,700));
+		
+		//transfers.add(new TransferWaypoint("Runway1", null, this, Math.PI*2));
 	}
 
 }
