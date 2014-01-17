@@ -1,5 +1,6 @@
 package sepr.atcGame;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -51,6 +52,7 @@ public class ATC extends JPanel implements GameTime{
 			checkViolations();
 			sinceLastCheck -= CHECK_PERIOD;
 		}
+		repaint();
 	}
 	
 	private void checkViolations(){
@@ -74,6 +76,7 @@ public class ATC extends JPanel implements GameTime{
 				}
 			}
 		}
+		
 	}
 	
 	
@@ -89,7 +92,24 @@ public class ATC extends JPanel implements GameTime{
 	
 	//overridden methods
 	public void paintComponent(Graphics g) {
-        super.paintComponent(g);       
+        super.paintComponent(g);      
+        int locationY = 10;
+        int fontSize = 12;
+        Flight[] aircraft = airspace.getAircraft();
+        for (int i	= 0; i<aircraft.length; i++){
+			Flight f1 = aircraft[i];
+			if (f1!= null){
+				//locationY += i*20;
+				g.setColor(Color.black);
+				g.drawString(f1.getIdentifier(), 20, locationY);
+				locationY += fontSize;
+				g.drawString("Flight Status: " + f1.getStatus().toString(),20,locationY);
+				locationY += fontSize;
+				g.drawString("Next Waypoint : " + f1.getFlightPlan().peek().getName(),20,locationY);
+				locationY +=20;
+				
+			}
+        }
         //method will go in here
         //draw using [g]: show current flights, flightplans
     }
