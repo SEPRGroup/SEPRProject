@@ -39,8 +39,10 @@ public class Game extends JFrame implements ActionListener{
 	private ATC activeFlights;
 	private RadialMenu menu = new RadialMenu();
 	private testOutput output = new testOutput();
-	private JPanel timerPanel = new JPanel();
+	private JPanel statusPanel = new JPanel();
 	private JLabel timerDisplay = new JLabel();
+	private JLabel fpsDisplay = new JLabel();
+	
 	
 
 
@@ -56,9 +58,10 @@ public class Game extends JFrame implements ActionListener{
 		setResizable(true);	//may change if aspect ratio is locked
 		timerDisplay.setText("Time : 0");
 
-		timerPanel.add(timerDisplay);
-		timerPanel.setBackground(Color.WHITE);
-		add(timerPanel,BorderLayout.PAGE_START);
+		statusPanel.add(timerDisplay);
+		statusPanel.add(fpsDisplay);
+		statusPanel.setBackground(Color.WHITE);
+		add(statusPanel,BorderLayout.PAGE_START);
 		
 		{	//{!} test logic for radial menu
 			getRootPane().getLayeredPane().add(menu, JLayeredPane.MODAL_LAYER);
@@ -211,9 +214,10 @@ public class Game extends JFrame implements ActionListener{
 		activeFlights.update(elapsedGameTime);
 		//{!} update scheduler
 
-		{	//update score panel
+		{	//update status panel
 			gameTimeString = String.format("%d", gameTime/1000000000);
 			timerDisplay.setText("Time: \t"+ gameTimeString);
+			fpsDisplay.setText(String.valueOf(Math.round(fps.getFrameRate())) +"fps");
 		}
 
 		//{!} end game after n seconds
