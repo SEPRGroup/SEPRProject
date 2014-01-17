@@ -108,7 +108,7 @@ abstract class Aircraft extends Flight {
 				}
 				rotatedImage = null;
 				//labelImage = null;
-				if ( (abs(tBearing -bearing) < 0.01) || (abs(tBearing+2*PI -bearing) < 0.05)){
+				if ( (abs(tBearing -bearing) < 0.01) || (abs(tBearing+2*PI -bearing) < 0.01)){
 					vTurn = 0;
 					bearing = tBearing;	//end manoeuvres
 					//System.out.println(getIdentifier() +"\thas completed turning");
