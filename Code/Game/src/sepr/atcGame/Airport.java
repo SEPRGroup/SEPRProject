@@ -13,70 +13,71 @@ import java.util.List;
 
 import static java.lang.Math.PI;
 
-abstract class Airport extends Airspace{
+abstract class Airport extends Airspace {
 
 	private Image background;
 	private Image scaleBackground;
-	private Dimension boundaries;	//size of airspace in metres
+	private Dimension boundaries; // size of airspace in metres
 
-	private ComponentListener resizeListener = new ComponentAdapter(){
+	private ComponentListener resizeListener = new ComponentAdapter() {
 		public void componentResized(ComponentEvent arg0) {
 			scaleBackground = null;
-			//{!} needs to lock ratio
+			// {!} needs to lock ratio
 		}
 	};
 
-
-	//constructor
-	protected Airport(String airspaceName,
-			Dimension boundaries) {
+	// constructor
+	protected Airport(String airspaceName, Dimension boundaries) {
 		super(airspaceName);
 		this.boundaries = boundaries;
 
 		this.setOpaque(true);
-		setDoubleBuffered(true);	//{!} disable if not redrawing entire screen
+		setDoubleBuffered(true); // {!} disable if not redrawing entire screen
 		addComponentListener(resizeListener);
 
 		generateWaypoints();
 	}
 
-
-	//getters/setters
+	// getters/setters
 	@Override
-	public final void setTransfers(List<TransferWaypoint> transfers){
+	public final void setTransfers(List<TransferWaypoint> transfers) {
 		super.setTransfers(transfers);
-		double w = boundaries.width/2.0;
-		double h = boundaries.height/2.0;
-		for(TransferWaypoint t:transfers){
-			Position pos = t.getPosition(this);	//take mutable copy
+		double w = boundaries.width / 2.0;
+		double h = boundaries.height / 2.0;
+		for (TransferWaypoint t : transfers) {
+			Position pos = t.getPosition(this); // take mutable copy
 			double bearing = t.getBearingFrom(this);
 			double a = Math.tan(bearing);
-			double x = Math.min(Math.abs(h*a), w);
-			double y = Math.min(Math.abs(w/a), h);
-			pos.x = w +( bearing<PI ? x : -x );	//RHS ? add : sub
-			pos.y = h +( Math.abs(bearing-PI)>(PI/2) ? -y : y );	//TOP ? sub : add
-			//System.out.println("set transferWaypoint " +t.getName() +" : " +pos.x +"," +pos.y);	//{!}
+			double x = Math.min(Math.abs(h * a), w);
+			double y = Math.min(Math.abs(w / a), h);
+			pos.x = w + (bearing < PI ? x : -x); // RHS ? add : sub
+			pos.y = h + (Math.abs(bearing - PI) > (PI / 2) ? -y : y); // TOP ?
+																		// sub :
+																		// add
+			// System.out.println("set transferWaypoint " +t.getName() +" : "
+			// +pos.x +"," +pos.y); //{!}
 		}
 	}
 
 	protected final void setBackground(Image background) {
 		this.background = background;
 		this.scaleBackground = null;
-		setPreferredSize(new Dimension(background.getWidth(null), background.getHeight(null)));
+		setPreferredSize(new Dimension(background.getWidth(null),
+				background.getHeight(null)));
 	}
 
-	public final int getWidth(){
+	public final int getWidth() {
 		return boundaries.width;
 	}
 
-	public final int getHeight(){
+	public final int getHeight() {
 		return boundaries.height;
 	}
-	//methods
+
+	// methods
 	protected abstract void generateWaypoints();
 
-
-	//overridden methods
+	// overridden methods
 	@Override
 	public final void update(double time) {
 		for(Flight f:getAircraft()){
@@ -88,6 +89,16 @@ abstract class Airport extends Airspace{
 					if(f.waypointDistance < 1600){
 						f.nextWaypoint();
 					}
+					int offset = 500;
+					//Checks to see if plane is outside the airspace, offset is used to allow spawning of planes slightly outside airspace
+					if(f.getPosition().y < 0- offset||f.getPosition().x <0 - offset|| f.getPosition().x > getWidth() + offset|| f.getPosition().y > getHeight() + offset){
+						eventLost(f);
+					}
+					if(f.getFlightPlan().peek()==null){
+						//removes the aircraft from the airspace if it has finished it's flightplan
+						eventHandover(f);
+						}
+					
 				}
 			}
 		}
@@ -97,14 +108,16 @@ abstract class Airport extends Airspace{
 	@Override
 	public final void newFlight(Flight f) {
 		int i = 0;
-		while ((f != null) && (i < MAX_FLIGHTS)){
-			if (aircraft[i] == null){
+		while ((f != null) && (i < MAX_FLIGHTS)) {
+			if (aircraft[i] == null) {
 				aircraft[i] = f;
-				f = null;}
-			else i++;
+				f = null;
+			} else
+				i++;
 		}
-		if (MAX_FLIGHTS == i){	//was not added; would exceed MAX_FLIGHTS
-			eventLost(f);}
+		if (MAX_FLIGHTS == i) { // was not added; would exceed MAX_FLIGHTS
+			eventLost(f);
+		}
 	}
 
 	@Override
@@ -112,14 +125,16 @@ abstract class Airport extends Airspace{
 		f.transition(this, t);
 
 		int i = 0;
-		while ((f != null) && (i < MAX_FLIGHTS)){
-			if (aircraft[i] == null){
+		while ((f != null) && (i < MAX_FLIGHTS)) {
+			if (aircraft[i] == null) {
 				aircraft[i] = f;
-				f = null;}
-			else i++;
+				f = null;
+			} else
+				i++;
 		}
-		if (MAX_FLIGHTS == i){	//was not added; would exceed MAX_FLIGHTS
-			eventLost(f);}
+		if (MAX_FLIGHTS == i) { // was not added; would exceed MAX_FLIGHTS
+			eventLost(f);
+		}
 	}
 
 	@Override
@@ -136,43 +151,44 @@ abstract class Airport extends Airspace{
 		Point loc = new Point();
 		Position pos;
 
-		//draw background
-		if (scaleBackground != null){			
-			g.drawImage(scaleBackground, 0, 0, null);}
-		else if(background != null){
-			scaleBackground = background.getScaledInstance(bounds.width, bounds.height, Image.SCALE_SMOOTH);
-			g.drawImage(scaleBackground, 0, 0, null);}	
-		else{
+		// draw background
+		if (scaleBackground != null) {
+			g.drawImage(scaleBackground, 0, 0, null);
+		} else if (background != null) {
+			scaleBackground = background.getScaledInstance(bounds.width,
+					bounds.height, Image.SCALE_SMOOTH);
+			g.drawImage(scaleBackground, 0, 0, null);
+		} else {
 			g.setColor(Color.BLACK);
-			g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height); 
+			g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 		}
 
-		//draw Waypoints
-		for(Waypoint w:getWaypoints()){
-			if(w != null){
+		// draw Waypoints
+		for (Waypoint w : getWaypoints()) {
+			if (w != null) {
 				pos = w.getPosition();
-				loc.x = (int)Math.round(pos.x *scale);
-				loc.y = (int)Math.round(pos.y *scale);
-				w.draw(g, loc, 1);   		   
+				loc.x = (int) Math.round(pos.x * scale);
+				loc.y = (int) Math.round(pos.y * scale);
+				w.draw(g, loc, 1);
 			}
 		}
 
-		//draw TransferWaypoints
-		for(TransferWaypoint t:getTransfers()){	   
-			if(t != null){
+		// draw TransferWaypoints
+		for (TransferWaypoint t : getTransfers()) {
+			if (t != null) {
 				pos = t.getPosition(this);
-				loc.x = (int)Math.round(pos.x *scale);
-				loc.y = (int)Math.round(pos.y *scale);
+				loc.x = (int) Math.round(pos.x * scale);
+				loc.y = (int) Math.round(pos.y * scale);
 				t.draw(g, loc, 1);
 			}
 		}
 
-		//draw Flights
-		for(Flight f:getAircraft()){
-			if(f != null){
+		// draw Flights
+		for (Flight f : getAircraft()) {
+			if (f != null) {
 				pos = f.getPosition();
-				loc.x = (int)Math.round(pos.x *scale);
-				loc.y = (int)Math.round(pos.y *scale);
+				loc.x = (int) Math.round(pos.x * scale);
+				loc.y = (int) Math.round(pos.y * scale);
 				f.draw(g, loc, 1);
 			}
 		}

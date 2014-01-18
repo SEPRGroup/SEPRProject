@@ -52,7 +52,10 @@ public abstract class Flight implements GameTime, Drawable {
 
 	// methods
 	public final void nextWaypoint(){
-		flightPlan.poll();
+		if(flightPlan.peek()!= null){
+			flightPlan.poll();
+		}
+		
 	}
 
 	public abstract void init(double speed, double altitude);

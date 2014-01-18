@@ -64,12 +64,20 @@ public abstract class Airspace extends JPanel implements GameTime{
 		//This function cuts down on repeated code
 		//It finds and removes a flight which has been terminated in one way or another
 		//from the array of active flights 
+		int i = 0;
+		for(Flight flight : aircraft){
+			if(flight == f){
+				aircraft[i] = null;
+			} 
+			i++;
+		}
 		
 	}
 
 	public final void eventCrash(Flight f1, Flight f2) {
 		//TODO remove crashed planes from array of active flights
 		//TODO remove points or end game accordingly
+		
 	}
 
 	public final void eventLanded(Flight f) {
@@ -78,19 +86,13 @@ public abstract class Airspace extends JPanel implements GameTime{
 	}
 
 	public final void eventHandover(Flight f) {
-		//TODO remove landed plane from array of active flights
+		findAndRemoveFlight(f);
 		//TODO reward points accordingly
+		
 	}
 
 	public final void eventLost(Flight f) {
-		int i = 0;
-		for(Flight flight : aircraft){
-			if(flight == f){
-				aircraft[i] = null;
-			} 
-			i++;
-		}
-		//TODO remove landed plane from array of active flights
+		findAndRemoveFlight(f);
 		//TODO remove points accordingly
 	}
 	
