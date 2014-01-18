@@ -41,8 +41,8 @@ public class Waypoint implements Drawable{
 			String dataString = String.format("\u21A5%1$4d", 
 					Math.round(position.altitude));
 			g.setFont(dataFont);
-			g.drawString(idString, location.x -w/2, location.y +h +7);	
-			g.drawString(dataString, location.x -w/2, location.y +h +17);
+			g.drawString(idString, location.x -w/2, location.y +h +dataFont.getSize() -3);	
+			g.drawString(dataString, location.x -w/2, location.y +h +dataFont.getSize()*2 -3);
 		}
 	}
 	

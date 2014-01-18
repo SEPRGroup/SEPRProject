@@ -194,17 +194,17 @@ public class Game extends JFrame implements ActionListener{
 		if (toAdd.size() > 0){	//{!} test logic
 			if (sinceLastFlight > 1500000000){
 				Aircraft f = (Aircraft)toAdd.poll();
-				/*{
+				{
 					f.init(f.cruiseV, 200);
 					airport.receiveFlight(f, 
 							(TransferWaypoint)f.getFlightPlan().poll());
 					f.turnTo(0);
 					f.toAltitude(300);
-				}*/
-				{
+				}
+				/*{
 					airport.newFlight(f);
 					f.takeOff(airport, (TransferWaypoint)f.getFlightPlan().poll());
-				}
+				}*/
 				System.out.println("add flight:\t" +f.getIdentifier());
 				sinceLastFlight -= 1500000000;
 			}

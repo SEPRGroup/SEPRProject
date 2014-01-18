@@ -11,17 +11,17 @@ public abstract class Flight implements GameTime, Drawable {
 	protected final Queue<Waypoint> flightPlan;
 	private FlightConditions conditions;
 	protected double bearing;	//radians
-	
-	
+
+
 	// constructor
- 	protected Flight(String id, Queue<Waypoint> flightPlan){
+	protected Flight(String id, Queue<Waypoint> flightPlan){
 		identifier = id;
 		this.flightPlan = flightPlan;
 		position = new Position(-1, -1, -1);	//invalid position
 	}
- 	
+
 	//getters and setters
- 	public final FlightConditions getCondition() {
+	public final FlightConditions getCondition() {
 		return conditions;
 	}
 	public void setConditions(FlightConditions conditions) {
@@ -31,7 +31,7 @@ public abstract class Flight implements GameTime, Drawable {
 	public final String getIdentifier() {
 		return identifier;
 	}
-	
+
 	public final FlightStatus getStatus() {
 		return status;
 	}
@@ -54,9 +54,9 @@ public abstract class Flight implements GameTime, Drawable {
 	public final void nextWaypoint(){
 		flightPlan.poll();
 	}
-	
+
 	public abstract void init(double speed, double altitude);
-	
+
 	public abstract void transition(Airspace a, TransferWaypoint t);
 	public abstract void takeOff(Airspace a, TransferWaypoint t);
 	public abstract void land(TransferWaypoint t);
@@ -65,11 +65,7 @@ public abstract class Flight implements GameTime, Drawable {
 	public abstract void toSpeed(double speed);
 	public abstract void abort();
 	public abstract void crash();
-
-
-	public void paint(Graphics g) {
-		// TODO Auto-generated method stub
-		
-	}
+	
+	public abstract void highlight(Boolean highlight);
 
 }

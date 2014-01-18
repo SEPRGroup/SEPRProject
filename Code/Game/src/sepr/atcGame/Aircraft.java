@@ -20,7 +20,7 @@ import static java.lang.Math.round;
 
 abstract class Aircraft extends Flight {
 	private BufferedImage image, rotatedImage;	//,labelImage;
-	
+
 	//static characteristics
 	public double
 		minAlt, cruiseAlt, maxAlt,	//position:	m	
@@ -38,7 +38,7 @@ abstract class Aircraft extends Flight {
 		tAlt, tV, tBearing;
 
 	protected static Font dataFont = new Font(Font.MONOSPACED, Font.PLAIN, 12);
-	
+
 
 	//constructor
 	protected Aircraft(String id, Queue<Waypoint> flightPlan) {
@@ -164,7 +164,7 @@ abstract class Aircraft extends Flight {
 			AffineTransformOp op = new AffineTransformOp(
 					AffineTransform.getRotateInstance(bearing, image.getWidth()/2, image.getHeight()/2), 
 					AffineTransformOp.TYPE_BILINEAR);
-			rotatedImage = op.filter(image, null);		
+			rotatedImage = op.filter(image, null);
 		}
 		//precalculate useful positioning values 
 		int w=rotatedImage.getWidth()/2, h=rotatedImage.getHeight()/2;
@@ -178,8 +178,8 @@ abstract class Aircraft extends Flight {
 					Math.round(position.altitude), round(v));
 			//unused bearing code:	 \u21BB%3$03d	, round(Math.toDegrees(bearing))
 			g.setFont(dataFont);
-			g.drawString(idString, location.x -w/2 , location.y +h +3);	
-			g.drawString(dataString, location.x -w, location.y +h +13);
+			g.drawString(idString, location.x -w/2 , location.y +h +dataFont.getSize() -3);	
+			g.drawString(dataString, location.x -w, location.y +h +dataFont.getSize()*2 -3);
 		}
 
 	}
@@ -266,4 +266,9 @@ abstract class Aircraft extends Flight {
 		status = CRASHING;
 	}
 
+	@Override
+	public final void highlight(Boolean highlight){
+		System.out.println("unimplemented method: Aircraft.highlight()");
+		//TODO
+	}
 }
