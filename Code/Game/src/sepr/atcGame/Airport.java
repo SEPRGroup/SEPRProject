@@ -94,11 +94,12 @@ abstract class Airport extends Airspace {
 					if(f.getPosition().y < 0- offset||f.getPosition().x <0 - offset|| f.getPosition().x > getWidth() + offset|| f.getPosition().y > getHeight() + offset){
 						eventLost(f);
 					}
-					if(f.getFlightPlan().peek()==null){
-						//removes the aircraft from the airspace if it has finished it's flightplan
-						eventHandover(f);
+				}else{
+						if(f.getPosition().y < 0||f.getPosition().x <0|| f.getPosition().x > getWidth()|| f.getPosition().y > getHeight()){
+							//removes the aircraft from the airspace if it has finished it's flightplan
+							//ensures that the aircraft is outside the airspace before it is removed
+							eventHandover(f);
 						}
-					
 				}
 			}
 		}
