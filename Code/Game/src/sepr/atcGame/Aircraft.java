@@ -1,7 +1,9 @@
 package sepr.atcGame;
 
 import java.util.Queue;
-import java.awt.*;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;

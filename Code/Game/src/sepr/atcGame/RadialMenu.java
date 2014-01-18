@@ -22,7 +22,8 @@ import javax.swing.JComponent;
 public class RadialMenu extends JComponent{
 	private List<String> names = new ArrayList<String>();
 	private List<Image> images = new ArrayList<Image>();
-	private List<Image> scaleImages = null;
+	private List<Area> buttons;
+	private List<Image> scaleImages;
 
 	protected int
 	spacing = 4,	//degrees between  buttons
@@ -47,8 +48,8 @@ public class RadialMenu extends JComponent{
 
 		//test logic?
 		Image image = null;	//{!}
-		try {image = ImageIO.read(new File("src/sepr/atcGame/Images/cloud.png"));}
-		catch (IOException e){};
+		try {image = ImageIO.read(new File("src/sepr/atcGame/Images/Waypoint.png"));}
+		catch (IOException e){System.out.println("image not found");};
 		this.addButton("turnTo", image);	//{!}
 		this.addButton("toAlt", image);	//{!}
 		this.addButton("toSpeed", image);	//{!}
@@ -72,7 +73,23 @@ public class RadialMenu extends JComponent{
 	public void setButtonSize(int buttonSize) {
 		this.buttonSize = buttonSize;
 		setRadius();
-		recalculate();
+		scaleImages = null;
+	}
+	
+	public int getSpacing() {
+		return spacing;
+	}
+	public void setSpacing(int spacing) {
+		this.spacing = spacing;
+		buttons = null;
+	}
+
+	public int getOffset() {
+		return offset;
+	}
+	public void setOffset(int offset) {
+		this.offset = offset;
+		buttons = null;
 	}
 
 	public int getRadius() {
@@ -80,6 +97,7 @@ public class RadialMenu extends JComponent{
 	}
 	private void setRadius() {
 		radius = holeRadius +buttonSize;
+		buttons = null;
 		int diameter = 2*radius +1;
 		Dimension size = new Dimension(diameter, diameter);
 		setPreferredSize(size);
@@ -94,6 +112,7 @@ public class RadialMenu extends JComponent{
 	}
 	public void setStyle(int style) {
 		this.style = style;
+		buttons = null;
 		repaint();
 	}
 
@@ -104,59 +123,65 @@ public class RadialMenu extends JComponent{
 		this.font = font;
 		repaint();
 	}
+	
+	private void getButton(){
+		if (buttons == null){
+			buttons = new ArrayList<Area>();
+			int num = names.size();
+			int size = (360 -num*spacing) /num;	//angular size of buttons
+			int position = offset;
+			Area b;	//inner area to remove
+			switch (style){
+			case DONUT:{
+				b = new Area(new Ellipse2D.Double(buttonSize, buttonSize, 2*holeRadius, 2*holeRadius));
+				break;
+			}
+			case FLOWER:{
+				Polygon p = new Polygon();
+				double posR = Math.toRadians(offset -spacing/2.0);
+				double sizeR = 2*Math.PI /num;
+				for (int i=0; i<num; i++){
+					p.addPoint(radius +(int)Math.round(holeRadius*Math.sin(posR)), 
+							radius -(int)Math.round(holeRadius*Math.cos(posR)));
+					posR += sizeR;
+				}
+				b = new Area(p);
+				break;
+			}
+			default: b = new Area();
+			}
+			Area a;
+			//account for coordinate reference system
+			int spacing = -this.spacing;
+			size = -size;
+			position = 90 -position -size -spacing;	
+			for (int i=0; i<num; i++){
+				position += size +spacing;
+				//generate partial segment; 
+				a = new Area(new Arc2D.Double(0, 0, 2*radius, 2*radius, 
+						position, size, Arc2D.PIE));
+				a.subtract(b);
+				buttons.add(a);
+			}
+		}
+	}
+	
 
 	//methods
 	public void addButton(String label, Image image){
 		names.add(label);
 		images.add(image);
-		recalculate();
-	}
-
-	private void recalculate(){
 		scaleImages = null;
+		buttons = null;
 		repaint();
-	}
-
-	private void drawBackground(Graphics g, int position, int size){
-		Graphics2D g2d = (Graphics2D) g;
-
-		//account for coordinate reference system
-		position = 90 -position;	
-		size = -size;	
-		//generate partial segment; 
-		Area a = new Area(new Arc2D.Double(0, 0, 2*radius, 2*radius, position, size, Arc2D.PIE));
-		switch (style){
-		case DONUT:{
-			Area b = new Area(new Ellipse2D.Double(buttonSize, buttonSize, 2*holeRadius, 2*holeRadius));
-			a.subtract(b);	//subtract inner circle to leave edge
-		}
-		case FLOWER:{
-			Polygon p = new Polygon();
-			int num = names.size();
-			double posR = Math.toRadians(offset -spacing/2.0);
-			double sizeR = 2*Math.PI /num;
-			for (int i=0; i<num; i++){
-				p.addPoint(radius +(int)Math.round(holeRadius*Math.sin(posR)), 
-						radius -(int)Math.round(holeRadius*Math.cos(posR)));
-				posR += sizeR;
-			}
-			Area b = new Area(p);
-			a.subtract(b);	//subtract inner polygo to leave petals
-		}
-		default:
-			//{!} error
-		}
-
-		g2d.setColor(getBackground());
-		g2d.fill(a);
-		g2d.setColor(getBackground().darker());
-		g2d.draw(a);
 	}
 
 
 	//overridden methods
 	@Override
 	public final void paintComponent(Graphics g){
+		Graphics2D g2d = (Graphics2D)g;
+		getButton();
 		//calculate scaled icons if needed
 		if (scaleImages == null){
 			scaleImages = new ArrayList<Image>();
@@ -182,16 +207,22 @@ public class RadialMenu extends JComponent{
 			cy = radius -(int)Math.round((holeRadius +buttonSize/2)*Math.cos(posCR));
 			String name = names.get(i);
 			Image image = scaleImages.get(i);
-			drawBackground(g, pos, size);
-			g.setFont(font);
-			g.setColor(getForeground());
+			Area button = buttons.get(i);
+			//draw button background
+			g2d.setColor(getBackground());
+			g2d.fill(button);
+			g2d.setColor(getBackground().darker());
+			g2d.draw(button);
+			//draw (image) and text
+			g2d.setFont(font);
+			g2d.setColor(getForeground());
 			if (image != null){
-				g.drawImage(image, cx -image.getWidth(null)/2, 
+				g2d.drawImage(image, cx -image.getWidth(null)/2, 
 						cy -image.getHeight(null)/2 -font.getSize()/2, null);
-				g.drawString(name, cx -image.getWidth(null)/2, 
+				g2d.drawString(name, cx -image.getWidth(null)/2, 
 						cy +image.getHeight(null)/2 +font.getSize()/2);
 			}else {
-				g.drawString(name, cx -buttonSize/2 +5, 
+				g2d.drawString(name, cx -buttonSize/2 +5, 
 						cy +font.getSize()/2);
 			}
 
@@ -208,7 +239,5 @@ public class RadialMenu extends JComponent{
 		p.x -= radius; p.y -= radius;
 		super.setLocation(p);	
 	}
-
-
 
 }
