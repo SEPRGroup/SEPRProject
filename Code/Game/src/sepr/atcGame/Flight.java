@@ -10,7 +10,7 @@ public abstract class Flight implements GameTime, Drawable {
 	protected Position position;
 	protected final Queue<Waypoint> flightPlan;
 	private FlightConditions conditions;
-	protected double bearing;	//radians
+	protected double bearing,waypointDistance;	//radians
 
 
 	// constructor

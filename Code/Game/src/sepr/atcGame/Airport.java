@@ -81,7 +81,12 @@ abstract class Airport extends Airspace{
 	public final void update(double time) {
 		for(Flight f:getAircraft()){
 			if(f != null){
-				f.update(time);	}
+				f.update(time);	
+				Waypoint w  = f.flightPlan.peek();
+				if (w != null){
+					f.waypointDistance = Math.sqrt(Math.pow(f.getPosition().x-w.getPosition().x ,2) +Math.pow(f.getPosition().y-w.getPosition().y,2)+Math.pow(f.getPosition().altitude-w.getPosition().altitude,2));
+				}
+			}
 		}
 		repaint();
 	}
