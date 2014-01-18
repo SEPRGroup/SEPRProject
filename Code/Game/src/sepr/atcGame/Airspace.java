@@ -83,6 +83,13 @@ public abstract class Airspace extends JPanel implements GameTime{
 	}
 
 	public final void eventLost(Flight f) {
+		int i = 0;
+		for(Flight flight : aircraft){
+			if(flight == f){
+				aircraft[i] = null;
+			} 
+			i++;
+		}
 		//TODO remove landed plane from array of active flights
 		//TODO remove points accordingly
 	}

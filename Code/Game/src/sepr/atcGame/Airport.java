@@ -85,6 +85,9 @@ abstract class Airport extends Airspace{
 				Waypoint w  = f.flightPlan.peek();
 				if (w != null){
 					f.waypointDistance = Math.sqrt(Math.pow(f.getPosition().x-w.getPosition().x ,2) +Math.pow(f.getPosition().y-w.getPosition().y,2)+Math.pow(f.getPosition().altitude-w.getPosition().altitude,2));
+					if(f.waypointDistance < 1600){
+						f.nextWaypoint();
+					}
 				}
 			}
 		}

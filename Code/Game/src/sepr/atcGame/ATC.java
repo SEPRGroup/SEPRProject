@@ -105,8 +105,10 @@ public class ATC extends JPanel implements GameTime{
 				locationY += fontSize;
 				g.drawString("Flight Status: " + f1.getStatus().toString(),20,locationY);
 				locationY += fontSize;
-				g.drawString("Next Waypoint : " + f1.getFlightPlan().peek().getName(),20,locationY);
-				locationY+= fontSize;
+				if(f1.getFlightPlan().peek() != null){
+					g.drawString("Next Waypoint : " + f1.getFlightPlan().peek().getName(),20,locationY);
+					locationY+= fontSize;
+				}
 				g.drawString("Waypoint distance : " + String.valueOf(Math.round(f1.waypointDistance)),20,locationY);
 				locationY +=20;
 				
