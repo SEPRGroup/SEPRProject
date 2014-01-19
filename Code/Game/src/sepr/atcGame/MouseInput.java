@@ -75,7 +75,7 @@ public final class MouseInput extends Input {
 		bearing.addListener(new RadialMenuListener(){
 			public void eventButtonClicked(int button) {
 				setVisible(false);
-				highlighted.turnTo(button *= 4);
+				highlighted.turnTo(Math.toRadians(button *= 4));
 				highlighted = null;
 			}
 		});
