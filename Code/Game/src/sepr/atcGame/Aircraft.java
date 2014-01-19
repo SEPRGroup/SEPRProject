@@ -18,9 +18,17 @@ import static java.lang.Math.abs;
 import static java.lang.Math.round;
 
 
-public class Aircraft extends Flight {
+public /*abstract*/ class Aircraft extends Flight {
 	//MH: No longer Abstract Class - was necessary to instantiate for testing
 	private BufferedImage image, rotatedImage;
+	
+	private static String 
+		basePath = "src/sepr/atcGame/Images/plane.png",
+		highlightPath = "src/sepr/atcGame/Images/Plane_Selected.png";
+	private static BufferedImage 
+		base, highlight;	//images for the plane normally, and when highlighted
+
+	protected static Font dataFont = new Font(Font.MONOSPACED, Font.PLAIN, 12);
 
 	//static characteristics
 	public double
@@ -37,16 +45,21 @@ public class Aircraft extends Flight {
 	//target tracking variables
 	private double 
 		tAlt, tV, tBearing;
-
-	protected static Font dataFont = new Font(Font.MONOSPACED, Font.PLAIN, 12);
-
+	
 
 	//constructor
 	public Aircraft(String id, Queue<Waypoint> flightPlan) {
 		super(id, flightPlan);
-		try {image = ImageIO.read(new File("src/sepr/atcGame/Images/plane.png"));}
-		catch (IOException e){};
+		if (base == null || highlight == null){
+			try {
+				base = ImageIO.read(new File(basePath));
+				highlight = ImageIO.read(new File(highlightPath));}
+			catch (IOException e){
+				System.out.println("Aircraft:\tImage loading failed");
+			};
+		}
 		status = FlightStatus.WAITING;
+		image = base;
 	}
 
 
@@ -161,7 +174,7 @@ public class Aircraft extends Flight {
 		//calculate rotated image if invalidated
 		if (rotatedImage == null){
 			AffineTransformOp op = new AffineTransformOp(
-					AffineTransform.getRotateInstance(bearing, image.getWidth()/2, image.getHeight()/2), 
+					AffineTransform.getRotateInstance(bearing, image.getWidth()/2.0, image.getHeight()/2.0), 
 					AffineTransformOp.TYPE_BILINEAR);
 			rotatedImage = op.filter(image, null);
 		}
@@ -266,8 +279,10 @@ public class Aircraft extends Flight {
 	}
 
 	@Override
-	public final void highlight(Boolean highlight){
-		System.out.println("unimplemented method: Aircraft.highlight()");
-		//TODO
+	public final void highlight(Boolean aFlag){
+		if (aFlag){
+			image = highlight;
+		} else image = base;
+		rotatedImage = null;
 	}
 }
