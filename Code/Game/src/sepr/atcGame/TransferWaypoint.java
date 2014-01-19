@@ -29,6 +29,7 @@ class TransferWaypoint extends Waypoint {
 		this.bearing = bearing;
 	}
 	
+	
 	@Override
 	public void draw(Graphics g, Point location, double scale) {	 
 		//precalculate useful positioning values 
@@ -40,7 +41,6 @@ class TransferWaypoint extends Waypoint {
 			String idString = (getName());
 			String dataString = String.format("\u21A5%1$4d", 
 					Math.round(this.getPosition().altitude));
-			g.setFont(dataFont);
 			
 			Boolean AtoB;	//if the position is consistent with being AtoB for this airspace
 			if ((0 < bearing) && (PI/2 > bearing)){
@@ -59,10 +59,11 @@ class TransferWaypoint extends Waypoint {
 				dir = bearing;
 			}
 			
+			g.setFont(dataFont);
 			int oX, oY, //x and y offsets of centre of text from location
-				eX = 15, eY = 11;	//expected half-width, half-height of text
-			oX = (int)(Math.round(Math.sin(dir)*(w+eX)));	//where 15 is 1/2 the expected width of the text
-			oY = (int)(Math.round(-Math.cos(dir)*(h+eY)));	//where 11 is 1/2 the expected height of the text
+				eX = 20, eY = dataFont.getSize();	//expected half-width, half-height of text
+			oX = (int)(Math.round(Math.sin(dir)*(w+eX +2)));
+			oY = (int)(Math.round(-Math.cos(dir)*(h+eY +2))) -3;
 			g.drawString(idString, location.x +oX -eX, location.y +oY);
 			g.drawString(dataString, location.x +oX -eX, location.y +oY +eY);
 	

@@ -1,6 +1,5 @@
 package sepr.atcGame;
 
-import java.awt.Graphics;
 import java.util.Queue;
 
 public abstract class Flight implements GameTime, Drawable {

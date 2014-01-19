@@ -118,9 +118,9 @@ abstract class Aircraft extends Flight {
 			}
 			if (!changed){
 				status = CRUISING;
-				System.out.println(getIdentifier() +"\thas completed manoeuvres");
+				//System.out.println(getIdentifier() +"\thas completed manoeuvres");
 			}
-			//execute cruising behaviour
+			//execute cruising behaviour : no break
 		}
 		case CRUISING: {
 			//update positions

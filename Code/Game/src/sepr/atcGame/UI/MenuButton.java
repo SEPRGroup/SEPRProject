@@ -3,8 +3,6 @@ package sepr.atcGame.UI;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -45,7 +43,6 @@ public class MenuButton extends JPanel {
 
 	public class MenuText extends JLabel {
 
-		private Color color = new Color(0,0,255);
 		private Font font;
 
 		public MenuText(String text){
