@@ -5,10 +5,12 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.ComponentAdapter;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 
 import static java.lang.Math.PI;
@@ -18,11 +20,51 @@ abstract class Airport extends Airspace {
 	private Image background;
 	private Image scaleBackground;
 	private Dimension boundaries; // size of airspace in metres
+	private Flight highlighted;
 
 	private ComponentListener resizeListener = new ComponentAdapter() {
 		public void componentResized(ComponentEvent arg0) {
 			scaleBackground = null;
 			// {!} needs to lock ratio
+		}
+	};
+
+	private MouseListener mouseListener = new MouseAdapter(){
+		public void mouseClicked(MouseEvent e){
+			//clear current highlighted plane
+			if (highlighted != null){
+				highlighted.highlight(false);}
+
+			Position pos = new Position(e.getX(), e.getY(), -1);
+			//convert to internal coordinates
+			double scale = (double)boundaries.width / getWidth();
+			pos.x *= scale;	pos.y *= scale;
+
+			double minD = Double.MAX_VALUE; 
+			Flight minF = null;
+			for (Flight f : aircraft){
+				if (f != null){
+					Position p = f.getPosition();
+					double d = Math.sqrt(Math.pow(pos.x -p.x, 2) +Math.pow(pos.y -p.y, 2));
+					if (d < minD){
+						minD = d;
+						minF = f;
+					}
+				}
+			}
+
+			if (minF != null){	//if at least one Flight exists in the airspace
+				if (minD < 800){	//if click was close enough to Flight
+					highlighted = minF;
+					minF.highlight(true);
+					eventHighlighted(minF);
+				} else {
+					highlighted = null;
+					eventHighlighted(null);
+				}
+			} else {
+				eventHighlighted(null);
+			}
 		}
 	};
 
@@ -34,6 +76,7 @@ abstract class Airport extends Airspace {
 		this.setOpaque(true);
 		setDoubleBuffered(true); // {!} disable if not redrawing entire screen
 		addComponentListener(resizeListener);
+		addMouseListener(mouseListener);
 
 		generateWaypoints();
 	}
@@ -51,11 +94,8 @@ abstract class Airport extends Airspace {
 			double x = Math.min(Math.abs(h * a), w);
 			double y = Math.min(Math.abs(w / a), h);
 			pos.x = w + (bearing < PI ? x : -x); // RHS ? add : sub
-			pos.y = h + (Math.abs(bearing - PI) > (PI / 2) ? -y : y); // TOP ?
-																		// sub :
-																		// add
-			// System.out.println("set transferWaypoint " +t.getName() +" : "
-			// +pos.x +"," +pos.y); //{!}
+			pos.y = h + (Math.abs(bearing - PI) > (PI / 2) ? -y : y); // TOP ? sub : add
+			// System.out.println("set transferWaypoint " +t.getName() +" : " +pos.x +"," +pos.y); //{!}
 		}
 	}
 
@@ -66,20 +106,21 @@ abstract class Airport extends Airspace {
 				background.getHeight(null)));
 	}
 
-	public final int getWidth() {
-		return boundaries.width;
-	}
-
-	public final int getHeight() {
-		return boundaries.height;
-	}
-
+	
 	// methods
 	protected abstract void generateWaypoints();
-
+	
+	public final Point positionToLocation(Position p){
+		//converts internal coordinate system to pixel coordinate system
+		double scale = (double)getWidth() / boundaries.width;
+		return new Point((int)Math.round(p.x*scale), (int)Math.round(p.y*scale));
+	}
+	
+	
 	// overridden methods
 	@Override
 	public final void update(double time) {
+		Dimension bounds = this.boundaries;
 		for(Flight f:getAircraft()){
 			if(f != null){
 				f.update(time);	
@@ -89,17 +130,17 @@ abstract class Airport extends Airspace {
 					if(f.waypointDistance < 1600){
 						f.nextWaypoint();
 					}
-					int offset = 500;
+					int offset = 1000;
 					//Checks to see if plane is outside the airspace, offset is used to allow spawning of planes slightly outside airspace
-					if(f.getPosition().y < 0- offset||f.getPosition().x <0 - offset|| f.getPosition().x > getWidth() + offset|| f.getPosition().y > getHeight() + offset){
+					if(f.getPosition().y < 0- offset||f.getPosition().x <0 - offset|| f.getPosition().x > bounds.getWidth() + offset|| f.getPosition().y > bounds.getHeight() + offset){
 						eventLost(f);
 					}
 				}else{
-						if(f.getPosition().y < 0||f.getPosition().x <0|| f.getPosition().x > getWidth()|| f.getPosition().y > getHeight()){
-							//removes the aircraft from the airspace if it has finished it's flightplan
-							//ensures that the aircraft is outside the airspace before it is removed
-							eventHandover(f);
-						}
+					if(f.getPosition().y < 0||f.getPosition().x <0|| f.getPosition().x > bounds.getWidth()|| f.getPosition().y > bounds.getHeight()){
+						//removes the aircraft from the airspace if it has finished it's flightplan
+						//ensures that the aircraft is outside the airspace before it is removed
+						eventHandover(f);
+					}
 				}
 			}
 		}
@@ -147,8 +188,7 @@ abstract class Airport extends Airspace {
 	public final void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		Rectangle bounds = getBounds();
-		double scale = bounds.getWidth() / boundaries.getWidth();
+		double scale = (double)getWidth() / boundaries.width;
 		Point loc = new Point();
 		Position pos;
 
@@ -156,12 +196,12 @@ abstract class Airport extends Airspace {
 		if (scaleBackground != null) {
 			g.drawImage(scaleBackground, 0, 0, null);
 		} else if (background != null) {
-			scaleBackground = background.getScaledInstance(bounds.width,
-					bounds.height, Image.SCALE_SMOOTH);
+			scaleBackground = background.getScaledInstance(getWidth(),
+					getHeight(), Image.SCALE_SMOOTH);
 			g.drawImage(scaleBackground, 0, 0, null);
 		} else {
 			g.setColor(Color.BLACK);
-			g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+			g.fillRect(0, 0, getWidth(), getHeight());
 		}
 
 		// draw Waypoints

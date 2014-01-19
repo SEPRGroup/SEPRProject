@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
 
+import sepr.atcGame.events.ATCListener;
+import sepr.atcGame.events.AirspaceListener;
+
 
 public abstract class Airspace extends JPanel implements GameTime{
 	//constants
@@ -16,24 +19,19 @@ public abstract class Airspace extends JPanel implements GameTime{
 	protected Waypoint[] waypoints = new Waypoint[MAX_WAYPOINTS];	//Fixed size, may be filled
 	protected List<TransferWaypoint> transfers;
 	
+	private List<AirspaceListener> listeners = new ArrayList<AirspaceListener>();
+	
+	
 	//constructor
 	protected Airspace(String airspaceName){
-		this.airspaceName = airspaceName;	
-		// Math.sin(Math.toRadians(i*360/MAX_WAYPOINTS))
-		
+		this.airspaceName = airspaceName;
 	}
-	
-	/*	Full event generating routines and data	*/
 	
 	
 	//getters and setters
 	public String getAirspaceName(){
 		return airspaceName;
 	}
-
-//	public Flight[] getAircraft() {
-//		return aircraft;
-//	}
 	
 	public Flight[] getAircraft() {
 		return aircraft;
@@ -55,45 +53,45 @@ public abstract class Airspace extends JPanel implements GameTime{
 	
 	//methods	
 	public abstract void newFlight(Flight f);
-
 	public abstract void receiveFlight(Flight f, TransferWaypoint t);
-
 	public abstract void newObstacle(Flight flight);
 	
-	public final void findAndRemoveFlight(Flight f) {
-		//This function cuts down on repeated code
-		//It finds and removes a flight which has been terminated in one way or another
-		//from the array of active flights 
-		int i = 0;
-		for(Flight flight : aircraft){
-			if(flight == f){
+	public final void addListener(AirspaceListener toAdd){
+		listeners.add(toAdd);
+	}
+	
+	protected final void eventCrash(Flight f1, Flight f2) {
+		//TODO signal event{!}
+	}
+
+	protected final void eventLanded(Flight f) {
+		removeFlight(f);
+		//TODO signal event{!}
+	}
+
+	protected final void eventHandover(Flight f) {
+		removeFlight(f);
+		//TODO signal event {!}	
+	}
+
+	protected final void eventLost(Flight f) {
+		removeFlight(f);
+		//TODO signal event {!}
+	}
+	
+	protected final void eventHighlighted(Flight f) {
+		for (AirspaceListener l : listeners)
+			l.eventHighlighted(f);
+	}
+	
+	private final void removeFlight(Flight f) {
+		//finds and removes a flight from the array of active flights 
+		for(int i=0; i<MAX_FLIGHTS; i++){
+			if(aircraft[i] == f){
 				aircraft[i] = null;
-			} 
-			i++;
-		}
-		
-	}
-
-	public final void eventCrash(Flight f1, Flight f2) {
-		//TODO remove crashed planes from array of active flights
-		//TODO remove points or end game accordingly
-		
-	}
-
-	public final void eventLanded(Flight f) {
-		//TODO remove landed plane from array of active flights
-		//TODO reward points accordingly
-	}
-
-	public final void eventHandover(Flight f) {
-		findAndRemoveFlight(f);
-		//TODO reward points accordingly
-		
-	}
-
-	public final void eventLost(Flight f) {
-		findAndRemoveFlight(f);
-		//TODO remove points accordingly
+				break;
+			}
+		}		
 	}
 	
 }

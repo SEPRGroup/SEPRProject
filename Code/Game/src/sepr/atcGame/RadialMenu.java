@@ -8,18 +8,19 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Polygon;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 
+import sepr.atcGame.events.RadialMenuListener;
 
-public class RadialMenu extends JComponent{
+
+public class RadialMenu extends JComponent implements MouseListener{
 	private List<String> names = new ArrayList<String>();
 	private List<Image> images = new ArrayList<Image>();
 	private List<Area> buttons;
@@ -35,26 +36,21 @@ public class RadialMenu extends JComponent{
 	radius;
 	private Font font = new Font(Font.SERIF, Font.BOLD, 11);
 
+	private List<RadialMenuListener> listeners = new ArrayList<RadialMenuListener>();
+
 	public static final int DONUT = 0, FLOWER = 1;
 
 
 	//constructor
 	public RadialMenu() {
 		setOpaque(false);
+		setVisible(false);
 
 		setBackground(new Color(200, 180, 20, 245));
 		setForeground(new Color(50,20,10));
 		setRadius();
 
-		//test logic?
-		Image image = null;	//{!}
-		try {image = ImageIO.read(new File("src/sepr/atcGame/Images/Waypoint.png"));}
-		catch (IOException e){System.out.println("image not found");};
-		this.addButton("turnTo", image);	//{!}
-		this.addButton("toAlt", image);	//{!}
-		this.addButton("toSpeed", image);	//{!}
-		this.addButton("abort", image);	//{!}
-		this.addButton("land", image);	//{!}
+		addMouseListener(this);
 	}
 
 
@@ -75,7 +71,7 @@ public class RadialMenu extends JComponent{
 		setRadius();
 		scaleImages = null;
 	}
-	
+
 	public int getSpacing() {
 		return spacing;
 	}
@@ -123,7 +119,7 @@ public class RadialMenu extends JComponent{
 		this.font = font;
 		repaint();
 	}
-	
+
 	private void getButton(){
 		if (buttons == null){
 			buttons = new ArrayList<Area>();
@@ -165,7 +161,7 @@ public class RadialMenu extends JComponent{
 			}
 		}
 	}
-	
+
 
 	//methods
 	public void addButton(String label, Image image){
@@ -174,6 +170,16 @@ public class RadialMenu extends JComponent{
 		scaleImages = null;
 		buttons = null;
 		repaint();
+	}
+
+	public final void addListener(RadialMenuListener toAdd){
+		listeners.add(toAdd);
+	}
+
+	private void eventButtonClicked(int button){
+		for (RadialMenuListener l : listeners){
+			l.eventButtonClicked(button);
+		}
 	}
 
 
@@ -203,8 +209,8 @@ public class RadialMenu extends JComponent{
 		for (int i=0; i<num; i++){
 			pos += size +spacing;
 			posCR = Math.toRadians(pos +size/2);
-			cx = radius +(int)Math.round((holeRadius +buttonSize/2)*Math.sin(posCR));
-			cy = radius -(int)Math.round((holeRadius +buttonSize/2)*Math.cos(posCR));
+			cx = radius +(int)Math.round( (holeRadius +buttonSize/2)*Math.sin(posCR) );
+			cy = radius -(int)Math.round( (holeRadius +buttonSize/2)*Math.cos(posCR) );
 			String name = names.get(i);
 			Image image = scaleImages.get(i);
 			Area button = buttons.get(i);
@@ -231,13 +237,49 @@ public class RadialMenu extends JComponent{
 
 	@Override
 	public final void setLocation(int x, int y){	//set location of centre
-		super.setLocation(x -radius, y -radius);
+		super.setLocation(x -radius/2, y -radius/2);
 	}
 
 	@Override
 	public final void setLocation(Point p){	//set location of centre
-		p.x -= radius; p.y -= radius;
-		super.setLocation(p);	
+		//{!} my favourite kind of comment...
+		//I don't know why this is radius/2 instead of radius, but it works...
+		p.x -= radius/2; p.y -= radius/2;
+		super.setLocation(p);
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		//check which button was clicked
+		for (int i=0; i<names.size(); i++){
+			Area a = buttons.get(i);
+			if (a.contains(e.getPoint())){
+				System.out.println("button\t" +names.get(i) +"\tclicked");
+				eventButtonClicked(i);	//signal that a button has been clicked
+				break;	//areas should not intersect; no need to continue checking
+			}
+		}
 	}
 
 }

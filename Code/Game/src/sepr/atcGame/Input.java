@@ -1,12 +1,12 @@
 package sepr.atcGame;
 
-abstract class Input {
-	protected ATC atc;
+import javax.swing.JPanel;
+import sepr.atcGame.events.AirspaceListener;
 
-	
-	protected Input(ATC atc) {
+public abstract class Input extends JPanel implements AirspaceListener{
+
+	protected Input() {
 		super();
-		this.atc = atc;
 	}
 
 }

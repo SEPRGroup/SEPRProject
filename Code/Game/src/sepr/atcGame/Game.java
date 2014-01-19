@@ -36,8 +36,8 @@ public class Game extends JFrame implements ActionListener{
 	private long sinceLastFlight;
 	private Queue<Flight> toAdd;	//{!}
 
-	private ATC activeFlights;
-	private RadialMenu menu = new RadialMenu();
+	private ATC atc;
+	private Input input;
 	private testOutput output = new testOutput();
 	private JPanel statusPanel = new JPanel();
 	private JLabel timerDisplay = new JLabel();
@@ -63,16 +63,14 @@ public class Game extends JFrame implements ActionListener{
 		statusPanel.setBackground(Color.WHITE);
 		add(statusPanel,BorderLayout.PAGE_START);
 		
-		{	//{!} test logic for radial menu
-			getRootPane().getLayeredPane().add(menu, JLayeredPane.MODAL_LAYER);
-		}
-		
 		generateWorld();
-		activeFlights = new ATC("bob",airport);
-		activeFlights.addListener(output);
-		add(activeFlights,BorderLayout.EAST);
+		atc = new ATC("bob",airport);
+		atc.addListener(output);
+		add(atc,BorderLayout.EAST);
 		add(airport);
 		pack();
+		input = new MouseInput(airport);
+		getRootPane().getLayeredPane().add(input, JLayeredPane.MODAL_LAYER);
 		setLocationRelativeTo(null);
 		setMinimumSize(getSize());
 		{
@@ -205,8 +203,6 @@ public class Game extends JFrame implements ActionListener{
 					f.init(f.cruiseV, 200);
 					airport.receiveFlight(f, 
 							(TransferWaypoint)f.getFlightPlan().poll());
-					f.turnTo(0);
-					f.toAltitude(300);
 				}
 				/*{
 					airport.newFlight(f);
@@ -218,7 +214,7 @@ public class Game extends JFrame implements ActionListener{
 		}
 
 		airport.update(elapsedGameTime);
-		activeFlights.update(elapsedGameTime);
+		atc.update(elapsedGameTime);
 		//{!} update scheduler
 
 		{	//update status panel
