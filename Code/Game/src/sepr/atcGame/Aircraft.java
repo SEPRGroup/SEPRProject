@@ -20,7 +20,7 @@ import static java.lang.Math.round;
 
 public class Aircraft extends Flight {
 	//MH: No longer Abstract Class - was necessary to instantiate for testing
-	private BufferedImage image, rotatedImage;	//,labelImage;
+	private BufferedImage image, rotatedImage;
 
 	//static characteristics
 	public double
@@ -83,7 +83,6 @@ public class Aircraft extends Flight {
 					vClimb = max(vClimb, minClimb);	//cap climb rate
 					vClimb = max(vClimb, -dalt);	//cap to smooth climb
 				}
-				//labelImage = null
 				if ( abs(tAlt-position.altitude) < 0.5){
 					vClimb = 0;
 					position.altitude = tAlt;	//end manoeuvres
@@ -110,7 +109,6 @@ public class Aircraft extends Flight {
 					vTurn = max(vTurn, dturn);	//cap to smooth rotation
 				}
 				rotatedImage = null;
-				//labelImage = null;
 				if ( (abs(tBearing -bearing) < 0.01) || (abs(tBearing+2*PI -bearing) < 0.01)){
 					vTurn = 0;
 					bearing = tBearing;	//end manoeuvres

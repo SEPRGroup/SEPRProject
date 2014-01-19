@@ -19,7 +19,7 @@ public class ATC extends JPanel implements GameTime{
 	private static final double CHECK_PERIOD = 5;
 	private double sinceLastCheck = 0;
 	
-	List<ATCListener> listeners = new ArrayList<ATCListener>();
+	private List<ATCListener> listeners = new ArrayList<ATCListener>();
 	
 
 	//getters/setters
@@ -85,7 +85,7 @@ public class ATC extends JPanel implements GameTime{
             l.eventViolation(f1, f2);
 	}
 	
-	public void addListener(ATCListener toAdd) {
+	public final void addListener(ATCListener toAdd) {
         listeners.add(toAdd);
     }
 	
