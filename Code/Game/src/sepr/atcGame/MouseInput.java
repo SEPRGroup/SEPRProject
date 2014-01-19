@@ -1,11 +1,10 @@
 package sepr.atcGame;
 
-import java.awt.Graphics;
 import java.awt.Point;
 
 import sepr.atcGame.events.RadialMenuListener;
 
-public final class MouseInput extends Input {
+public final class MouseInput extends Input implements GameTime{
 	private Airport airport;
 	private Flight highlighted = null;
 	
@@ -166,6 +165,33 @@ public final class MouseInput extends Input {
 	@Override
 	public void removeFlight(Flight f) {
 		// TODO Auto-generated method stub	
+	}
+
+
+	@Override
+	public void update(double time) {
+	//Checks which menu is highlighted if any then gets the menu to follow the plane
+		if (highlighted != null){
+			if(main.isVisible()){
+				tryLocation(main,
+						airport.positionToLocation(highlighted.getPosition()));
+				setVisible(true);
+			}else if(bearing.isVisible()){
+				tryLocation(bearing,
+						airport.positionToLocation(highlighted.getPosition()));
+				setVisible(true);
+			}else if(speed.isVisible()){
+				tryLocation(speed,
+						airport.positionToLocation(highlighted.getPosition()));
+				setVisible(true);
+			}else if(altitude.isVisible()){
+				tryLocation(altitude,
+						airport.positionToLocation(highlighted.getPosition()));
+				setVisible(true);
+			}
+		} else setVisible(false);
+		
+		
 	}
 	
 }

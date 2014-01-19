@@ -37,7 +37,7 @@ public class Game extends JFrame implements ActionListener{
 	private Queue<Flight> toAdd;	//{!}
 
 	private ATC atc;
-	private Input input;
+	private MouseInput input;
 	private testOutput output = new testOutput();
 	private JPanel statusPanel = new JPanel();
 	private JLabel timerDisplay = new JLabel();
@@ -215,6 +215,8 @@ public class Game extends JFrame implements ActionListener{
 
 		airport.update(elapsedGameTime);
 		atc.update(elapsedGameTime);
+		input.update(elapsedGameTime);
+		
 		//{!} update scheduler
 
 		{	//update status panel
