@@ -6,7 +6,7 @@ import java.awt.Point;
 import static java.lang.Math.PI;
 
 
-class TransferWaypoint extends Waypoint {
+public class TransferWaypoint extends Waypoint {
 	//Variables
 	private Position position2;
 	private Airspace airspace1, airspace2; 

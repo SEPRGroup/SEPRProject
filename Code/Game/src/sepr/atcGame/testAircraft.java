@@ -2,7 +2,7 @@ package sepr.atcGame;
 //No Junit Test Created for this - Unsure if this a test itself. mjh. 28/12/13
 import java.util.Queue;
 
-final class testAircraft extends Aircraft {
+public final class testAircraft extends Aircraft {
 
 	//constructor
 	public testAircraft(String id, Queue<Waypoint> flightPlan) {

@@ -1,8 +1,8 @@
 package sepr.atcGame;
 
-final class DummyAirspace extends Airspace {
+public final class DummyAirspace extends Airspace {
 
-	protected DummyAirspace(String airspaceName) {
+	public DummyAirspace(String airspaceName) {
 		super(airspaceName);
 	}
 	
