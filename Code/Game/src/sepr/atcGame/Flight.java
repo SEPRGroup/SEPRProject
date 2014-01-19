@@ -47,6 +47,11 @@ public abstract class Flight implements GameTime, Drawable {
 	public final double getBearing() {
 		return bearing;
 	}
+	
+
+	public final String toString() {
+		return "<Flight| identifier:"+this.identifier+", status:"+this.status+", position:"+this.position+", flightPlan:"+this.flightPlan+", conditions:"+this.conditions+", bearing:"+this.bearing+">";
+	}
 
 
 	// methods

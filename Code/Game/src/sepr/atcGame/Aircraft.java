@@ -18,7 +18,8 @@ import static java.lang.Math.abs;
 import static java.lang.Math.round;
 
 
-abstract class Aircraft extends Flight {
+public class Aircraft extends Flight {
+	//MH: No longer Abstract Class - was necessary to instantiate for testing
 	private BufferedImage image, rotatedImage;	//,labelImage;
 
 	//static characteristics
@@ -41,7 +42,7 @@ abstract class Aircraft extends Flight {
 
 
 	//constructor
-	protected Aircraft(String id, Queue<Waypoint> flightPlan) {
+	public Aircraft(String id, Queue<Waypoint> flightPlan) {
 		super(id, flightPlan);
 		try {image = ImageIO.read(new File("src/sepr/atcGame/Images/plane.png"));}
 		catch (IOException e){};

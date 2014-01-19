@@ -1,11 +1,36 @@
-package sepr.atcGame.tests; import sepr.atcGame.*;
+package sepr.atcGame.tests; import java.util.List;
+import java.util.Queue;
 
+import sepr.atcGame.*;
 import static org.junit.Assert.*;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
-import org.junit.Test; @Ignore
+import org.junit.Test;
 
 public class AircraftTest {
+	public Aircraft testinstance, testconstruct;
+	public Game testgame;
+	public Queue<Waypoint> testflightplan;
+	
+	@Before
+	public void setup() {
+		testgame = new Game(GameDifficulty.EASY);
+		testflightplan = testgame.randomFlightPlan();
+		System.out.println(testflightplan);
+		testinstance = new Aircraft("Q12", testflightplan);
+		System.out.println(testinstance);
+	}
+	
+	@After
+	public void teardown() {
+		testgame = null;
+		testflightplan = null;
+		testinstance = null;
+		
+	}
 
 	@Test
 	public void testSetBearing() {
@@ -49,7 +74,9 @@ public class AircraftTest {
 
 	@Test
 	public void testAircraft() {
-		fail("Not yet implemented");
+		testconstruct = new Aircraft("Q12", testflightplan);
+		assertEquals(testinstance.toString(),testconstruct.toString());
+		
 	}
 
 	@Test

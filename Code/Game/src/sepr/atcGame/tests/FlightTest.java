@@ -1,11 +1,29 @@
-package sepr.atcGame.tests; import sepr.atcGame.*;
-
+package sepr.atcGame.tests;
+import sepr.atcGame.Flight;
+import sepr.atcGame.GameDifficulty;
+import sepr.atcGame.Position;
+import sepr.atcGame.Game;
 import static org.junit.Assert.*;
-
-import org.junit.Test; import org.junit.Ignore; @Ignore
+/*
+ * MH: CANNOT INSTANTIATE ABSTRACT METHODS - NEED TO LOOK INTO THIS
+ * 
+ */
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test; import org.junit.Ignore;
 
 public class FlightTest {
-
+	public Flight testinstance;
+	public Position testposition;
+	public Game testgame;
+	
+	@BeforeClass
+	public void classsetup() {
+		testgame = new Game(GameDifficulty.EASY);
+		testposition = new Position(-1,-1,-1);
+		testinstance = new Flight("Q12", (testgame.randomFlightPlan()));
+	}
+	
 	@Test
 	public void testFlight() {
 		fail("Not yet implemented");

@@ -156,10 +156,17 @@ public class Game extends JFrame implements ActionListener{
 		airport.setTransfers(transferWaypoints);	//should be a semi-random subset of
 	}
 
-	private Queue<Waypoint> randomFlightPlan(){		
+	public Queue<Waypoint> randomFlightPlan(){		
 		
 		Queue<Waypoint> flightPlan = new LinkedList<Waypoint>( flightPlans.get(random.nextInt(flightPlans.size())));
 		System.out.println(flightPlan.toString());
+	
+	/* PREVIOUS METHOD	
+	 * 
+	 * //MH: FlightTest uses this method to determine Flight Plan
+		Waypoint[] waypoints = airport.getWaypoints();
+		List<TransferWaypoint> transfers = airport.getTransfers();
+	*/
 		
 		return flightPlan;
 	}
