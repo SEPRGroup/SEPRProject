@@ -120,7 +120,6 @@ public final class MouseInput extends Input {
 		//{!} in theory... incomplete
 		m.setVisible(true);
 		m.setLocation(p);
-		System.out.println("display:\t" +m.toString());
 	}
 	
 
@@ -152,6 +151,7 @@ public final class MouseInput extends Input {
 	public void eventHighlighted(Flight f) {
 		highlighted = f;
 		//hide any existing menus
+		main.setVisible(false);
 		bearing.setVisible(false);
 		speed.setVisible(false);
 		altitude.setVisible(false);
@@ -160,7 +160,7 @@ public final class MouseInput extends Input {
 			tryLocation(main,
 					airport.positionToLocation(f.getPosition()));
 			setVisible(true);
-		}
+		} else setVisible(false);
 	}
 
 	@Override
