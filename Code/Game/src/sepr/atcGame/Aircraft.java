@@ -62,7 +62,7 @@ public class Aircraft extends Flight {
 				if (v < tV){
 					dv = min(dv, a);}
 				else{
-					dv = max(-dv, -a);
+					dv = max(dv, -a);
 				}
 				v += dv*time;
 				if ( abs(tV-v) < 0.5){
@@ -81,7 +81,7 @@ public class Aircraft extends Flight {
 				else{
 					vClimb -= aClimb*time;
 					vClimb = max(vClimb, minClimb);	//cap climb rate
-					vClimb = max(vClimb, -dalt);	//cap to smooth climb
+					vClimb = max(vClimb, dalt);	//cap to smooth climb
 				}
 				if ( abs(tAlt-position.altitude) < 0.5){
 					vClimb = 0;
