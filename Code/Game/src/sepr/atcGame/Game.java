@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -52,12 +53,24 @@ public class Game extends JFrame implements ActionListener{
 
 	//constructor
 	public Game(GameDifficulty difficulty) {
+		ImageIcon timeImage,fpsImage;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //{!}
 		//setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setTitle("ATC Game | GAME");
 		setResizable(true);	//may change if aspect ratio is locked
 		timerDisplay.setText("Time : 0");
-
+		
+			timeImage = new ImageIcon("src/sepr/atcGame/Images/timer_bg.png");
+			fpsImage = new ImageIcon("src/sepr/atcGame/Images/score_bg.png");
+		//Sets background for status bar labels
+		timerDisplay.setIcon(timeImage);
+		timerDisplay.setVerticalTextPosition(JLabel.CENTER);
+		timerDisplay.setHorizontalTextPosition(JLabel.CENTER);
+		
+		fpsDisplay.setIcon(fpsImage);
+		fpsDisplay.setVerticalTextPosition(JLabel.CENTER);
+		fpsDisplay.setHorizontalTextPosition(JLabel.CENTER);
+	
 		statusPanel.add(timerDisplay);
 		statusPanel.add(fpsDisplay);
 		statusPanel.setBackground(Color.WHITE);
