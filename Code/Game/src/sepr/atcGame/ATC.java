@@ -58,19 +58,17 @@ public class ATC extends JPanel implements GameTime{
 			@Override
 			public void eventHandover(Flight f) {
 				// TODO Auto-generated method stub
-				
+				if(f == f2){
+					f2= null;
+				}
 			}
 
 			@Override
 			public void eventLost(Flight f) {
 				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void removeFlight(Flight f) {
-				// TODO Auto-generated method stub
-				
+				if(f == f2){
+					f2= null;
+				}
 			}
 		});
 	}

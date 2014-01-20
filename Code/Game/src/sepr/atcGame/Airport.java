@@ -144,6 +144,26 @@ abstract class Airport extends Airspace {
 				}
 			}
 		}
+		Flight[] aircraft = getAircraft();
+		for (int i	= 0; i<aircraft.length; i++){
+			Flight f1 = aircraft[i];
+			if (f1!= null){
+				for (int ii = i+1; ii<aircraft.length; ii++){
+					Flight f2 = aircraft[ii];
+					if (f2!= null){
+						Position f1Pos = f1.getPosition(), f2Pos = f2.getPosition();
+						boolean vertical = Math.abs(f1Pos.altitude - f2Pos.altitude) < 50;
+						if (vertical){
+							boolean horizontal = Math.pow(Math.pow(f1Pos.x - f2Pos.x, 2) 
+									+ Math.pow(f1Pos.y - f2Pos.y, 2),0.5) < 100;
+							if (horizontal){
+								eventCrash(f1, f2);
+							}
+						}
+					}
+				}
+			}
+		}
 		repaint();
 	}
 
