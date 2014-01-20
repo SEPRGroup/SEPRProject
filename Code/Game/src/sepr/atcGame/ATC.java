@@ -6,6 +6,9 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import sepr.atcGame.events.ATCListener;
@@ -22,7 +25,10 @@ public class ATC extends JPanel implements GameTime{
 	
 	private List<ATCListener> listeners = new ArrayList<ATCListener>();
 	private Flight highlighted;
-
+	private JLabel[] labels = new JLabel[5];
+	private Icon background = new ImageIcon("src/sepr/atcGame/Images/side_bg.png");
+	private Icon selectedBg = new ImageIcon("src/sepr/atcGame/Images/side_bg_selected.png");
+	private Icon baseBg  = background;
 	//getters/setters
 	public String getName() {
 		return name;
@@ -36,7 +42,8 @@ public class ATC extends JPanel implements GameTime{
 	public ATC(String name, Airspace airspace) {
 		this.name = name;
 		this.airspace = airspace;
-		this.setPreferredSize(new Dimension(200,300));
+		setPreferredSize(new Dimension(215,300));
+		setBackground(Color.white);
 		airspace.addListener(new AirspaceListener(){
 			public void eventHighlighted(Flight f){
 				//System.out.println("selected");
@@ -85,11 +92,46 @@ public class ATC extends JPanel implements GameTime{
 	}
 	
 	public void update(double time){
+		String output = null;
 		sinceLastCheck += time;
 		if (sinceLastCheck >= CHECK_PERIOD){
 			checkViolations();
 			sinceLastCheck -= CHECK_PERIOD;
 		}
+		 Flight[] aircraft = airspace.getAircraft();
+		for (int i	= 0; i<aircraft.length; i++){
+			Flight f1 = aircraft[i];
+			if (f1 != null){
+				if(labels[i]!= null){
+					if(highlighted!= null){
+						if(highlighted.getIdentifier() == f1.getIdentifier()){
+							labels[i].setIcon(selectedBg);
+						}
+					}else{
+						labels[i].setIcon(background);
+					}
+					if(labels[i].getText().contains(f1.getIdentifier())){
+						output = "<html>"+f1.getIdentifier() + "<br> Flight Status: " + f1.getStatus().toString()+ "<br> Next Waypoint : " + f1.getFlightPlan().peek().getName() + "<br> Waypoint distance : " + String.valueOf(Math.round(f1.waypointDistance)) + "</html>";
+						labels[i].setText(output);
+					}else{
+						labels[i] = new JLabel(baseBg);
+						output = "<html>"+f1.getIdentifier() + "<br> Flight Status: " + f1.getStatus().toString()+ "<br> Next Waypoint : " + f1.getFlightPlan().peek().getName() + "<br> Waypoint distance : " + String.valueOf(Math.round(f1.waypointDistance)) + "</html>";
+						labels[i].setVerticalTextPosition(JLabel.CENTER);
+						labels[i].setHorizontalTextPosition(JLabel.CENTER);
+						labels[i].setText(output);
+						add(labels[i]);
+					}
+				}else{
+					labels[i] = new JLabel(baseBg);
+					output = "<html>"+f1.getIdentifier() + "<br> Flight Status: " + f1.getStatus().toString()+ "<br> Next Waypoint : " + f1.getFlightPlan().peek().getName() + "<br> Waypoint distance : " + String.valueOf(Math.round(f1.waypointDistance)) + "</html>";
+					labels[i].setVerticalTextPosition(JLabel.CENTER);
+					labels[i].setHorizontalTextPosition(JLabel.CENTER);
+					labels[i].setText(output);
+					add(labels[i]);
+				}
+			}
+		}
+		
 		repaint();
 	}
 	
@@ -133,37 +175,7 @@ public class ATC extends JPanel implements GameTime{
 	//overridden methods
 	public void paintComponent(Graphics g) {
         super.paintComponent(g);      
-        int locationY = 10;
-        int fontSize = 12;
-        Flight[] aircraft = airspace.getAircraft();
-        for (int i	= 0; i<aircraft.length; i++){
-			Flight f1 = aircraft[i];
-			if (f1 != null){
-				if(highlighted != null){
-					if(f1 == highlighted){
-						g.setColor(Color.red);
-						g.drawRoundRect(0, locationY-fontSize, getPreferredSize().width-1, fontSize * 3 + 14, 2, 2);
-						g.drawRoundRect(1, locationY-fontSize+1, getPreferredSize().width-3, fontSize * 3 + 12, 2, 2);
-						g.setColor(Color.black);
-					}
-				}
-				//locationY += i*20;
-				g.setColor(Color.black);
-				g.drawString(f1.getIdentifier(), 20, locationY);
-				locationY += fontSize;
-				g.drawString("Flight Status: " + f1.getStatus().toString(),20,locationY);
-				locationY += fontSize;
-				if(f1.getFlightPlan().peek() != null){
-					g.drawString("Next Waypoint : " + f1.getFlightPlan().peek().getName(),20,locationY);
-					locationY+= fontSize;
-				}
-				g.drawString("Waypoint distance : " + String.valueOf(Math.round(f1.waypointDistance)),20,locationY);
-				locationY +=20;
-				
-			}
-        }
-        //method will go in here
-        //draw using [g]: show current flights, flightplans
-    }
+	}
+  }
 
-}
+
