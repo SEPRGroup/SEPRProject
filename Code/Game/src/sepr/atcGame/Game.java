@@ -225,12 +225,6 @@ public class Game extends JFrame implements ActionListener{
 			fpsDisplay.setText(String.valueOf(Math.round(fps.getFrameRate())) +"fps");
 		}
 
-		//{!} end game after n seconds
-		gameOver = (nanoToGameTime(gameTime) > 60.0);
-		if (gameOver){
-			frameTimer.stop();
-			System.out.println("[END]");
-		}
 	}
 
 }

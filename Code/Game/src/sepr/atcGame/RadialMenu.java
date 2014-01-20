@@ -237,17 +237,10 @@ public class RadialMenu extends JComponent implements MouseListener{
 
 	@Override
 	public final void setLocation(int x, int y){	//set location of centre
-		super.setLocation(x -radius/2, y -radius/2);
+		super.setLocation(x -radius, y -radius);
 	}
 
-	@Override
-	public final void setLocation(Point p){	//set location of centre
-		//{!} my favourite kind of comment...
-		//I don't know why this is radius/2 instead of radius, but it works...
-		p.x -= radius/2; p.y -= radius/2;
-		super.setLocation(p);
-	}
-
+	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub

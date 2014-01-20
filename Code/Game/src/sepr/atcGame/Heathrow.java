@@ -1,6 +1,7 @@
 package sepr.atcGame;
 
 import java.awt.Dimension;
+import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -8,12 +9,23 @@ import javax.imageio.ImageIO;
 
 public final class Heathrow extends Airport {
 	
+	private static String 
+		backgroundPath = "src/sepr/atcGame/Images/dummy1.jpg";
+	private static Image background;
+	
 	//constructor
 	public Heathrow(){
 		super("Heathrow Airport", new Dimension(16000, 12000));
 		
-		try {setBackground(ImageIO.read(new File("src/sepr/atcGame/Images/dummy1.jpg")));}
-		catch (IOException e){};	
+		if (background == null){
+			try {
+				background = ImageIO.read(new File(backgroundPath));
+			}
+			catch (IOException e){
+				System.out.println("Heathrow:\tImage loading failed");
+			};
+		}
+		setBackground(background);
 	}
 	
 	
