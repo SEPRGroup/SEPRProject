@@ -45,8 +45,6 @@ public class Game extends JFrame implements ActionListener{
 	private JLabel fpsDisplay = new JLabel();
 	
 	
-
-
 	private static double nanoToGameTime(long time){
 		return time/1000000000.0;}
 
@@ -183,16 +181,31 @@ public class Game extends JFrame implements ActionListener{
 	}
 
 	public void Play(){
+		//{!} test logic
 		toAdd = new LinkedList<Flight>();	
 		for (int i=0; i<5; i++){
 			toAdd.add(new testAircraft("test"+i, randomFlightPlan()));}
 		sinceLastFlight = 0;
 
-		paused = false;
 		gameTime = 0;
-		lastTime = System.nanoTime();
-		frameTimer.start();
+		Resume();
 	}
+	
+	public void Pause(){
+		if (!paused){
+			frameTimer.stop();
+			paused = true;
+		}
+	}
+	
+	public void Resume(){
+		if (paused && !gameOver){
+			paused = false;
+			lastTime = System.nanoTime();
+			frameTimer.start();
+		}	
+	}
+	
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
@@ -213,7 +226,7 @@ public class Game extends JFrame implements ActionListener{
 			if (sinceLastFlight > 1500000000){
 				Aircraft f = (Aircraft)toAdd.poll();
 				{
-					f.init(f.cruiseV, 200);
+					f.init(f.cruiseV, 3000);	//enter < 10000 feet
 					airport.receiveFlight(f, 
 							(TransferWaypoint)f.getFlightPlan().poll());
 				}
