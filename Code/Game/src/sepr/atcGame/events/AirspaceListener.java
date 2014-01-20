@@ -9,5 +9,4 @@ public interface AirspaceListener {
 	public void eventHandover(Flight f);
 	public void eventLost(Flight f);
 	public void eventHighlighted(Flight f);
-	public void removeFlight(Flight f);
 }

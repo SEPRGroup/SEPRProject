@@ -23,7 +23,7 @@ abstract class Airport extends Airspace {
 	private Flight highlighted;
 
 	private ComponentListener resizeListener = new ComponentAdapter() {
-		public void componentResized(ComponentEvent arg0) {
+		public void componentResized(ComponentEvent e) {
 			scaleBackground = null;
 			// {!} needs to lock ratio
 		}

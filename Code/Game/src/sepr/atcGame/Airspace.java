@@ -61,22 +61,26 @@ public abstract class Airspace extends JPanel implements GameTime{
 	}
 	
 	protected final void eventCrash(Flight f1, Flight f2) {
-		//TODO signal event{!}
+		for (AirspaceListener l : listeners)
+			l.eventCrash(f1, f2);
 	}
 
 	protected final void eventLanded(Flight f) {
 		removeFlight(f);
-		//TODO signal event{!}
+		for (AirspaceListener l : listeners)
+			l.eventLanded(f);
 	}
 
 	protected final void eventHandover(Flight f) {
 		removeFlight(f);
-		//TODO signal event {!}	
+		for (AirspaceListener l : listeners)
+			l.eventHandover(f);	
 	}
 
 	protected final void eventLost(Flight f) {
 		removeFlight(f);
-		//TODO signal event {!}
+		for (AirspaceListener l : listeners)
+			l.eventLost(f);
 	}
 	
 	protected final void eventHighlighted(Flight f) {

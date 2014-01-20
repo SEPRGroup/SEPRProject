@@ -1,6 +1,8 @@
 package sepr.atcGame;
 
 import java.awt.Point;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 import sepr.atcGame.events.RadialMenuListener;
 
@@ -10,14 +12,14 @@ public final class MouseInput extends Input implements GameTime{
 	
 	private RadialMenu main, bearing, speed, altitude;
 	
-	public MouseInput(Airport airport) {
+	public MouseInput(Airport a) {
 		super();
-		this.airport = airport;
+		this.airport = a;
 		
 		setOpaque(false);
+		setVisible(false);
 		setLayout(null);
-
-		this.setBounds(airport.getBounds());
+		setBounds(airport.getBounds());
 		
 		initMain();
 		initBearing();
@@ -25,7 +27,11 @@ public final class MouseInput extends Input implements GameTime{
 		initAltitude();
 
 		airport.addListener(this);
-		this.setVisible(false);
+		airport.addComponentListener(new ComponentAdapter(){
+			public void componentResized(ComponentEvent e) {
+				setBounds(airport.getBounds());
+			}
+		});
 	}
 	
 	
@@ -42,7 +48,6 @@ public final class MouseInput extends Input implements GameTime{
 					main.setVisible(false);
 					tryLocation(bearing,
 							airport.positionToLocation(highlighted.getPosition()));
-					
 					break;
 				case 1:	//altitude
 					main.setVisible(false);
@@ -121,34 +126,56 @@ public final class MouseInput extends Input implements GameTime{
 	
 	private void tryLocation(RadialMenu m, Point p){
 		//places m as close to p as possible, within constraints of the airport
-		//{!} in theory... incomplete
-		m.setVisible(true);
+		int	r = m.getRadius(),
+				minX = p.x -r, maxX = p.x +r,
+				minY = p.y -r, maxY = p.y +r;
+			
+		if (minX < 0){
+			p.x = r;
+		} else if (maxX > getWidth()){
+			p.x = getWidth() -r;
+		}
+		if (minY < 0){
+			p.y = r;
+		} else if (maxY > getHeight()){
+			p.y = getHeight() -r;
+		}
+
 		m.setLocation(p);
+		m.setVisible(true);
 	}
 	
 
 	@Override
 	public void eventCrash(Flight f1, Flight f2) {
-		// TODO Auto-generated method stub
-		
+		if (highlighted == f1 || highlighted == f2){
+			highlighted = null;
+			setVisible(false);
+		}
 	}
 
 	@Override
 	public void eventLanded(Flight f) {
-		// TODO Auto-generated method stub
-		
+		if (highlighted == f){
+			highlighted = null;
+			setVisible(false);
+		}
 	}
 
 	@Override
 	public void eventHandover(Flight f) {
-		// TODO Auto-generated method stub
-		
+		if (highlighted == f){
+			highlighted = null;
+			setVisible(false);
+		}
 	}
 
 	@Override
 	public void eventLost(Flight f) {
-		// TODO Auto-generated method stub
-		
+		if (highlighted == f){
+			highlighted = null;
+			setVisible(false);
+		}
 	}
 
 	@Override
@@ -168,33 +195,23 @@ public final class MouseInput extends Input implements GameTime{
 	}
 
 	@Override
-	public void removeFlight(Flight f) {
-		// TODO Auto-generated method stub	
-	}
-
-
-	@Override
 	public void update(double time) {
 	//Checks which menu is highlighted if any then gets the menu to follow the plane
 		if (highlighted != null){
 			if(main.isVisible()){
 				tryLocation(main,
 						airport.positionToLocation(highlighted.getPosition()));
-				setVisible(true);
 			}else if(bearing.isVisible()){
 				tryLocation(bearing,
 						airport.positionToLocation(highlighted.getPosition()));
-				setVisible(true);
 			}else if(speed.isVisible()){
 				tryLocation(speed,
 						airport.positionToLocation(highlighted.getPosition()));
-				setVisible(true);
 			}else if(altitude.isVisible()){
 				tryLocation(altitude,
 						airport.positionToLocation(highlighted.getPosition()));
-				setVisible(true);
 			}
-		} else setVisible(false);
+		}
 		
 		
 	}
