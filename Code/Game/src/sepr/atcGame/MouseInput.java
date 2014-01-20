@@ -42,6 +42,7 @@ public final class MouseInput extends Input implements GameTime{
 					main.setVisible(false);
 					tryLocation(bearing,
 							airport.positionToLocation(highlighted.getPosition()));
+					
 					break;
 				case 1:	//altitude
 					main.setVisible(false);
@@ -56,6 +57,7 @@ public final class MouseInput extends Input implements GameTime{
 				case 3:	//abort
 					setVisible(false);
 					highlighted.abort();
+					highlighted.highlight(false);
 					highlighted = null;
 					break;
 				};
@@ -75,6 +77,7 @@ public final class MouseInput extends Input implements GameTime{
 			public void eventButtonClicked(int button) {
 				setVisible(false);
 				highlighted.turnTo(Math.toRadians(button *= 4));
+				highlighted.highlight(false);
 				highlighted = null;
 			}
 		});
@@ -91,6 +94,7 @@ public final class MouseInput extends Input implements GameTime{
 			public void eventButtonClicked(int button) {
 				setVisible(false);
 				highlighted.toSpeed(speeds[button]);
+				highlighted.highlight(false);
 				highlighted = null;
 			}
 		});
@@ -107,6 +111,7 @@ public final class MouseInput extends Input implements GameTime{
 			public void eventButtonClicked(int button) {
 				setVisible(false);
 				highlighted.toAltitude(altitudes[button]);
+				highlighted.highlight(false);
 				highlighted = null;
 			}
 		});
