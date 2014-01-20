@@ -1,12 +1,14 @@
 package sepr.atcGame.tests;
 import sepr.atcGame.Flight;
+import sepr.atcGame.FlightStatus;
 import sepr.atcGame.GameDifficulty;
 import sepr.atcGame.Position;
 import sepr.atcGame.Game;
+import sepr.atcGame.testAircraft;
 import static org.junit.Assert.*;
 /*
  * MH: CANNOT INSTANTIATE ABSTRACT METHODS - NEED TO LOOK INTO THIS
- * 
+ * SJ: USE 'testAircraft' THAT INHERITS CLASSES INSTEAD
  */
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -15,25 +17,30 @@ import org.junit.Test; import org.junit.Ignore;
 public class FlightTest {
 	public Flight testinstance;
 	public Position testposition;
-	public Game testgame;
+	public Game testgame = new Game(GameDifficulty.EASY);
 	
-	@BeforeClass
-	public void classsetup() {
-		testgame = new Game(GameDifficulty.EASY);
+	@Before
+	public void setup() {
+		//testgame = new Game(GameDifficulty.EASY);
 		testposition = new Position(-1,-1,-1);
-		testinstance = new Flight("Q12", (testgame.randomFlightPlan()));
+		testinstance = new testAircraft("Q12", (testgame.randomFlightPlan()));
 	}
 	
 	@Test
 	public void testFlight() {
 		fail("Not yet implemented");
 	}
-
+	
+	
+	// Not implemented in actual game yet
+	@Ignore
 	@Test
 	public void testGetCondition() {
 		fail("Not yet implemented");
 	}
-
+	
+	// Not implemented in actual game yet
+	@Ignore
 	@Test
 	public void testSetConditions() {
 		fail("Not yet implemented");
@@ -41,12 +48,12 @@ public class FlightTest {
 
 	@Test
 	public void testGetIdentifier() {
-		fail("Not yet implemented");
+		assertEquals("Q12", testinstance.getIdentifier());
 	}
 
 	@Test
 	public void testGetStatus() {
-		fail("Not yet implemented");
+		assertEquals(FlightStatus.WAITING, testinstance.getStatus());
 	}
 
 	@Test
