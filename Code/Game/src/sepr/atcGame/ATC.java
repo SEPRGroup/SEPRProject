@@ -9,6 +9,7 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import sepr.atcGame.events.ATCListener;
+import sepr.atcGame.events.AirspaceListener;
 
 
 public class ATC extends JPanel implements GameTime{
@@ -20,7 +21,7 @@ public class ATC extends JPanel implements GameTime{
 	private double sinceLastCheck = 0;
 	
 	private List<ATCListener> listeners = new ArrayList<ATCListener>();
-	
+	private Flight f2;
 
 	//getters/setters
 	public String getName() {
@@ -36,6 +37,42 @@ public class ATC extends JPanel implements GameTime{
 		this.name = name;
 		this.airspace = airspace;
 		this.setPreferredSize(new Dimension(200,300));
+		airspace.addListener(new AirspaceListener(){
+			public void eventHighlighted(Flight f){
+				System.out.println("selected");
+				f2 = f;
+			}
+
+			@Override
+			public void eventCrash(Flight f1, Flight f2) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void eventLanded(Flight f) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void eventHandover(Flight f) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void eventLost(Flight f) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void removeFlight(Flight f) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 	
 	
@@ -83,7 +120,9 @@ public class ATC extends JPanel implements GameTime{
 	private void eventViolation(Flight f1,Flight f2){
 		for (ATCListener l : listeners)
             l.eventViolation(f1, f2);
+		
 	}
+	
 	
 	public final void addListener(ATCListener toAdd) {
         listeners.add(toAdd);
@@ -98,7 +137,15 @@ public class ATC extends JPanel implements GameTime{
         Flight[] aircraft = airspace.getAircraft();
         for (int i	= 0; i<aircraft.length; i++){
 			Flight f1 = aircraft[i];
-			if (f1!= null){
+			if (f1 != null){
+				if(f2 != null){
+					if(f1 == f2){
+						g.setColor(Color.red);
+						g.drawRoundRect(0, locationY-fontSize, getPreferredSize().width-1, fontSize * 3 + 14, 2, 2);
+						g.drawRoundRect(1, locationY-fontSize+1, getPreferredSize().width-3, fontSize * 3 + 12, 2, 2);
+						g.setColor(Color.black);
+					}
+				}
 				//locationY += i*20;
 				g.setColor(Color.black);
 				g.drawString(f1.getIdentifier(), 20, locationY);

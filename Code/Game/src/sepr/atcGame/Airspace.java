@@ -85,7 +85,10 @@ public abstract class Airspace extends JPanel implements GameTime{
 	
 	protected final void eventHighlighted(Flight f) {
 		for (AirspaceListener l : listeners)
-			l.eventHighlighted(f);
+			if(l!= null){
+				l.eventHighlighted(f);
+			}
+			
 	}
 	
 	private final void removeFlight(Flight f) {
