@@ -27,13 +27,15 @@ public class RadialMenu extends JComponent implements MouseListener{
 	private List<Image> scaleImages;
 
 	protected int
-	spacing = 4,	//degrees between  buttons
-	offset = spacing/2;	//degrees that start of first button is offset from 12 o'clock
+		spacing = 4,	//degrees between  buttons
+		offset = spacing/2;	//degrees that start of first button is offset from 12 o'clock
 	private int
-	style = FLOWER,
-	holeRadius = 45,	//pixel radius of centre hole
-	buttonSize = 40,	//pixel width of buttons
-	radius;
+		style = FLOWER,
+		holeRadius = 45,	//pixel radius of centre hole
+		buttonSize = 40,	//pixel width of buttons
+		radius,
+		pressed = -1;
+	private Boolean outline = true;
 	private Font font = new Font(Font.SERIF, Font.BOLD, 11);
 
 	private List<RadialMenuListener> listeners = new ArrayList<RadialMenuListener>();
@@ -109,6 +111,14 @@ public class RadialMenu extends JComponent implements MouseListener{
 	public void setStyle(int style) {
 		this.style = style;
 		buttons = null;
+		repaint();
+	}
+	
+	public Boolean getOutline(){
+		return outline;
+	}
+	public void setOutline(Boolean aFlag){
+		outline = aFlag;
 		repaint();
 	}
 
@@ -215,10 +225,14 @@ public class RadialMenu extends JComponent implements MouseListener{
 			Image image = scaleImages.get(i);
 			Area button = buttons.get(i);
 			//draw button background
-			g2d.setColor(getBackground());
+			if (i != pressed){
+				g2d.setColor(getBackground());
+			} else g2d.setColor(getBackground().darker());
 			g2d.fill(button);
-			g2d.setColor(getBackground().darker());
-			g2d.draw(button);
+			if (outline){
+				g2d.setColor(getBackground().darker());
+				g2d.draw(button);
+			};
 			//draw (image) and text
 			g2d.setFont(font);
 			g2d.setColor(getForeground());
@@ -244,34 +258,40 @@ public class RadialMenu extends JComponent implements MouseListener{
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
+		System.out.println("click");
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub		
+		// TODO Auto-generated method stub	 
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+		pressed = -1;
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub		
+		// TODO Auto-generated method stub	
+		for (int i=0; i<names.size(); i++){
+			Area a = buttons.get(i);
+			if (a.contains(e.getPoint())){
+				System.out.println("button\t" +names.get(i) +"\tpressed");
+				pressed = i;	//signal that a button has been clicked
+				break;	//areas should not intersect; no need to continue checking
+			}
+		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		//check which button was clicked
-		for (int i=0; i<names.size(); i++){
-			Area a = buttons.get(i);
-			if (a.contains(e.getPoint())){
-				System.out.println("button\t" +names.get(i) +"\tclicked");
-				eventButtonClicked(i);	//signal that a button has been clicked
-				break;	//areas should not intersect; no need to continue checking
+		if (pressed > -1){
+			//if button released on is the same as the one first pressed
+			if (buttons.get(pressed).contains(e.getPoint())){
+				eventButtonClicked(pressed);
 			}
+			pressed = -1;
 		}
 	}
 

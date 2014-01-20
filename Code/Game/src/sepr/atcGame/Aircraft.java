@@ -268,6 +268,7 @@ public /*abstract*/ class Aircraft extends Flight {
 	@Override
 	public final void abort() {
 		tAlt =cruiseAlt;
+		vTurn = 0;
 		tBearing = bearing;
 		tV = cruiseV;
 		status = COMPLYING;

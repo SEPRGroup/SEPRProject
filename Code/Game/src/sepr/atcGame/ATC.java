@@ -21,7 +21,7 @@ public class ATC extends JPanel implements GameTime{
 	private double sinceLastCheck = 0;
 	
 	private List<ATCListener> listeners = new ArrayList<ATCListener>();
-	private Flight f2;
+	private Flight highlighted;
 
 	//getters/setters
 	public String getName() {
@@ -39,35 +39,38 @@ public class ATC extends JPanel implements GameTime{
 		this.setPreferredSize(new Dimension(200,300));
 		airspace.addListener(new AirspaceListener(){
 			public void eventHighlighted(Flight f){
-				System.out.println("selected");
-				f2 = f;
+				//System.out.println("selected");
+				highlighted = f;
 			}
 
 			@Override
 			public void eventCrash(Flight f1, Flight f2) {
-				// TODO Auto-generated method stub
+				if(f1 == highlighted || f2 == highlighted){
+					highlighted= null;
+				}
 				
 			}
 
 			@Override
 			public void eventLanded(Flight f) {
-				// TODO Auto-generated method stub
+				if(f == highlighted){
+					highlighted= null;
+				}
 				
 			}
 
 			@Override
 			public void eventHandover(Flight f) {
-				// TODO Auto-generated method stub
-				if(f == f2){
-					f2= null;
+				if(f == highlighted){
+					highlighted= null;
 				}
 			}
 
 			@Override
 			public void eventLost(Flight f) {
 				// TODO Auto-generated method stub
-				if(f == f2){
-					f2= null;
+				if(f == highlighted){
+					highlighted= null;
 				}
 			}
 		});
@@ -101,8 +104,8 @@ public class ATC extends JPanel implements GameTime{
 						Position f1Pos = f1.getPosition(), f2Pos = f2.getPosition();
 						boolean vertical = Math.abs(f1Pos.altitude - f2Pos.altitude) < 300;
 						if (vertical){
-							boolean horizontal = Math.pow(Math.pow(f1Pos.x - f2Pos.x, 2) 
-									+ Math.pow(f1Pos.y - f2Pos.y, 2),0.5) < 4830;
+							boolean horizontal = Math.sqrt(Math.pow(f1Pos.x - f2Pos.x, 2) 
+									+ Math.pow(f1Pos.y - f2Pos.y, 2)) < 4830;
 							if (horizontal){
 								eventViolation(f1, f2);
 							}
@@ -136,8 +139,8 @@ public class ATC extends JPanel implements GameTime{
         for (int i	= 0; i<aircraft.length; i++){
 			Flight f1 = aircraft[i];
 			if (f1 != null){
-				if(f2 != null){
-					if(f1 == f2){
+				if(highlighted != null){
+					if(f1 == highlighted){
 						g.setColor(Color.red);
 						g.drawRoundRect(0, locationY-fontSize, getPreferredSize().width-1, fontSize * 3 + 14, 2, 2);
 						g.drawRoundRect(1, locationY-fontSize+1, getPreferredSize().width-3, fontSize * 3 + 12, 2, 2);

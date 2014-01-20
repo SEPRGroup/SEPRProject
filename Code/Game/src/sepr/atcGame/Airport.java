@@ -121,7 +121,7 @@ abstract class Airport extends Airspace {
 	@Override
 	public final void update(double time) {
 		Dimension bounds = this.boundaries;
-		for(Flight f:getAircraft()){
+		for(Flight f:aircraft){
 			if(f != null){
 				f.update(time);	
 				Waypoint w  = f.flightPlan.peek();
@@ -144,7 +144,6 @@ abstract class Airport extends Airspace {
 				}
 			}
 		}
-		Flight[] aircraft = getAircraft();
 		for (int i	= 0; i<aircraft.length; i++){
 			Flight f1 = aircraft[i];
 			if (f1!= null){
@@ -152,11 +151,12 @@ abstract class Airport extends Airspace {
 					Flight f2 = aircraft[ii];
 					if (f2!= null){
 						Position f1Pos = f1.getPosition(), f2Pos = f2.getPosition();
-						boolean vertical = Math.abs(f1Pos.altitude - f2Pos.altitude) < 50;
+						boolean vertical = Math.abs(f1Pos.altitude -f2Pos.altitude) < 50;
 						if (vertical){
-							boolean horizontal = Math.pow(Math.pow(f1Pos.x - f2Pos.x, 2) 
-									+ Math.pow(f1Pos.y - f2Pos.y, 2),0.5) < 100;
+							boolean horizontal = Math.sqrt(Math.pow(f1Pos.x - f2Pos.x, 2) 
+									+ Math.pow(f1Pos.y - f2Pos.y, 2)) < 100;
 							if (horizontal){
+								f1.crash(); f2.crash();
 								eventCrash(f1, f2);
 							}
 						}
@@ -174,8 +174,7 @@ abstract class Airport extends Airspace {
 			if (aircraft[i] == null) {
 				aircraft[i] = f;
 				f = null;
-			} else
-				i++;
+			} else i++;
 		}
 		if (MAX_FLIGHTS == i) { // was not added; would exceed MAX_FLIGHTS
 			eventLost(f);

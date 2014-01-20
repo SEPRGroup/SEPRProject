@@ -1,5 +1,7 @@
 package sepr.atcGame;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -37,6 +39,7 @@ public final class MouseInput extends Input implements GameTime{
 	
 	private void initMain(){
 		main = new RadialMenu();
+		main.setFont(main.getFont().deriveFont(Font.PLAIN));
 		main.addButton("Bearing", null);
 		main.addButton("Altitude", null);
 		main.addButton("Speed", null);
@@ -60,10 +63,7 @@ public final class MouseInput extends Input implements GameTime{
 							airport.positionToLocation(highlighted.getPosition()));
 					break;
 				case 3:	//abort
-					setVisible(false);
 					highlighted.abort();
-					highlighted.highlight(false);
-					highlighted = null;
 					break;
 				};
 			}
@@ -75,15 +75,18 @@ public final class MouseInput extends Input implements GameTime{
 		bearing = new RadialMenu();
 		bearing.setSpacing(0);
 		bearing.setOffset(-2);
+		bearing.setStyle(RadialMenu.DONUT);
+		bearing.setOutline(false);
+		bearing.setButtonSize(25);
 		for (int i=0; i<360; i+=4){
 			bearing.addButton("", null);
 		}
 		bearing.addListener(new RadialMenuListener(){
 			public void eventButtonClicked(int button) {
-				setVisible(false);
 				highlighted.turnTo(Math.toRadians(button *= 4));
-				highlighted.highlight(false);
-				highlighted = null;
+				bearing.setVisible(false);
+				tryLocation(main, 
+						airport.positionToLocation(highlighted.getPosition()));
 			}
 		});
 		add(bearing);
@@ -97,10 +100,10 @@ public final class MouseInput extends Input implements GameTime{
 		}
 		speed.addListener(new RadialMenuListener(){
 			public void eventButtonClicked(int button) {
-				setVisible(false);
 				highlighted.toSpeed(speeds[button]);
-				highlighted.highlight(false);
-				highlighted = null;
+				speed.setVisible(false);
+				tryLocation(main,
+						airport.positionToLocation(highlighted.getPosition()));
 			}
 		});
 		add(speed);
@@ -114,10 +117,10 @@ public final class MouseInput extends Input implements GameTime{
 		}
 		altitude.addListener(new RadialMenuListener(){
 			public void eventButtonClicked(int button) {
-				setVisible(false);
 				highlighted.toAltitude(altitudes[button]);
-				highlighted.highlight(false);
-				highlighted = null;
+				altitude.setVisible(false);
+				tryLocation(main,
+						airport.positionToLocation(highlighted.getPosition()));
 			}
 		});
 		add(altitude);
