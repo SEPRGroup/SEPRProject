@@ -48,6 +48,21 @@ public class ATC extends JPanel implements GameTime{
 			public void eventHighlighted(Flight f){
 				//System.out.println("selected");
 				highlighted = f;
+				for (int i	= 0; i<labels.length; i++){
+					if(f != null){
+						if(labels[i]!= null){
+							if(labels[i].getText().contains(f.getIdentifier())){
+								labels[i].setIcon(selectedBg);
+							}else{
+								labels[i].setIcon(baseBg);
+							}
+						}	
+					}else{
+						if(labels[i] != null){
+							labels[i].setIcon(baseBg);
+						}
+					}
+				}
 			}
 
 			@Override
@@ -70,14 +85,35 @@ public class ATC extends JPanel implements GameTime{
 			public void eventHandover(Flight f) {
 				if(f == highlighted){
 					highlighted= null;
+					 Flight[] aircraft = getAirspace().getAircraft();
+						for (int i	= 0; i<aircraft.length; i++){
+							Flight f1 = aircraft[i];
+							if (f1 != null){
+								if(labels[i].getText().contains(f.getIdentifier())){
+									remove(labels[i]);
+									labels[i] = null;
+								}
+							}
+						}
 				}
 			}
 
 			@Override
 			public void eventLost(Flight f) {
-				// TODO Auto-generated method stub
 				if(f == highlighted){
 					highlighted= null;
+				}
+				Flight[] aircraft = getAirspace().getAircraft();
+				for (int i	= 0; i<aircraft.length; i++){
+					Flight f1 = aircraft[i];
+					if (f1 == null){
+						if(labels[i] != null){
+							if(labels[i].getText().contains(f.getIdentifier())){
+								remove(labels[i]);
+								labels[i] = null;
+							}
+						}
+					}
 				}
 			}
 		});
@@ -103,13 +139,6 @@ public class ATC extends JPanel implements GameTime{
 			Flight f1 = aircraft[i];
 			if (f1 != null){
 				if(labels[i]!= null){
-					if(highlighted!= null){
-						if(highlighted.getIdentifier() == f1.getIdentifier()){
-							labels[i].setIcon(selectedBg);
-						}
-					}else{
-						labels[i].setIcon(background);
-					}
 					if(labels[i].getText().contains(f1.getIdentifier())){
 						output = "<html>"+f1.getIdentifier() + "<br> Flight Status: " + f1.getStatus().toString()+ "<br> Next Waypoint : " + f1.getFlightPlan().peek().getName() + "<br> Waypoint distance : " + String.valueOf(Math.round(f1.waypointDistance)) + "</html>";
 						labels[i].setText(output);
