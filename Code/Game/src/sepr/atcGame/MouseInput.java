@@ -77,12 +77,12 @@ public final class MouseInput extends Input implements GameTime{
 		bearing.setStyle(RadialMenu.DONUT);
 		bearing.setOutline(false);
 		bearing.setButtonSize(25);
-		for (int i=0; i<360; i+=5){
+		for (int i=0; i<360; i+=4){
 			bearing.addButton("", null);
 		}
 		bearing.addListener(new RadialMenuListener(){
 			public void eventButtonClicked(int button) {
-				highlighted.turnTo(Math.toRadians(button *= 5));
+				highlighted.turnTo(Math.toRadians(button *= 4));
 				bearing.setVisible(false);
 				tryLocation(main, 
 						airport.positionToLocation(highlighted.getPosition()));

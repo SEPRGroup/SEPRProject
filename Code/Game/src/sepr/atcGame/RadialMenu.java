@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -256,7 +257,8 @@ public class RadialMenu extends JComponent implements MouseListener{
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		//System.out.println("click");
+		// TODO Auto-generated method stub
+		System.out.println("click");
 	}
 
 	@Override
