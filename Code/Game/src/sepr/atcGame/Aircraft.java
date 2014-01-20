@@ -146,8 +146,23 @@ public /*abstract*/ class Aircraft extends Flight {
 			break;
 		}
 		case WAITING: break;
-		case CRASHING:
-			break;
+		case CRASHING: {
+			if (position.altitude > 0){
+				double vx, vy;	//velocity components
+				vClimb -= (9.8 *time);
+				v *= 1 -(0.1 *time);
+				bearing += vTurn*time; 
+				vx = Math.sin(bearing) * v;
+				vy = Math.cos(bearing) * v;
+				position.x += vx*time;
+				position.y -= vy*time;
+				position.altitude += vClimb*time;
+			}
+			if (position.altitude < 0){
+				position.altitude = 0;
+				v = 0;
+			}
+			break;}
 		case LANDING:
 			break;
 		case TAKEOFF: {
