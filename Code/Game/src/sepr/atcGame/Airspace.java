@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
 
-import sepr.atcGame.events.ATCListener;
 import sepr.atcGame.events.AirspaceListener;
 
 

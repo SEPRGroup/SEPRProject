@@ -132,7 +132,6 @@ public class Menu extends JFrame{
 
 		private class mListener extends MouseAdapter
 		{
-			private final Color fgColor = (new Color(0,0,139));
 			private MenuOptions menuOption;
 
 			public mListener(MenuOptions menuOption)
@@ -140,7 +139,7 @@ public class Menu extends JFrame{
 				this.menuOption = menuOption;
 			}			
 
-			public void mouseEntered(MouseEvent arg0) {
+			public void mouseEntered(MouseEvent e) {
 				menuOption.menuButton.getMenuText().setForeground(Color.BLACK);
 				if(menuOption.equals(MenuOptions.AIRPORT1)){
 					Airport.setIcon(Air1);
@@ -150,14 +149,14 @@ public class Menu extends JFrame{
 				}
 			}
 
-			public void mouseExited(MouseEvent arg0){
+			public void mouseExited(MouseEvent e){
 				menuOption.menuButton.getMenuText().setForeground(Color.WHITE);
 				if(menuOption.equals(MenuOptions.AIRPORT2) || menuOption.equals(MenuOptions.AIRPORT1)){
 					Airport.setIcon(Air);
 				}
 			}
 
-			public void mouseClicked(MouseEvent arg0){
+			public void mouseClicked(MouseEvent e){
 				menuOption.menuButton.getMenuText().setForeground(Color.BLACK);
 				selectedOption(menuOption);
 				if(menuOption.equals(MenuOptions.AIRPORT1)){
