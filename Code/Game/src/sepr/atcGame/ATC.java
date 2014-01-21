@@ -123,8 +123,8 @@ public class ATC extends JPanel implements GameTime{
 
 	//methods
 	public boolean processCommand(String command){ //return if command is valid
-		System.out.println("Unimplemented method: ATC.processCommand()");
-		return false; //{!}
+		System.out.println("Unimplemented method: ATC.processCommand()");	//{!}
+		return false;
 	}
 
 	public void update(double time){

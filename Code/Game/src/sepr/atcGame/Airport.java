@@ -74,7 +74,7 @@ abstract class Airport extends Airspace {
 		this.boundaries = boundaries;
 
 		this.setOpaque(true);
-		setDoubleBuffered(true); // {!} disable if not redrawing entire screen
+		setDoubleBuffered(true);
 		addComponentListener(resizeListener);
 		addMouseListener(mouseListener);
 
@@ -96,7 +96,7 @@ abstract class Airport extends Airspace {
 			pos.x = w + (bearing < PI ? x : -x); // RHS ? add : sub
 			pos.y = h + (Math.abs(bearing - PI) > (PI / 2) ? -y : y); // TOP ? sub : add
 			pos.altitude = 3350;	//exit at >11000 feet
-			// System.out.println("set transferWaypoint " +t.getName() +" : " +pos.x +"," +pos.y); //{!}
+			//System.out.println("set transferWaypoint " +t.getName() +" : " +pos.x +"," +pos.y);
 		}
 	}
 
@@ -121,7 +121,6 @@ abstract class Airport extends Airspace {
 	// overridden methods
 	@Override
 	public final void update(double time) {
-		Dimension bounds = this.boundaries;
 		for(Flight f:aircraft){
 			if(f != null){
 				f.update(time);	

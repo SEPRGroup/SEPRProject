@@ -93,7 +93,10 @@ public class TransferWaypoint extends Waypoint {
 			return this.getPosition();}
 		else if(airspace.equals(airspace2)){
 			return this.position2;}
-		else return null;			
+		else {
+			System.out.println("[ERROR TransferWaypoint.getPosition(" +airspace.getAirspaceName() +")] \t airspace is not is not registered with/t" +this.getName());	//{!}
+			return null;			
+		}
 	}
 
 	public void setPosition(Airspace airspace, Position position) {
@@ -101,7 +104,7 @@ public class TransferWaypoint extends Waypoint {
 			setPosition(position);}
 		else if(airspace.equals(airspace2)){
 			setPosition2(position);}
-		//else {!}
+		else System.out.println("[ERROR TransferWaypoint.setPosition(" +airspace.getAirspaceName() +")] \t airspace is not is not registered with/t" +this.getName());	//{!}
 	}
 		
 	public Position getPosition2() {
@@ -125,7 +128,10 @@ public class TransferWaypoint extends Waypoint {
 			return bearing;}
 		else if(airspace.equals(airspace2)){
 			return bearing<Math.PI ? bearing+Math.PI : bearing-Math.PI;}
-		else return -1; //{!}
+		else {
+			System.out.println("[ERROR TransferWaypoint.getBearingFrom(" +airspace.getAirspaceName() +")] \t airspace is not is not registered with/t" +this.getName());	//{!}
+			return -1;
+		}
 	}
 	
 	public double getBearingTo(Airspace airspace) {
@@ -133,6 +139,9 @@ public class TransferWaypoint extends Waypoint {
 			return bearing<Math.PI ? bearing+Math.PI : bearing-Math.PI;}
 		else if(airspace.equals(airspace2)){
 			return bearing;}
-		else return -1; //{!}
+		else {
+			System.out.println("[ERROR TransferWaypoint.getBearingTo(" +airspace.getAirspaceName() +")] \t airspace is not is not registered with/t" +this.getName());	//{!}
+			return -1;
+		}
 	}
 }
