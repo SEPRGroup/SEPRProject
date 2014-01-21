@@ -199,6 +199,11 @@ public class Game extends JFrame implements ActionListener{
 
 		return flightPlan;
 	}
+	
+	// for testing
+	public List<Queue<Waypoint>> getFlightPlans() {
+		return flightPlans;
+	}
 
 	public void Play(){
 		//{!} test logic
