@@ -95,6 +95,7 @@ abstract class Airport extends Airspace {
 			double y = Math.min(Math.abs(w / a), h);
 			pos.x = w + (bearing < PI ? x : -x); // RHS ? add : sub
 			pos.y = h + (Math.abs(bearing - PI) > (PI / 2) ? -y : y); // TOP ? sub : add
+			pos.altitude = 3350;	//exit at >11000 feet
 			// System.out.println("set transferWaypoint " +t.getName() +" : " +pos.x +"," +pos.y); //{!}
 		}
 	}
@@ -124,27 +125,39 @@ abstract class Airport extends Airspace {
 		for(Flight f:aircraft){
 			if(f != null){
 				f.update(time);	
-				Waypoint w  = f.flightPlan.peek();
-				if (w != null){
-					f.waypointDistance = Math.sqrt(Math.pow(f.getPosition().x-w.getPosition().x ,2) +Math.pow(f.getPosition().y-w.getPosition().y,2)+Math.pow(f.getPosition().altitude-w.getPosition().altitude,2));
-					if(f.waypointDistance < 1600){
-						f.nextWaypoint();
-					}
-					int offset = 1000;
-					//Checks to see if plane is outside the airspace, offset is used to allow spawning of planes slightly outside airspace
-					if(f.getPosition().y < 0- offset||f.getPosition().x <0 - offset|| f.getPosition().x > bounds.getWidth() + offset|| f.getPosition().y > bounds.getHeight() + offset){
-						eventLost(f);
-					}
-				}else{
-					if(f.getPosition().y < 0||f.getPosition().x <0|| f.getPosition().x > bounds.getWidth()|| f.getPosition().y > bounds.getHeight()){
+				Waypoint w = f.getFlightPlan().peek();
+				//calculate distances
+				Position wPos, fPos;
+				double distance;
+				fPos = f.getPosition();
+				if (w instanceof TransferWaypoint){
+					wPos = ((TransferWaypoint)w).getPosition(this);
+				} else wPos = w.getPosition();
+				distance = Math.sqrt(Math.pow(fPos.x-wPos.x ,2) +Math.pow(fPos.y-wPos.y,2)+Math.pow(fPos.altitude-wPos.altitude,2));
+				f.setWaypointDistance(distance);
+				
+				if (w instanceof TransferWaypoint){
+					if ( (distance < 1600) && (fPos.y<0 || fPos.x<0 || fPos.x>boundaries.getWidth()|| fPos.y > boundaries.getHeight()) ){
 						//removes the aircraft from the airspace if it has finished it's flightplan
 						//ensures that the aircraft is outside the airspace before it is removed
 						eventHandover(f);
 					}
+				} else{
+					if (distance < 1600){
+						f.nextWaypoint();
+					}
+				}
+							
+				int offset = 1000;
+				//Checks to see if plane is outside the airspace, offset is used to allow spawning of planes slightly outside airspace
+				if (fPos.y < -offset || fPos.x < -offset|| fPos.x > boundaries.width+offset|| fPos.y > boundaries.height+offset){
+					eventLost(f);
 				}
 			}
 		}
-		for (int i	= 0; i<aircraft.length; i++){
+		
+		//detect collisions
+		for (int i=0; i<aircraft.length; i++){
 			Flight f1 = aircraft[i];
 			if (f1!= null){
 				for (int ii = i+1; ii<aircraft.length; ii++){
@@ -153,10 +166,9 @@ abstract class Airport extends Airspace {
 						Position f1Pos = f1.getPosition(), f2Pos = f2.getPosition();
 						boolean vertical = Math.abs(f1Pos.altitude -f2Pos.altitude) < 50;
 						if (vertical){
-							boolean horizontal = Math.sqrt(Math.pow(f1Pos.x - f2Pos.x, 2) 
-									+ Math.pow(f1Pos.y - f2Pos.y, 2)) < 100;
+							boolean horizontal = Math.sqrt(Math.pow(f1Pos.x -f2Pos.x, 2) 
+									+ Math.pow(f1Pos.y -f2Pos.y, 2)) < 100;
 							if (horizontal){
-								f1.crash(); f2.crash();
 								eventCrash(f1, f2);
 							}
 						}
@@ -173,6 +185,7 @@ abstract class Airport extends Airspace {
 		while ((f != null) && (i < MAX_FLIGHTS)) {
 			if (aircraft[i] == null) {
 				aircraft[i] = f;
+				aircraftCount++;
 				f = null;
 			} else i++;
 		}
@@ -189,9 +202,9 @@ abstract class Airport extends Airspace {
 		while ((f != null) && (i < MAX_FLIGHTS)) {
 			if (aircraft[i] == null) {
 				aircraft[i] = f;
+				aircraftCount++;
 				f = null;
-			} else
-				i++;
+			} else i++;
 		}
 		if (MAX_FLIGHTS == i) { // was not added; would exceed MAX_FLIGHTS
 			eventLost(f);

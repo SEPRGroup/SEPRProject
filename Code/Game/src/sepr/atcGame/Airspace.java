@@ -17,6 +17,7 @@ public abstract class Airspace extends JPanel implements GameTime{
 	protected Flight[] aircraft = new Flight[MAX_FLIGHTS];	//Fixed size; may be filled
 	protected Waypoint[] waypoints = new Waypoint[MAX_WAYPOINTS];	//Fixed size, may be filled
 	protected List<TransferWaypoint> transfers;
+	protected int aircraftCount = 0; 
 	
 	private List<AirspaceListener> listeners = new ArrayList<AirspaceListener>();
 	
@@ -34,6 +35,10 @@ public abstract class Airspace extends JPanel implements GameTime{
 	
 	public Flight[] getAircraft() {
 		return aircraft;
+	}
+	
+	public int getAircraftCount(){
+		return aircraftCount;
 	}
 
 	public Waypoint[] getWaypoints() {
@@ -60,6 +65,7 @@ public abstract class Airspace extends JPanel implements GameTime{
 	}
 	
 	protected final void eventCrash(Flight f1, Flight f2) {
+		f1.crash(); f2.crash();
 		for (AirspaceListener l : listeners)
 			l.eventCrash(f1, f2);
 	}
@@ -72,6 +78,11 @@ public abstract class Airspace extends JPanel implements GameTime{
 
 	protected final void eventHandover(Flight f) {
 		removeFlight(f);
+		TransferWaypoint t = (TransferWaypoint)f.getFlightPlan().poll();
+		if (this == t.getAirspace1())
+			t.getAirspace2().receiveFlight(f, t);
+		else t.getAirspace1().receiveFlight(f, t);
+		
 		for (AirspaceListener l : listeners)
 			l.eventHandover(f);	
 	}
@@ -84,10 +95,7 @@ public abstract class Airspace extends JPanel implements GameTime{
 	
 	protected final void eventHighlighted(Flight f) {
 		for (AirspaceListener l : listeners)
-			if(l!= null){
-				l.eventHighlighted(f);
-			}
-			
+			l.eventHighlighted(f);			
 	}
 	
 	private final void removeFlight(Flight f) {
@@ -95,6 +103,7 @@ public abstract class Airspace extends JPanel implements GameTime{
 		for(int i=0; i<MAX_FLIGHTS; i++){
 			if(aircraft[i] == f){
 				aircraft[i] = null;
+				aircraftCount--;
 				break;
 			}
 		}		

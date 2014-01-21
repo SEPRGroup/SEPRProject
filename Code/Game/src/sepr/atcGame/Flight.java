@@ -9,7 +9,8 @@ public abstract class Flight implements GameTime, Drawable {
 	protected Position position;
 	protected final Queue<Waypoint> flightPlan;
 	private FlightConditions conditions;
-	protected double bearing, waypointDistance;	//radians
+	protected double bearing;	//radians
+	private double waypointDistance;
 
 
 	// constructor
@@ -37,6 +38,13 @@ public abstract class Flight implements GameTime, Drawable {
 
 	public final Position getPosition() {
 		return position;
+	}
+	
+	public final void setWaypointDistance(double distance){
+		waypointDistance = distance; 
+	}
+	public final double getWaypointDistance(){
+		return waypointDistance;
 	}
 
 	//{!}allows modification: mutable

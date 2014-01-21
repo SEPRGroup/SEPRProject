@@ -22,8 +22,8 @@ public class TransferWaypoint extends Waypoint {
 	 */
 	public TransferWaypoint(String name, Airspace airspace1, Airspace airspace2,
 			double bearing){
-		super(name, new Position(-1,-1,3350));	//exit above 11000 feet
-		position2 = new Position(-1,-1,3350);
+		super(name, new Position(-1,-1,-1));
+		position2 = new Position(-1,-1,-1);
 		this.airspace1 = airspace1;
 		this.airspace2 = airspace2;
 		this.bearing = bearing;

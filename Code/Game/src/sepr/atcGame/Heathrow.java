@@ -32,7 +32,6 @@ public final class Heathrow extends Airport {
 	//overridden methods
 	@Override
 	protected void generateWaypoints() {
-		// TODO generate and place internal Waypoints, landing zones
 		waypoints[0] = new Waypoint("Alpha", new Position(2200,3000,3000));
 		waypoints[1] = new Waypoint("Bravo", new Position(4000,6140,3000));
 		waypoints[2] = new Waypoint("Charlie", new Position(12000,6140,3000));
@@ -45,6 +44,7 @@ public final class Heathrow extends Airport {
 		waypoints[9] = new Waypoint("Juliett", new Position(10100,2600,3000));
 
 		//transfers.add(new TransferWaypoint("Runway1", null, this, Math.PI*2));
+		//will not show up if added here; overwritten by setTransfers
 	}
 
 }

@@ -19,7 +19,7 @@ public final class DummyAirspace extends Airspace {
 
 	@Override
 	public final void receiveFlight(Flight f, TransferWaypoint t) {
-		System.out.println("Flight\t[" +f.getIdentifier() +"]\thas left the game.");
+		System.out.println(f.getIdentifier() +"\thas left the game.");
 		//nothing: drop reference to f
 	}
 
