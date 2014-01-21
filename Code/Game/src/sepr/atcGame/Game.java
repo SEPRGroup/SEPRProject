@@ -205,7 +205,7 @@ public class Game extends JFrame implements ActionListener{
 		return flightPlans;
 	}
 
-	public void Play(){
+	public Queue<Flight> Play(){
 		//{!} test logic
 		toAdd = new LinkedList<Flight>();	
 		for (int i=0; i<5; i++){
@@ -214,13 +214,15 @@ public class Game extends JFrame implements ActionListener{
 
 		gameTime = 0;
 		Resume();
+		return toAdd;
 	}
 	
-	public void Pause(){
+	public int Pause(){
 		if (!paused){
 			frameTimer.stop();
 			paused = true;
 		}
+		return frameTimer.getDelay();
 	}
 	
 	public void Resume(){
