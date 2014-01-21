@@ -16,10 +16,11 @@ public class GameTest {
 		instance = new Game(GameDifficulty.EASY);
 	}
 	
-	@Test
+	@Ignore
 	public void testGame() {
 		Game testGame = new Game(GameDifficulty.EASY);
-		
+		//no longer necessarily true since 
+			//random transfers => flightPlans are no longer the same
 		assertEquals(testGame.toString(), instance.toString());
 	}
 	
@@ -28,11 +29,7 @@ public class GameTest {
 	// compare directly 
 	@Test
 	public void testPlay() {
-		Queue<Flight> toAdd = new LinkedList<Flight>();	
-		for (int i=0; i<5; i++){
-			toAdd.add(new testAircraft("test"+i, instance.randomFlightPlan()));}
-		
-		assertEquals(toAdd.size(), instance.Play().size());
+		fail("Not yet implemented");
 	}
 	
 	

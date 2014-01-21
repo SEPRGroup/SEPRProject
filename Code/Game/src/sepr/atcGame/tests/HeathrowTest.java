@@ -43,10 +43,11 @@ public class HeathrowTest {
 			System.out.println("Actual Waypoint:" + w);
 		}
 		
-		
-		
 		// Not sure why this isn't working as they are exactly the same
-		assertEquals(newWaypoints, instance.getWaypoints());
+		assertArrayEquals(newWaypoints, instance.getWaypoints());
+		//Heathrow has changed; Waypoints are no longer the same
+		//in addition, Waypoint does not redefine .equals(), so it will use the default method of comparing memory addresses
+			//this will fail as they are separately generated objects
 	}
 
 	// Not sure how to check if the image came in??
