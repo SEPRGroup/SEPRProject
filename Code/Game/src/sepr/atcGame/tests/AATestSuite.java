@@ -10,7 +10,7 @@ import org.junit.runners.Suite.SuiteClasses;
  * ////// TO RUN THIS TEST SUITE:
  * Right-click on AATestSuite, choose 'Run as' and then click 1 Junit Test.
  * You should see outputs in both the console and the JUnit 4 Test Window, which should open automatically.
- * Keyboard Shortcut: Alt+Shiftt+X, T.
+ * Keyboard Shortcut: Alt+Shift+X, T.
  * Alternatively running AATestRunner.java will provide (significantly less) test result details in the console only. 
  *  
  * ////// IMPORTANT - TEST LOG:
