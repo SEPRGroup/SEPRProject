@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -15,27 +16,24 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
-import java.util.Random;
+import sepr.atcGame.events.AirspaceListener;
 
-import static java.lang.Math.PI;
-
-public class Game extends JFrame implements ActionListener{
+public class Game extends JFrame implements ActionListener, AirspaceListener{
 
 	private Airport airport;
 	private Airspace[] airspaces;
 	private List<TransferWaypoint> transferWaypoints = new ArrayList<TransferWaypoint>();
-	private static List<Queue<Waypoint>> flightPlans = new ArrayList<Queue<Waypoint>>();
+	private List<Queue<Waypoint>> flightPlans = new ArrayList<Queue<Waypoint>>();
 
 	private static final int FPS_MAX = 60;
 	private static final int FPS_DELAY = 1000/FPS_MAX;
 	private javax.swing.Timer frameTimer = new javax.swing.Timer(FPS_DELAY, this);
 	private FrameRateMonitor fps = new FrameRateMonitor(FPS_MAX *5);
-	private long lastTime, gameTime;
+	private long lastTime, gameTime, gameOverTime = -1;
 	private boolean paused = true, gameOver = false;
 
 	private static Random random = new Random();
 	private long sinceLastFlight;
-	private Queue<Flight> toAdd;	//{!}
 
 	private ATC atc;
 	private MouseInput input;
@@ -47,15 +45,18 @@ public class Game extends JFrame implements ActionListener{
 	
 	private static double nanoToGameTime(long time){
 		return time/1000000000.0;}
+	private static long gameToNanoTime(double time){	
+		return Math.round(time*1000000000);}
+
 
 
 	//constructor
 	public Game(GameDifficulty difficulty) {
 		ImageIcon timeImage,fpsImage;
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //{!}
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //{!} for while menu does not redisplay
+		//setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setTitle("ATC Game | GAME");
-		setResizable(true);	//may change if aspect ratio is locked
+		setResizable(false);	//may change if aspect ratio is locked
 		timerDisplay.setText("Time : 0");
 		timeImage = new ImageIcon("src/sepr/atcGame/Images/timer_bg.png");
 		fpsImage = new ImageIcon("src/sepr/atcGame/Images/score_bg.png");
@@ -81,15 +82,30 @@ public class Game extends JFrame implements ActionListener{
 		pack();
 		input = new MouseInput(airport);
 		getRootPane().getLayeredPane().add(input, JLayeredPane.MODAL_LAYER);
+		
+		airport.addListener(this);
+		
 		setLocationRelativeTo(null);
 		setMinimumSize(getSize());
-		
 		setVisible(true);
 	}
-
+	
+	
 	//methods
+
+	private void newFlightPlan(List<TransferWaypoint> transfers, Waypoint[] intermediate, int[] indexes){					
+		//creates a flightplan starting at a TransferWaypoint, 				
+			//following some number of intermediate, and terminating at a transferWaypoint			
+		Queue<Waypoint> flightPlan = new LinkedList<Waypoint>();				
+		flightPlan.add(transfers.get(indexes[0]));				
+		for (int i=1; i<=(indexes.length-2); i++)				
+			flightPlan.add(intermediate[indexes[i]]);			
+		flightPlan.add(transfers.get(indexes[indexes.length-1]));				
+		flightPlans.add(flightPlan);				
+	}					
+
 	private void generateWorld(){
-		//Generate airports
+		//Generate airspaces
 		airport = new Heathrow();
 		airspaces = new Airspace[]{
 				new DummyAirspace("Athens"), 
@@ -103,12 +119,51 @@ public class Game extends JFrame implements ActionListener{
 		};
 
 		//TRANSFERS
-		//Generate all transfers
+		//Generate all possible transfers
 		for (int i=0; i<airspaces.length; i++){
 			Airspace a = airspaces[i];
 			transferWaypoints.add(new TransferWaypoint(a.getAirspaceName(), 
 					airport, a, bearings[i]));
 		}
+		
+		//FLIGHTPLANS					
+		Waypoint[] intermediate = airport.getWaypoints();					
+		{	//Generate all possible flightPlans				
+			int ATHENS=0, DUBAI=1, PARIS=2,SYDNEY=3,ZURICH=4,				
+				ALPHA=0, BRAVO=1, CHARLIE=2, DELTA=3, ECHO=4, FOXTROT=5, GOLF=6, HOTEL=7, INDIGO=8, JULIETT=9;			
+							
+			newFlightPlan(transferWaypoints, intermediate, 				
+					new int[]{ATHENS, JULIETT, HOTEL, DUBAI});		
+							
+			newFlightPlan(transferWaypoints, intermediate, 				
+					new int[]{ATHENS, FOXTROT, ALPHA ,GOLF ,SYDNEY});		
+							
+			newFlightPlan(transferWaypoints, intermediate, 				
+					new int[]{DUBAI, ECHO, JULIETT, FOXTROT, BRAVO, SYDNEY});		
+							
+			newFlightPlan(transferWaypoints, intermediate, 				
+					new int[]{DUBAI, CHARLIE, ECHO, ATHENS});		
+							
+			newFlightPlan(transferWaypoints, intermediate, 				
+					new int[]{PARIS, DELTA, BRAVO, JULIETT, ATHENS});		
+							
+			newFlightPlan(transferWaypoints, intermediate, 				
+					new int[]{PARIS, INDIGO, CHARLIE, FOXTROT, ZURICH});		
+							
+			newFlightPlan(transferWaypoints, intermediate, 				
+					new int[]{SYDNEY, DELTA, INDIGO, HOTEL, DUBAI});		
+							
+			newFlightPlan(transferWaypoints, intermediate, 				
+					new int[]{SYDNEY, DELTA, INDIGO, CHARLIE, ATHENS});		
+							
+			newFlightPlan(transferWaypoints, intermediate, 				
+					new int[]{ZURICH, FOXTROT, JULIETT, CHARLIE, HOTEL, DUBAI});		
+							
+			newFlightPlan(transferWaypoints, intermediate, 				
+					new int[]{ZURICH, BRAVO, INDIGO, DUBAI});		
+		}					
+							
+
 
 		//Link airports: random subset of all transferWaypoints
 		List<TransferWaypoint> transfers = new ArrayList<TransferWaypoint>();
@@ -116,66 +171,13 @@ public class Game extends JFrame implements ActionListener{
 			num = transferWaypoints.size(), //number available
 			count = 0;	//number taken so far
 		for (TransferWaypoint t : transferWaypoints){
-			if (random.nextDouble() < ((double)(links-count))/num){
+			if ( random.nextDouble() < (links-count)/(double)num ){
 				transfers.add(t);
 				count++;
 			}
 			num--;
 		}
 		airport.setTransfers(transfers);
-
-		//FLIGHTPLANS
-		Waypoint[] intermediate = airport.getWaypoints();
-
-		//new flight plan - Athens, Juliett, Charlie
-		Queue<Waypoint> flightPlan = new LinkedList<Waypoint>();
-		flightPlan.add(transferWaypoints.get(0)); flightPlan.add(intermediate[9]); flightPlan.add(intermediate[2]);
-		flightPlans.add(flightPlan);
-
-		//new flight plan - Athens, Foxtrot, Alpha, Bravo
-		flightPlan = new LinkedList<Waypoint>();
-		flightPlan.add(transferWaypoints.get(0)); flightPlan.add(intermediate[5]); flightPlan.add(intermediate[0]); flightPlan.add(intermediate[1]);
-		flightPlans.add(flightPlan);
-
-		//new flight plan - Dubai, Echo, Juliett, Foxtrot, Bravo
-		flightPlan = new LinkedList<Waypoint>();
-		flightPlan.add(transferWaypoints.get(1)); flightPlan.add(intermediate[4]); flightPlan.add(intermediate[9]); flightPlan.add(intermediate[5]); flightPlan.add(intermediate[1]);
-		flightPlans.add(flightPlan);
-
-		//new flight plan - Dubai, Echo, Charlie
-		flightPlan = new LinkedList<Waypoint>();
-		flightPlan.add(transferWaypoints.get(1)); flightPlan.add(intermediate[4]); flightPlan.add(intermediate[2]);
-		flightPlans.add(flightPlan);
-
-		//new flight plan - Paris, Delta, Indigo, Charlie
-		flightPlan = new LinkedList<Waypoint>();
-		flightPlan.add(transferWaypoints.get(2)); flightPlan.add(intermediate[3]); flightPlan.add(intermediate[8]); flightPlan.add(intermediate[2]);
-		flightPlans.add(flightPlan);
-
-		//new flight plan - Paris, Hotel, Echo, Juliett, Bravo
-		flightPlan = new LinkedList<Waypoint>();
-		flightPlan.add(transferWaypoints.get(2)); flightPlan.add(intermediate[7]); flightPlan.add(intermediate[4]); flightPlan.add(intermediate[9]); flightPlan.add(intermediate[1]);
-		flightPlans.add(flightPlan);
-
-		//new flight plan - Sydney, Delta, Golf, Bravo
-		flightPlan = new LinkedList<Waypoint>();
-		flightPlan.add(transferWaypoints.get(3)); flightPlan.add(intermediate[3]); flightPlan.add(intermediate[6]); flightPlan.add(intermediate[1]);
-		flightPlans.add(flightPlan);
-
-		//new flight plan - Sydney, Delta, Indigo, Charlie
-		flightPlan = new LinkedList<Waypoint>();
-		flightPlan.add(transferWaypoints.get(3)); flightPlan.add(intermediate[3]); flightPlan.add(intermediate[8]); flightPlan.add(intermediate[2]);
-		flightPlans.add(flightPlan);
-
-		//new flight plan -Zurich, Alpha, Foxtrot, Juliett, Charlie
-		flightPlan = new LinkedList<Waypoint>();
-		flightPlan.add(transferWaypoints.get(4)); flightPlan.add(intermediate[0]); flightPlan.add(intermediate[5]); flightPlan.add(intermediate[9]); flightPlan.add(intermediate[2]);
-		flightPlans.add(flightPlan);
-
-		//new flight plan -Zurich, Golf, Bravo
-		flightPlan = new LinkedList<Waypoint>();
-		flightPlan.add(transferWaypoints.get(4)); flightPlan.add(intermediate[6]); flightPlan.add(intermediate[1]);
-		flightPlans.add(flightPlan);
 
 		//remove any flightPlans that are incompatible with Transfer selection
 		List<Waypoint> waypoints = new ArrayList<Waypoint>(transfers);
@@ -188,7 +190,7 @@ public class Game extends JFrame implements ActionListener{
 			}
 		}
 		flightPlans.removeAll(invalid);
-
+		transferWaypoints = transfers;
 	}
 
 	public Queue<Waypoint> randomFlightPlan(){		
@@ -196,25 +198,29 @@ public class Game extends JFrame implements ActionListener{
 		Queue<Waypoint> flightPlan = new LinkedList<Waypoint>( 
 				flightPlans.get(random.nextInt(flightPlans.size())));
 		//System.out.println(flightPlan.toString());
-
 		return flightPlan;
 	}
 	
+	private Flight randomFlight(){	
+		//should determine which class of Flight to generate
+		String idString = "test" +String.format("%1$04d", random.nextInt(10000));
+		Aircraft f = new testAircraft(idString, randomFlightPlan());
+		f.init(f.cruiseV, 3000);	//enter at <10000 feet
+		return f;
+	}	
+
+	
 	// for testing
 	public List<Queue<Waypoint>> getFlightPlans() {
+		System.out.println("Game.getFlightPlans should be called for test purposes only");
 		return flightPlans;
 	}
 
-	public Queue<Flight> Play(){
-		//{!} test logic
-		toAdd = new LinkedList<Flight>();	
-		for (int i=0; i<5; i++){
-			toAdd.add(new testAircraft("test"+i, randomFlightPlan()));}
+	public void Play(){
 		sinceLastFlight = 0;
-
 		gameTime = 0;
+		
 		Resume();
-		return toAdd;
 	}
 	
 	public int Pause(){
@@ -238,7 +244,6 @@ public class Game extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent arg0) {
 		long elapsedTime;
 		double elapsedGameTime;
-		String gameTimeString;
 
 		elapsedTime = System.nanoTime() -lastTime;
 		lastTime += elapsedTime;	
@@ -247,39 +252,69 @@ public class Game extends JFrame implements ActionListener{
 		elapsedGameTime = nanoToGameTime(elapsedTime);
 
 		//Game logic
-
 		sinceLastFlight += elapsedTime;
-		if (toAdd.size() > 0){	//{!} test logic
-			if (sinceLastFlight > 1500000000){
-				Aircraft f = (Aircraft)toAdd.poll();
-				{
-					f.init(f.cruiseV, 3000);	//enter < 10000 feet
-					airport.receiveFlight(f, 
-							(TransferWaypoint)f.getFlightPlan().poll());
-				}
-				/*{
-					airport.newFlight(f);
-					f.takeOff(airport, (TransferWaypoint)f.getFlightPlan().poll());
-				}*/
-				System.out.println("add flight:\t" +f.getIdentifier());
-				sinceLastFlight -= 1500000000;
-			}
-		}
+		
+		if(airport.getAircraftCount() != Airspace.MAX_FLIGHTS){		
+			//increase spawn rate while airport is near empty	
+			long interval = gameToNanoTime(20)/ (Airspace.MAX_FLIGHTS -airport.getAircraftCount());	
+			if(sinceLastFlight >= interval){	
+				Flight f = randomFlight();
+				airport.receiveFlight(f, (TransferWaypoint)f.getFlightPlan().poll());
+				sinceLastFlight -= interval;
+				
+				/*airport.newFlight(f);
+				f.takeOff(airport, (TransferWaypoint)f.getFlightPlan().poll());*/
+			}	
+		}		
 
+		//update GameTime components
+		//{!} update scheduler
 		airport.update(elapsedGameTime);
 		atc.update(elapsedGameTime);
 		input.update(elapsedGameTime);
 		
-		//{!} update scheduler
 
 		{	//update status panel
-			gameTimeString = String.format("%d", gameTime/1000000000);
+			String gameTimeString = String.format("%d", Math.round(nanoToGameTime(gameTime)));
 			timerDisplay.setText("Time: \t"+ gameTimeString);
 			fpsDisplay.setText(String.valueOf(Math.round(fps.getFrameRate())) +"fps");
 		}
+		
+		if (gameOver){		
+			gameOverTime -= elapsedTime;	
+			if (gameOverTime < 0)	
+				Pause();
+		}		
 
 	}
 	
+	@Override	
+	public void eventCrash(Flight f1, Flight f2) {	
+		gameOver = true;
+		gameOverTime = gameToNanoTime(10); 
+	}	
+		
+	@Override	
+	public void eventLanded(Flight f) {	
+		//score
+		
+	}	
+		
+	@Override	
+	public void eventHandover(Flight f) {	
+		//score
+		
+	}	
+		
+	@Override	
+	public void eventLost(Flight f) {	
+		//score
+	}	
+		
+	@Override	
+	public void eventHighlighted(Flight f) {	
+		//nothing
+	}	
 	
 	@Override
 	public String toString(){ 
