@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import sepr.atcGame.Game;
@@ -76,6 +77,10 @@ public class Menu extends JFrame{
 			}
 
 		}
+		
+		private Menu getOuterClass() {
+			return Menu.this;
+		}
 
 		private void closeMenus(int firstLabel, int lastLabel)
 		{
@@ -86,15 +91,15 @@ public class Menu extends JFrame{
 
 
 		public void selectedOption(MenuOptions menuOption)
-		{
+		{	Game game;
 			switch (menuOption){
 				case START:
 					MenuOptions.START.menuButton.setVisible(false);
 					showMenus(1, 4);
 					break;
 				case PLAY:				
-					Game game = new Game(GameDifficulty.EASY);
-					setVisible(false);
+					game = new Game(GameDifficulty.EASY);
+					getOuterClass().setVisible(false);
 					game.Play();
 					break;
 				case CHOOSEAIRPORT:
@@ -118,8 +123,12 @@ public class Menu extends JFrame{
 				case HARD:
 					break;
 				case AIRPORT1:
+					game = new Game(GameDifficulty.EASY);
+					getOuterClass().setVisible(false);
+					game.Play();
 					break;
-				case AIRPORT2:				
+				case AIRPORT2:		
+					JOptionPane.showMessageDialog(null,"Unfortunately this airport is unavailable!");
 					break;
 				case BACK:
 					closeMenus(5, 10);
