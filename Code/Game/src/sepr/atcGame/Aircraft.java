@@ -235,7 +235,7 @@ public /*abstract*/ class Aircraft extends Flight {
 			position.altitude = altitude;
 			//System.out.println(getIdentifier() +" init");
 		}
-		else System.out.println("Cannot call Aircraft.init() after initialisation");
+		else System.out.println("Cannot call Aircraft.init() if not WAITING");
 	}
 
 	@Override
@@ -245,7 +245,7 @@ public /*abstract*/ class Aircraft extends Flight {
 			bearing = t.getBearingTo(a);
 			status = TAKEOFF;
 		}
-		else ;//{!}error
+		else System.out.println("Cannot call Aircraft.init() if not WAITING");//{!}error
 	}
 
 	@Override

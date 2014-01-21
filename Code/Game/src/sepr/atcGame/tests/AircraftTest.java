@@ -1,12 +1,10 @@
-package sepr.atcGame.tests; import java.util.List;
-import java.util.Queue;
+package sepr.atcGame.tests; import java.util.Queue;
 
 import sepr.atcGame.*;
 import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -59,17 +57,18 @@ public class AircraftTest {
 		//MH: FAULTY TEST
 		//MH: Causes Errors, can't find way to fix
 		//MH: Doesn't consider error condition. (else)
-		testinstance.transition(testheathrow, testtransferwaypoint);
-		assertTrue(testinstance.getStatus().toString() == "CRUISING");
+		
+		testinstance.transition(testdummyairspace1, testtransferwaypoint);
+		assertTrue(testinstance.getStatus() == FlightStatus.CRUISING);
 	}
 
 	@Test
 	public void testTakeOff() {
 		//MH: FAULTY TEST
 		//MH: Causes errors, can't find way to fix
-		testinstance.takeOff(testheathrow, testtransferwaypoint);
+		testinstance.takeOff(testdummyairspace1, testtransferwaypoint);
 		System.out.println(testinstance.getStatus().toString());
-		assertEquals("TAKEOFF", (testinstance.getStatus()).toString());
+		assertEquals(FlightStatus.TAKEOFF, (testinstance.getStatus()));
 	}
 
 	@Test
