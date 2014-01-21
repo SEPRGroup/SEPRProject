@@ -1,12 +1,10 @@
 package sepr.atcGame;
 
-final class FrameRateMonitor{
-	private long[] frameTimes;
-	private long totalTime;
-	private int pos;
-
-	private long frames = 0;
-
+public final class FrameRateMonitor{
+	public long[] frameTimes;
+	public /*private*/ long totalTime; //MH: Changed to public for testing. (FrameRateMonitorTest.java)
+	public /*private*/ int pos; //MH: Changed to public for testing. (FrameRateMonitorTest.java)
+	public /*private*/ long frames = 0; //MH: Changed to public for testing. (FrameRateMonitorTest.java)
 
 	public FrameRateMonitor(int bufferSize) {
 		frameTimes = new long[bufferSize];
@@ -41,10 +39,12 @@ final class FrameRateMonitor{
 		frames = 0;
 	}
 	
+	
 	@Override
 	public String toString(){
 		String s = "Frame rate: " + frameTimes.length*1000000000.0 /totalTime;
 		return s;
 	}
+	
 
 }
