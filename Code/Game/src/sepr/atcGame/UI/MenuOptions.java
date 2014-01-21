@@ -10,7 +10,7 @@ public enum MenuOptions {
 		MEDIUM (new MenuButton(" Medium ")),
 		HARD (new MenuButton("Hard")),
 		AIRPORT1 (new MenuButton(" Heathrow ")),
-		AIRPORT2 (new MenuButton(" Airport 2 ")),
+		AIRPORT2 (new MenuButton(" Schiphol ")),
 		BACK (new MenuButton("Back"));
 		
 
