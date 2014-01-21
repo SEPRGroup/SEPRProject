@@ -37,13 +37,13 @@ public /*abstract*/ class Aircraft extends Flight {
 		a, aClimb, aTurn;	//acceleration:	m/s/s , rad/s/s
 
 	//dynamic characteristics
-	private double
+	public double
 		v = 0,	//physical speed:	m/s
 		vClimb = 0,	//current climb rate:	m/s
 		vTurn = 0;	//current turn rate:	rad/s
 
 	//target tracking variables
-	private double 
+	public double 
 		tAlt, tV, tBearing;
 	
 
@@ -262,6 +262,7 @@ public /*abstract*/ class Aircraft extends Flight {
 
 	@Override
 	public final void toAltitude(double altitude) {
+		/*System.out.println("Aircraft.toAltitude()| minAlt="+minAlt+"maxAlt="+maxAlt); //MH: Used for test creation. */
 		if ((altitude >= minAlt) && (altitude <= maxAlt)){
 			tAlt = altitude;
 			if (CRUISING == status){
