@@ -36,9 +36,10 @@ public class FrameRateMonitorTest {
 		 * Another faulty test throwing NullPointerException.
 		 * Not sure how to fix.
 		 */ 
-		testconstruct.totalTime = 10000;
-		testconstruct.getFrameRate();
-		assertTrue((testconstruct.frameTimes.length*1000000000.0 /testconstruct.totalTime)==testconstruct.getFrameRate());
+		
+		testinstance.totalTime = 10000;
+		testinstance.getFrameRate();
+		assertTrue((testinstance.frameTimes.length*1000000000.0 /testinstance.totalTime)==testinstance.getFrameRate());
 	}
 
 	@Test
@@ -54,15 +55,35 @@ public class FrameRateMonitorTest {
 		 * MH: Can't tell what if anything is wrong with test, see console output.
 		 */
 		
+		//test one frame
 		testinstance.frames = 0;
 		testinstance.pos = 0;
 		testinstance.totalTime= 0;
 		testnano = 10;
 		testinstance.newFrame(testnano);
-		System.out.println("<testNewFrame() | ((testinstance.frameTimes[testinstance.pos]) = "+testinstance.frameTimes[testinstance.pos]+") should equal (testnano = "+testnano+")>");
-		System.out.println("<testNewFrame() | ((testinstance.totalTime - testinstance.frameTimes[testinstance.pos] + testnano) = "+(testinstance.totalTime - testinstance.frameTimes[testinstance.pos] + testnano)+") should equal (testinstance.totalTime = "+testinstance.totalTime+")>");
-		assertTrue((testinstance.frameTimes[testinstance.pos] == testnano) && ((testinstance.totalTime - testinstance.frameTimes[testinstance.pos] + testnano) == testinstance.totalTime));
+		
+		assertTrue(testinstance.pos == 1);
+		assertTrue(testinstance.frameTimes[testinstance.pos] == 0);
+		assertTrue(testinstance.frameTimes[testinstance.pos -1] == testnano);
+		assertTrue(testinstance.totalTime == testnano);
+		assertTrue(testinstance.frames == 1);
+		//monitor result is NOT accurate until the buffer is full; one frame will not do this
+			//(unless buffer size is set to one...)
+		assertFalse(testinstance.getFrameRate() == 1000000000/(double)testnano);
+		
+		//test many frames
+		for (int i=0; i<1000000; i++)
+			testinstance.newFrame(testnano);
+		//monitor result should be accurate now
+		assertTrue(testinstance.getFrameRate() == 1000000000/(double)testnano);
+		
+		//System.out.println("<testNewFrame() | ((testinstance.frameTimes[testinstance.pos]) = "+testinstance.frameTimes[testinstance.pos]+") should equal (testnano = "+testnano+")>");
+		//System.out.println("<testNewFrame() | ((testinstance.totalTime - testinstance.frameTimes[testinstance.pos] + testnano) = "+(testinstance.totalTime - testinstance.frameTimes[testinstance.pos] + testnano)+") should equal (testinstance.totalTime = "+testinstance.totalTime+")>");
+		assertTrue((testinstance.frameTimes[testinstance.pos-1] == testnano) && ((testinstance.totalTime - testinstance.frameTimes[testinstance.pos-1] + testnano) == testinstance.totalTime));
+		//the && is redundant: (x == y && z +x-y == z) ; one side is true IFF the other
 	}
+	
+	
 
 	@Test
 	public void testReset() {
