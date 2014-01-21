@@ -1,22 +1,20 @@
 package sepr.atcGame.tests; import sepr.atcGame.*;
-
+import static java.lang.Math.PI;
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Ignore;
-import org.junit.Test; @Ignore
+import org.junit.Test;
 
 public class AirportTest {
-
-	@Test
-	public void testGetWidth() {
-		fail("Not yet implemented");
+	
+	public Airport instance;
+	
+	@Before
+	public void setup() {
+		instance = new Heathrow();
 	}
-
-	@Test
-	public void testGetHeight() {
-		fail("Not yet implemented");
-	}
-
+	
 	@Test
 	public void testSetTransfers() {
 		fail("Not yet implemented");
@@ -24,6 +22,7 @@ public class AirportTest {
 
 	@Test
 	public void testNewFlight() {
+		
 		fail("Not yet implemented");
 	}
 
@@ -39,13 +38,14 @@ public class AirportTest {
 
 	@Test
 	public void testAirport() {
-		fail("Not yet implemented");
+		Airport testInstance = new Heathrow();
+		assertEquals(testInstance.toString(), instance.toString());
 	}
 
-	@Test
-	public void testSetBackgroundImage() {
-		fail("Not yet implemented");
-	}
+	//@Test
+	//public void testSetBackgroundImage() {
+	//	fail("Not yet implemented");
+	//
 
 	@Test
 	public void testGenerateWaypoints() {
@@ -57,9 +57,9 @@ public class AirportTest {
 		fail("Not yet implemented");
 	}
 
-	@Test
-	public void testPaintComponentGraphics() {
-		fail("Not yet implemented");
-	}
+	//@Test
+	//public void testPaintComponentGraphics() {
+	//	fail("Not yet implemented");
+	//}
 
 }

@@ -15,7 +15,7 @@ import java.util.List;
 
 import static java.lang.Math.PI;
 
-abstract class Airport extends Airspace {
+public abstract class Airport extends Airspace {
 
 	private Image background;
 	private Image scaleBackground;
@@ -217,6 +217,7 @@ abstract class Airport extends Airspace {
 
 	@Override
 	public final void paintComponent(Graphics g) {
+
 		super.paintComponent(g);
 
 		double scale = (double)getWidth() / boundaries.width;
@@ -265,5 +266,10 @@ abstract class Airport extends Airspace {
 			}
 		}
 	}
-
+	
+	@Override
+	public String toString(){
+		String s = "Boudaries: " + boundaries + ", Highlighted: " + highlighted;
+		return s;
+	}
 }
