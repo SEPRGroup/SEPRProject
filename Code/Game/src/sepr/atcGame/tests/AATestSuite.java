@@ -22,9 +22,9 @@ import org.junit.runners.Suite.SuiteClasses;
 		ATCTest.class, DrawableTest.class, DummyAirspaceTest.class,
 		FlightConditionsTest.class, FlightStatusTest.class, FlightTest.class,
 		FrameRateMonitorTest.class, GameDifficultyTest.class,
-		GameOutputTest.class, GameTest.class, GameTimeTest.class,
+		GameTest.class, GameTimeTest.class,
 		HeathrowTest.class, InputTest.class, MouseInputTest.class,
-		OutputTest.class, PositionTest.class, ScheduleItemTest.class,
+		PositionTest.class, ScheduleItemTest.class,
 		SchedulerTest.class, TransferWaypointTest.class, WaypointTest.class })
 public class AATestSuite {
 

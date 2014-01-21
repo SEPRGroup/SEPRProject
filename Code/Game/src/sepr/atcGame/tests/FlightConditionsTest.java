@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test; import org.junit.Ignore; @Ignore
 
 public class FlightConditionsTest {
-
+	// No Condition implemented so not needed
 	@Test
 	public void testGetWindSpeed() {
 		fail("Not yet implemented");
