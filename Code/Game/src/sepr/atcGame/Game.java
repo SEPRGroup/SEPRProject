@@ -277,5 +277,14 @@ public class Game extends JFrame implements ActionListener{
 		}
 
 	}
+	
+	
+	@Override
+	public String toString(){ 
+		String s = "<Game> | Flight plans: " + flightPlans +  
+				", Frame rate monitor:" + fps + ", Timer: " + 
+				timerDisplay.getText() + ", Difficulty: Not implemented" ;
+		return s;
+	}
 
 }

@@ -40,5 +40,11 @@ final class FrameRateMonitor{
 		pos = 0;
 		frames = 0;
 	}
+	
+	@Override
+	public String toString(){
+		String s = "Frame rate: " + frameTimes.length*1000000000.0 /totalTime;
+		return s;
+	}
 
 }
