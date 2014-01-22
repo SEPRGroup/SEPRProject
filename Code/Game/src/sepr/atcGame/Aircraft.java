@@ -27,7 +27,7 @@ public /*abstract*/ class Aircraft extends Flight {
 		highlightPath = "src/sepr/atcGame/Images/Plane_Selected.png",
 		crashedPath = "src/sepr/atcGame/Images/plane_crashed.png";
 	private static BufferedImage 
-		base, highlight, crashed;	//images for the plane normally, and when highlighted
+		base, highlight, crashed;	//images for the plane normally, when highlighted, crashing
 
 	protected static Font dataFont = new Font(Font.MONOSPACED, Font.PLAIN, 12);
 
