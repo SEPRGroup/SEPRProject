@@ -40,7 +40,7 @@ public class TransferWaypoint extends Waypoint {
 		{	//label attributes
 			String idString = (getName());
 			String dataString = String.format("\u21A5%1$4d", 
-					Math.round(this.getPosition().altitude));
+					Math.round(super.getPosition().altitude));
 			
 			Boolean AtoB;	//if the position is consistent with being AtoB for this airspace
 			if ((0 < bearing) && (PI/2 > bearing)){
@@ -88,9 +88,14 @@ public class TransferWaypoint extends Waypoint {
 	
 	
 	//getters and setters
+	public Position getPosition(){
+		System.out.println("[ERROR TransferWaypoint.getPosition()] \t use getPosition(airspace) for TransferWaypoint/t" +this.getName());	//{!}
+		return null;
+	}
+	
 	public Position getPosition(Airspace airspace) {
 		if(airspace.equals(airspace1)){
-			return this.getPosition();}
+			return super.getPosition();}
 		else if(airspace.equals(airspace2)){
 			return this.position2;}
 		else {
