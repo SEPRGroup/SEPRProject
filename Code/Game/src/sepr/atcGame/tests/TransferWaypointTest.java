@@ -1,6 +1,7 @@
 package sepr.atcGame.tests; import sepr.atcGame.*;
 import static org.junit.Assert.*;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test; import org.junit.Ignore;
 
@@ -17,6 +18,14 @@ public class TransferWaypointTest {
 		testDummyAirspace = new DummyAirspace("Athens");
 		testAirspace = new Heathrow();
 		instance = new TransferWaypoint(testAirspace.getAirspaceName(), testAirspace, testDummyAirspace, bearing);
+	}
+	
+	@After
+	public void teardown(){
+		bearing = 0;
+		testDummyAirspace = null;
+		testAirspace = null;
+		instance = null;
 	}
 	
 	@Test

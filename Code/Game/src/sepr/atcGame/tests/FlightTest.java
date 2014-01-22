@@ -14,6 +14,8 @@ import sepr.atcGame.Waypoint;
 import sepr.atcGame.testAircraft;
 import static java.lang.Math.PI;
 import static org.junit.Assert.*;
+
+import org.junit.After;
 /*
  * MH: CANNOT INSTANTIATE ABSTRACT METHODS - NEED TO LOOK INTO THIS
  * SJ: USE 'testAircraft' THAT INHERITS CLASSES INSTEAD
@@ -32,6 +34,13 @@ public class FlightTest {
 		testgame = new Game(GameDifficulty.EASY);
 		testposition = new Position(-1,-1,-1);
 		testinstance = new testAircraft("Q12", (testgame.randomFlightPlan()));
+	}
+	
+	@After
+	public void teardown(){
+		testgame = null;
+		testposition = null;
+		testinstance = null;
 	}
 	
 	// Works fine. Flight plans will always be different so assertion fails 

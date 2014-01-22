@@ -18,7 +18,13 @@ public class ATCTest {
 		instance = new ATC(newATCName, newAirspace);
 	}
 	
-	// I'm thinking this could be instead of the setup() function
+	@After
+	public void teardown(){
+		newATCName = null;
+		newAirspace = null;
+		instance = null;
+	}
+	
 	@Test
 	public void testATC() {
 		

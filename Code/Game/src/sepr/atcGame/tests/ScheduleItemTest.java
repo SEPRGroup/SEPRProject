@@ -1,6 +1,7 @@
 package sepr.atcGame.tests; import sepr.atcGame.*;
 import static org.junit.Assert.*;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test; import org.junit.Ignore;
 
@@ -18,6 +19,15 @@ public class ScheduleItemTest {
 		testposition = new Position(-1,-1,-1);
 		testaircraft = new Aircraft("A1", testgame.randomFlightPlan());		
 		testinstance = new ScheduleItem(testaircraft, testtime);
+	}
+	
+	@After
+	public void teardown(){
+		testtime = 0;
+		testgame = null;
+		testposition = null;
+		testaircraft = null;		
+		testinstance = null;
 	}
 	
 	@Test

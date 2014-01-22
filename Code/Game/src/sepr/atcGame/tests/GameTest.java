@@ -1,4 +1,4 @@
-package sepr.atcGame.tests; import java.util.LinkedList;
+package sepr.atcGame.tests; 
 import java.util.Queue;
 
 import sepr.atcGame.*;
@@ -14,6 +14,10 @@ public class GameTest {
 	@Before
 	public void Setup(){
 		instance = new Game(GameDifficulty.EASY);
+	}
+	
+	public void teardown(){
+		instance = null;
 	}
 	
 	@Ignore
