@@ -15,7 +15,7 @@ public abstract class Airspace extends JPanel implements GameTime{
 	//variables
 	private String airspaceName;
 	protected Flight[] aircraft = new Flight[MAX_FLIGHTS];	//Fixed size; may be filled
-	protected Waypoint[] waypoints = new Waypoint[MAX_WAYPOINTS];	//Fixed size, may be filled
+	public Waypoint[] waypoints = new Waypoint[MAX_WAYPOINTS];	//Fixed size, may be filled
 	protected List<TransferWaypoint> transfers;
 	protected int aircraftCount = 0; 
 	
@@ -87,7 +87,7 @@ public abstract class Airspace extends JPanel implements GameTime{
 			l.eventHandover(f);	
 	}
 
-	protected final void eventLost(Flight f) {
+	public final void eventLost(Flight f) {
 		removeFlight(f);
 		for (AirspaceListener l : listeners)
 			l.eventLost(f);

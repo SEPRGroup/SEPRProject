@@ -31,7 +31,7 @@ public final class Heathrow extends Airport {
 	
 	//overridden methods
 	@Override
-	protected void generateWaypoints() {
+	public void generateWaypoints() {
 		waypoints[0] = new Waypoint("Alpha", new Position(2200,3000,3000));
 		waypoints[1] = new Waypoint("Bravo", new Position(4000,6140,3000));
 		waypoints[2] = new Waypoint("Charlie", new Position(12000,6140,3000));
