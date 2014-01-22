@@ -79,7 +79,7 @@ public class RadialMenu extends JComponent implements MouseListener, MouseMotion
 		return spacing;
 	}
 	public void setSpacing(int degrees) {
-		this.spacing = spacing;
+		this.spacing = degrees;
 		buttons = null;
 	}
 
@@ -87,7 +87,7 @@ public class RadialMenu extends JComponent implements MouseListener, MouseMotion
 		return offset;
 	}
 	public void setOffset(int degrees) {
-		this.offset = offset;
+		this.offset = degrees;
 		buttons = null;
 	}
 
