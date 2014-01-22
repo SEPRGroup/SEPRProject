@@ -109,7 +109,7 @@ public abstract class Airport extends Airspace {
 
 	
 	// methods
-	protected abstract void generateWaypoints();
+	public abstract void generateWaypoints();
 	
 	public final Point positionToLocation(Position p){
 		//converts internal coordinate system to pixel coordinate system
