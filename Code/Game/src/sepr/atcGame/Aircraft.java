@@ -24,9 +24,10 @@ public /*abstract*/ class Aircraft extends Flight {
 	
 	private static String 
 		basePath = "src/sepr/atcGame/Images/plane.png",
-		highlightPath = "src/sepr/atcGame/Images/Plane_Selected.png";
+		highlightPath = "src/sepr/atcGame/Images/Plane_Selected.png",
+		crashedPath = "src/sepr/atcGame/Images/plane_crashed.png";
 	private static BufferedImage 
-		base, highlight;	//images for the plane normally, and when highlighted
+		base, highlight, crashed;	//images for the plane normally, and when highlighted
 
 	protected static Font dataFont = new Font(Font.MONOSPACED, Font.PLAIN, 12);
 
@@ -53,9 +54,10 @@ public /*abstract*/ class Aircraft extends Flight {
 		if (base == null || highlight == null){
 			try {
 				base = ImageIO.read(new File(basePath));
-				highlight = ImageIO.read(new File(highlightPath));}
-			catch (IOException e){
-				System.out.println("Aircraft:\tImage loading failed");
+				highlight = ImageIO.read(new File(highlightPath));
+				crashed = ImageIO.read(new File(crashedPath));
+			} catch (IOException e){
+				System.out.println("[ERROR Aircraft()]\tImage(s) loading failed");
 			};
 		}
 		status = FlightStatus.WAITING;
@@ -293,6 +295,8 @@ public /*abstract*/ class Aircraft extends Flight {
 	@Override
 	public final void crash() {
 		status = CRASHING;
+		image = crashed;
+		rotatedImage = null;
 	}
 
 	@Override
