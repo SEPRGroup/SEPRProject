@@ -1,34 +1,58 @@
 package sepr.atcGame.tests; import sepr.atcGame.*;
-
 import static org.junit.Assert.*;
 
-import org.junit.Test; import org.junit.Ignore; @Ignore
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test; import org.junit.Ignore;
 
 public class DummyAirspaceTest {
-
-	@Test
+	private DummyAirspace testinstance;
+	private Aircraft testaircraft;
+	private Game testgame;
+	private double testtime;
+	
+	@Before
+	public void setup() {
+		testgame = new Game(GameDifficulty.EASY);
+		testaircraft = new Aircraft("A1", testgame.randomFlightPlan());
+		testinstance = new DummyAirspace("testinstance");
+	}
+	
+	@After
+	public void teardown() {
+		testgame = null;
+		testaircraft = null;
+		testinstance = null;
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
 	public void testNewFlight() {
-		fail("Not yet implemented");
+		testinstance.newFlight(testaircraft);
 	}
 
-	@Test
+	@Ignore
 	public void testReceiveFlight() {
-		fail("Not yet implemented");
+		//MH: method prints a message to console
+		//Not Testing, Annotation is @Ignore
 	}
 
-	@Test
+	@Test(expected = UnsupportedOperationException.class)
 	public void testNewObstacle() {
-		fail("Not yet implemented");
+		testinstance.newObstacle(testaircraft);
 	}
 
 	@Test
 	public void testDummyAirspace() {
-		fail("Not yet implemented");
+		testinstance = null;
+		testinstance = new DummyAirspace("testinstance");
+		assertTrue(testinstance instanceof DummyAirspace);
+		
 	}
 
-	@Test
-	public void testUpdateDouble() {
-		fail("Not yet implemented");
+	@Test(expected = UnsupportedOperationException.class)
+	public void testUpdate() {
+		testtime = 20;
+		testinstance.update(testtime);
 	}
 
 }
