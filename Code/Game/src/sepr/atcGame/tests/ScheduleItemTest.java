@@ -1,24 +1,40 @@
 package sepr.atcGame.tests; import sepr.atcGame.*;
-
 import static org.junit.Assert.*;
 
-import org.junit.Test; import org.junit.Ignore; @Ignore
+import org.junit.Before;
+import org.junit.Test; import org.junit.Ignore;
 
 public class ScheduleItemTest {
-
+	private ScheduleItem testinstance;
+	private Aircraft testaircraft;
+	public Position testposition;
+	private Game testgame;
+	private double testtime;
+	
+	@Before
+	public void setup() {
+		testtime = 3;
+		testgame = new Game(GameDifficulty.EASY);
+		testposition = new Position(-1,-1,-1);
+		testaircraft = new Aircraft("A1", testgame.randomFlightPlan());		
+		testinstance = new ScheduleItem(testaircraft, testtime);
+	}
+	
 	@Test
 	public void testScheduleItem() {
-		fail("Not yet implemented");
+		testinstance = null;
+		testinstance = new ScheduleItem(testaircraft, testtime);
+		assertTrue(testinstance.getFlight()==testaircraft && testinstance.getTime()==testtime);
 	}
 
 	@Test
 	public void testGetFlight() {
-		fail("Not yet implemented");
+		assertTrue(testinstance.getFlight()==testaircraft);
 	}
 
 	@Test
 	public void testGetTime() {
-		fail("Not yet implemented");
+		assertTrue(testinstance.getTime()==testtime);
 	}
 
 }

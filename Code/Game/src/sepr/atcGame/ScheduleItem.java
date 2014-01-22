@@ -1,6 +1,6 @@
 package sepr.atcGame;
 
-final class ScheduleItem {
+public final class ScheduleItem {
 	
 	public Flight flight;
 	public double time;

@@ -54,8 +54,6 @@ public class AircraftTest {
 	
 	@Test
 	public void testTransition(){
-		//MH: FAULTY TEST
-		//MH: Causes Errors, can't find way to fix
 		//MH: Doesn't consider error condition. (else)
 		
 		testinstance.transition(testdummyairspace1, testtransferwaypoint);
@@ -64,8 +62,6 @@ public class AircraftTest {
 
 	@Test
 	public void testTakeOff() {
-		//MH: FAULTY TEST
-		//MH: Causes errors, can't find way to fix
 		testinstance.takeOff(testdummyairspace1, testtransferwaypoint);
 		System.out.println(testinstance.getStatus().toString());
 		assertEquals(FlightStatus.TAKEOFF, (testinstance.getStatus()));

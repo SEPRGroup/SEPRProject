@@ -2,12 +2,12 @@ package sepr.atcGame.tests; import sepr.atcGame.*;
 
 import static org.junit.Assert.*;
 
-import org.junit.Test; import org.junit.Ignore;
+import org.junit.Test; import org.junit.Ignore; @Ignore
 
 public class GameDifficultyTest {
 
-	@Test
-	public void test() {
+	@Test // No Test Required
+	public void testGameDifficulty() {
 		fail("Not yet implemented");
 	}
 

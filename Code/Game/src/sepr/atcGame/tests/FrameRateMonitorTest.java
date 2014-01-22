@@ -32,11 +32,6 @@ public class FrameRateMonitorTest {
 
 	@Test
 	public void testGetFrameRate() {
-		/* MH: FAULTY TEST
-		 * Another faulty test throwing NullPointerException.
-		 * Not sure how to fix.
-		 */ 
-		
 		testinstance.totalTime = 10000;
 		testinstance.getFrameRate();
 		assertTrue((testinstance.frameTimes.length*1000000000.0 /testinstance.totalTime)==testinstance.getFrameRate());
@@ -51,10 +46,6 @@ public class FrameRateMonitorTest {
 
 	@Test
 	public void testNewFrame() {
-		/* THIS TEST DETECTS A FAILURE 
-		 * MH: Can't tell what if anything is wrong with test, see console output.
-		 */
-		
 		//test one frame
 		testinstance.frames = 0;
 		testinstance.pos = 0;
@@ -93,11 +84,11 @@ public class FrameRateMonitorTest {
 		testinstance.reset();
 		assertTrue((testinstance.frames == 0) && (testinstance.pos == 0) && (testinstance.totalTime == 0));
 		/* MH: Null Pointer Exception creating fault.
-		   Essentially trying to create testzeroarray same length as frameTimes all with zeros, and testing for equality
-		for (int i=0; i < testinstance.frameTimes.length; i++){
+		   Essentially trying to create testzeroarray same length as frameTimes all with zeros, and testing for equality */
+		/*for (int i=0; i < testinstance.frameTimes.length; i++){
 			testzeroarray[i] = 0;
 		}
-		assertArrayEquals(testzeroarray, testinstance.frameTimes); */
+		assertArrayEquals(testzeroarray, testinstance.frameTimes);*/
 	}
 
 }
