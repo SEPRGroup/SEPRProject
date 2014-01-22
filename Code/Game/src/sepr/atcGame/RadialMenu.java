@@ -9,6 +9,7 @@ import java.awt.Image;
 import java.awt.Polygon;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
@@ -19,7 +20,7 @@ import javax.swing.JComponent;
 import sepr.atcGame.events.RadialMenuListener;
 
 
-public class RadialMenu extends JComponent implements MouseListener{
+public class RadialMenu extends JComponent implements MouseListener, MouseMotionListener{
 	private List<String> names = new ArrayList<String>();
 	private List<Image> images = new ArrayList<Image>();
 	private List<Area> buttons;
@@ -52,6 +53,7 @@ public class RadialMenu extends JComponent implements MouseListener{
 		setRadius();
 
 		addMouseListener(this);
+		addMouseMotionListener(this);
 	}
 
 
@@ -133,8 +135,8 @@ public class RadialMenu extends JComponent implements MouseListener{
 		if (buttons == null){
 			buttons = new ArrayList<Area>();
 			int num = names.size();
-			int size = (360 -num*spacing) /num;	//angular size of buttons
-			int position = offset;
+			double size = (360 -num*spacing) /(double)num;	//angular size of buttons
+			double position = offset;
 			Area b;	//inner area to remove
 			switch (style){
 			case DONUT:{
@@ -163,9 +165,11 @@ public class RadialMenu extends JComponent implements MouseListener{
 			for (int i=0; i<num; i++){
 				position += size +spacing;
 				//generate partial segment; 
-				a = new Area(new Arc2D.Double(0, 0, 2*radius, 2*radius, 
-						position, size, Arc2D.PIE));
-				a.subtract(b);
+				if ((names.get(i) != null) || images.get(i) != null){
+					a = new Area(new Arc2D.Double(0, 0, 2*radius, 2*radius, 
+							position, size, Arc2D.PIE));
+					a.subtract(b);
+				} else a = new Area();
 				buttons.add(a);
 			}
 		}
@@ -179,6 +183,10 @@ public class RadialMenu extends JComponent implements MouseListener{
 		scaleImages = null;
 		buttons = null;
 		repaint();
+	}
+	
+	public void addSpacer(){
+		addButton(null, null);
 	}
 
 	public final void addListener(RadialMenuListener toAdd){
@@ -211,19 +219,9 @@ public class RadialMenu extends JComponent implements MouseListener{
 		}
 
 		int num = names.size();
-		int size = (360 -num*spacing) /num;	//angular size of buttons
-		int pos = offset -size -spacing;	//angular position of start of current button
-		double posCR;	//angular position of centre of button in radians
-		int cx, cy;	//position of centre of button
+		//draw button backgrounds
 		for (int i=0; i<num; i++){
-			pos += size +spacing;
-			posCR = Math.toRadians(pos +size/2);
-			cx = radius +(int)Math.round( (holeRadius +buttonSize/2)*Math.sin(posCR) );
-			cy = radius -(int)Math.round( (holeRadius +buttonSize/2)*Math.cos(posCR) );
-			String name = names.get(i);
-			Image image = scaleImages.get(i);
 			Area button = buttons.get(i);
-			//draw button background
 			if (i != pressed){
 				g2d.setColor(getBackground());
 			} else g2d.setColor(getBackground().darker());
@@ -232,19 +230,39 @@ public class RadialMenu extends JComponent implements MouseListener{
 				g2d.setColor(getBackground().darker());
 				g2d.draw(button);
 			};
+		}
+		
+		double size = (360 -num*spacing) /(double)num;	//angular size of buttons
+		double pos = offset -size -spacing;	//angular position of start of current button
+		double posCR;	//angular position of centre of button in radians
+		int cx, cy;	//position of centre of button
+		//draw images and labels
+		g2d.setFont(font);
+		g2d.setColor(getForeground());
+		for (int i=0; i<num; i++){
+			pos += size +spacing;
+			posCR = Math.toRadians(pos +size/2);
+			cx = radius +(int)Math.round( (holeRadius +buttonSize/2)*Math.sin(posCR) );
+			cy = radius -(int)Math.round( (holeRadius +buttonSize/2)*Math.cos(posCR) );
+			String name = names.get(i);
+			Image image = scaleImages.get(i);
 			//draw (image) and text
-			g2d.setFont(font);
-			g2d.setColor(getForeground());
 			if (image != null){
-				g2d.drawImage(image, cx -image.getWidth(null)/2, 
-						cy -image.getHeight(null)/2 -font.getSize()/2, null);
-				g2d.drawString(name, cx -image.getWidth(null)/2, 
-						cy +image.getHeight(null)/2 +font.getSize()/2);
+				if (name != null){
+					g2d.drawImage(image, cx -image.getWidth(null)/2, 
+							cy -image.getHeight(null)/2 -font.getSize()/2, null);
+					g2d.drawString(name, cx -image.getWidth(null)/2, 
+							cy +image.getHeight(null)/2 +font.getSize()/2);
+				} else{
+					g2d.drawImage(image, cx -image.getWidth(null)/2, 
+							cy -image.getHeight(null)/2, null);
+				}
 			}else {
-				g2d.drawString(name, cx -buttonSize/2 +5, 
-						cy +font.getSize()/2);
+				if (name != null){
+					g2d.drawString(name, cx -buttonSize/2 +5, 
+							cy +font.getSize()/2);
+				}
 			}
-
 		}
 	}
 
@@ -255,27 +273,16 @@ public class RadialMenu extends JComponent implements MouseListener{
 
 	
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		//System.out.println("click");
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub	 
-	}
-
-	@Override
 	public void mouseExited(MouseEvent e) {
 		pressed = -1;
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub	
 		for (int i=0; i<names.size(); i++){
 			Area a = buttons.get(i);
 			if (a.contains(e.getPoint())){
-				System.out.println("button\t" +names.get(i) +"\tpressed");
+				//System.out.println("button\t" +names.get(i) +"\tpressed");
 				pressed = i;	//signal that a button has been clicked
 				break;	//areas should not intersect; no need to continue checking
 			}
@@ -285,15 +292,42 @@ public class RadialMenu extends JComponent implements MouseListener{
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		if (pressed > -1){
-			//if button released on is the same as the one first pressed
-			if (buttons.get(pressed).contains(e.getPoint())){
-				eventButtonClicked(pressed);
-			}
+			eventButtonClicked(pressed);
 			pressed = -1;
 		}
 	}
 
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		if (pressed > -1){
+			if (!buttons.get(pressed).contains(e.getPoint())){
+				//if mouse is not still in previous button area, find new (if any) button
+				pressed = -1;	//if not in any area, cancel click operation
+				for (int i=0; i<names.size(); i++){
+					Area a = buttons.get(i);
+					if (a.contains(e.getPoint())){
+						pressed = i;	//signal that a button is highlighted
+						break;	//areas should not intersect; no need to continue checking
+					}
+				}	
+			}	
+		}	
+	}
 
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		//nothing; could be used to track highlights
+	}
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		//	N/A since component represents many subcomponents
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		//	N/A
+	}
 
 
 }

@@ -71,18 +71,20 @@ public final class MouseInput extends Input implements GameTime{
 	}
 	
 	private void initBearing(){
+		final int interval = 4;	//even 1 will work, but you'll start to see input lag
 		bearing = new RadialMenu();
+		main.setFont(main.getFont().deriveFont(Font.PLAIN, 10));
 		bearing.setSpacing(0);
 		bearing.setOffset(-2);
 		bearing.setStyle(RadialMenu.DONUT);
 		bearing.setOutline(false);
 		bearing.setButtonSize(25);
-		for (int i=0; i<360; i+=5){
+		for (int i=0; i<360; i+=interval){
 			bearing.addButton("", null);
 		}
 		bearing.addListener(new RadialMenuListener(){
 			public void eventButtonClicked(int button) {
-				highlighted.turnTo(Math.toRadians(button *= 5));
+				highlighted.turnTo(Math.toRadians(button *= interval));
 				bearing.setVisible(false);
 				tryLocation(main, 
 						airport.positionToLocation(highlighted.getPosition()));
@@ -92,14 +94,21 @@ public final class MouseInput extends Input implements GameTime{
 	}
 	
 	private void initSpeed(){
-		final int[] speeds = {100, 150, 200, 250, 300, 350, 400};
+		final int min = 0, max = 300, interval = 10;
 		speed = new RadialMenu();
-		for (int i=0; i<speeds.length; i++){
-			speed.addButton(String.valueOf(speeds[i]), null);
+		speed.setSpacing(1);
+		speed.setOffset(0);
+		speed.setStyle(RadialMenu.DONUT);
+		bearing.setButtonSize(30);
+		for (int i=min; i<=max; i+=interval){
+			String s = (i%50 == 0) ? String.valueOf(i) : "";
+			speed.addButton(s, null);
 		}
+		speed.addSpacer();
+		
 		speed.addListener(new RadialMenuListener(){
 			public void eventButtonClicked(int button) {
-				highlighted.toSpeed(speeds[button]);
+				highlighted.toSpeed(min +button*interval);
 				speed.setVisible(false);
 				tryLocation(main,
 						airport.positionToLocation(highlighted.getPosition()));
@@ -109,14 +118,19 @@ public final class MouseInput extends Input implements GameTime{
 	}
 	
 	private void initAltitude(){
-		final int[] altitudes = {100, 150, 200, 250, 300, 350, 400};
+		final int min = 100, max = 4000, interval = 100;
 		altitude = new RadialMenu();
-		for (int i=0; i<altitudes.length; i++){
-			altitude.addButton(String.valueOf(altitudes[i]), null);
+		altitude.setSpacing(1);
+		altitude.setOffset(0);
+		altitude.addSpacer();
+		for (int i=min; i<=max; i+=interval){
+			String s = (i%500 == 0) ? ' '+String.valueOf(i) : "";
+			altitude.addButton(s, null);
 		}
+		
 		altitude.addListener(new RadialMenuListener(){
 			public void eventButtonClicked(int button) {
-				highlighted.toAltitude(altitudes[button]);
+				highlighted.toAltitude(min +button*interval);
 				altitude.setVisible(false);
 				tryLocation(main,
 						airport.positionToLocation(highlighted.getPosition()));

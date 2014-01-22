@@ -88,11 +88,13 @@ public class ATC extends JPanel implements GameTime{
 					highlighted= null;
 				}
 					Flight[] aircraft = getAirspace().getAircraft();
-					for (int i	= 0; i<aircraft.length; i++){
+					for (int i=0; i<aircraft.length; i++){
 						if (f!= null){
-							if(labels[i].getText().contains(f.getIdentifier())){
-								remove(labels[i]);
-								labels[i] = null;
+							if (labels[i] != null){
+								if(labels[i].getText().contains(f.getIdentifier())){
+									remove(labels[i]);
+									labels[i] = null;
+								}
 							}
 						}
 					}

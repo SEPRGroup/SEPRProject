@@ -297,13 +297,11 @@ public class Game extends JFrame implements ActionListener, AirspaceListener{
 	@Override	
 	public void eventLanded(Flight f) {	
 		//score
-		
 	}	
 		
 	@Override	
 	public void eventHandover(Flight f) {	
 		//score
-		
 	}	
 		
 	@Override	
