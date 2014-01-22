@@ -16,16 +16,19 @@ import org.junit.runners.Suite.SuiteClasses;
  * ////// IMPORTANT - TEST LOG:
  * Once you have synced your commit on Git, please fill out the Test Log here: http://bit.ly/19wc1D0
  * Filling this out is essential to proving that we proactively tested our work as comprehensively as possible.
+ * 
+ * ////// These classes do not require test classes:
+ * Drawable.java (Interface), Flightconditions.java (Not implemented, No constructor), FlightStatus.java (enum),
+ * GameDifficulty.java (enum), GameTime.java (nothing to test), InputTest.java (uses super class),
+ * 
  */
 @RunWith(Suite.class)
 @SuiteClasses({ AircraftTest.class, AirportTest.class, AirspaceTest.class,
-		ATCTest.class, DrawableTest.class, DummyAirspaceTest.class,
-		FlightConditionsTest.class, FlightStatusTest.class, FlightTest.class,
-		FrameRateMonitorTest.class, GameDifficultyTest.class,
-		GameTest.class, GameTimeTest.class,
-		HeathrowTest.class, InputTest.class, MouseInputTest.class,
-		PositionTest.class, ScheduleItemTest.class,
-		SchedulerTest.class, TransferWaypointTest.class, WaypointTest.class })
+		ATCTest.class, DummyAirspaceTest.class, FlightTest.class,
+		FrameRateMonitorTest.class, GameTest.class, 
+		HeathrowTest.class, MouseInputTest.class, PositionTest.class, 
+		ScheduleItemTest.class, SchedulerTest.class, TransferWaypointTest.class,
+		WaypointTest.class })
 public class AATestSuite {
 
 }
