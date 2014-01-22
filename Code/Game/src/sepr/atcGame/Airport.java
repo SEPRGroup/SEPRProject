@@ -269,7 +269,7 @@ public abstract class Airport extends Airspace {
 	
 	@Override
 	public String toString(){
-		String s = "Boudaries: " + boundaries + ", Highlighted: " + highlighted;
+		String s = "Name of airport: " + this.getAirspaceName() + "Boudaries: " + boundaries + ", Highlighted: " + highlighted;
 		return s;
 	}
 }

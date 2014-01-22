@@ -27,6 +27,7 @@ public class GameTest {
 	
 	// As long as there are 5 planes this is fine. Due to randomFlightPlan cannot
 	// compare directly 
+	@Ignore
 	@Test
 	public void testPlay() {
 		fail("Not yet implemented");

@@ -129,7 +129,7 @@ public class TransferWaypoint extends Waypoint {
 		else if(airspace.equals(airspace2)){
 			return bearing<Math.PI ? bearing+Math.PI : bearing-Math.PI;}
 		else {
-			System.out.println("[ERROR TransferWaypoint.getBearingFrom(" +airspace.getAirspaceName() +")] \t airspace is not is not registered with/t" +this.getName());	//{!}
+			System.out.println("[ERROR TransferWaypoint.getBearingFrom(" +airspace.getAirspaceName() +")] \t airspace is not is not registered with\t" +this.getName());	//{!}
 			return -1;
 		}
 	}
