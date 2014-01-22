@@ -301,9 +301,11 @@ public /*abstract*/ class Aircraft extends Flight {
 
 	@Override
 	public final void highlight(Boolean aFlag){
-		if (aFlag){
-			image = highlight;
-		} else image = base;
-		rotatedImage = null;
+		if (status != FlightStatus.CRASHING){
+			if (aFlag){
+				image = highlight;
+			} else image = base;
+			rotatedImage = null;
+		}
 	}
 }
