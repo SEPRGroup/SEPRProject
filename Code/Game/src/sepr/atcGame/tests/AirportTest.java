@@ -147,7 +147,8 @@ public class AirportTest {
 		assertEquals(instance.waypoints[9].toString(),new Waypoint("Juliett", new Position(10100,2600,3000)).toString());
 		
 	}
-
+	
+	@Ignore
 	@Test
 	public void testUpdateDouble() {
 		fail("Not yet implemented");

@@ -288,6 +288,11 @@ public class Game extends JFrame implements ActionListener, AirspaceListener{
 
 	}
 	
+	// Testing purposes
+	public Airport getAirport(){
+		return airport;
+	}
+	
 	@Override	
 	public void eventCrash(Flight f1, Flight f2) {	
 		gameOver = true;
