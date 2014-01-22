@@ -8,7 +8,3 @@ public class Main {
 		menu.setVisible(true);
 	}
 }
-
-
-
-
