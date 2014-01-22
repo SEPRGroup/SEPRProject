@@ -9,6 +9,8 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+
 import javax.imageio.ImageIO;
 import static sepr.atcGame.FlightStatus.*;
 import static java.lang.Math.PI;
@@ -23,9 +25,9 @@ public /*abstract*/ class Aircraft extends Flight {
 	private BufferedImage image, rotatedImage;
 	
 	private static String 
-		basePath = "src/sepr/atcGame/Images/plane.png",
-		highlightPath = "src/sepr/atcGame/Images/Plane_Selected.png",
-		crashedPath = "src/sepr/atcGame/Images/plane_crashed.png";
+		basePath = "/sepr/atcGame/Images/plane.png",
+		highlightPath = "/sepr/atcGame/Images/Plane_Selected.png",
+		crashedPath = "/sepr/atcGame/Images/plane_crashed.png";
 	private static BufferedImage 
 		base, highlight, crashed;	//images for the plane normally, when highlighted, crashing
 
@@ -53,9 +55,9 @@ public /*abstract*/ class Aircraft extends Flight {
 		super(id, flightPlan);
 		if (base == null || highlight == null){
 			try {
-				base = ImageIO.read(new File(basePath));
-				highlight = ImageIO.read(new File(highlightPath));
-				crashed = ImageIO.read(new File(crashedPath));
+				base = ImageIO.read(getClass().getResourceAsStream(basePath));
+				highlight = ImageIO.read(getClass().getResourceAsStream(highlightPath));
+				crashed = ImageIO.read(getClass().getResourceAsStream(crashedPath));
 			} catch (IOException e){
 				System.out.println("[ERROR Aircraft()]\tImage(s) loading failed");
 			};

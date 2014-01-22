@@ -5,7 +5,6 @@ import java.util.Queue;
 import java.util.Random;
 
 import sepr.atcGame.*;
-import static java.lang.Math.PI;
 import static org.junit.Assert.*;
 
 import org.junit.After;

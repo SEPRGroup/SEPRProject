@@ -22,7 +22,7 @@ public class Menu extends JFrame{
 	public Menu() {
 		super("ATC Game | MENU");
 		
-		ImagePanel panel = new ImagePanel(new ImageIcon("src/sepr/atcGame/Images/sky.jpg").getImage());
+		ImagePanel panel = new ImagePanel(new ImageIcon(getClass().getResource("/sepr/atcGame/Images/sky.jpg")).getImage());
 		getContentPane().add(panel);
 		pack();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -35,9 +35,9 @@ public class Menu extends JFrame{
 
 		private Image img;
 
-		private ImageIcon Air = new ImageIcon("src/sepr/atcGame/Images/Airport.png");
-		private  ImageIcon Air1 = new ImageIcon("src/sepr/atcGame/Images/Airport1.png");
-		private ImageIcon Air2 = new ImageIcon("src/sepr/atcGame/Images/Airport2.png");
+		private ImageIcon Air = new ImageIcon(getClass().getResource("/sepr/atcGame/Images/Airport.png"));
+		private  ImageIcon Air1 = new ImageIcon(getClass().getResource("/sepr/atcGame/Images/Airport1.png"));
+		private ImageIcon Air2 = new ImageIcon(getClass().getResource("/sepr/atcGame/Images/Airport2.png"));
 
 		private JLabel Airport = new JLabel("",Air,JLabel.CENTER);
 

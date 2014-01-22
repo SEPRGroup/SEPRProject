@@ -6,6 +6,8 @@ import java.awt.Image;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+
 import javax.imageio.ImageIO;
 
 
@@ -22,8 +24,8 @@ public class Waypoint implements Drawable{
 		this.name = name;
 		this.position = position;
 		try{
-			image = ImageIO.read(new File("src/sepr/atcGame/Images/Waypoint.png"));
-		}catch (IOException e){};
+			image = ImageIO.read(getClass().getResourceAsStream("/sepr/atcGame/Images/Waypoint.png"));
+		}catch (IOException e){System.out.println(e.toString());};
 	}
 
 	

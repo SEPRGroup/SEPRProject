@@ -26,8 +26,8 @@ public class ATC extends JPanel implements GameTime{
 	private List<ATCListener> listeners = new ArrayList<ATCListener>();
 	private Flight highlighted;
 	private JLabel[] labels = new JLabel[5];
-	private Icon background = new ImageIcon("src/sepr/atcGame/Images/side_bg.png");
-	private Icon selectedBg = new ImageIcon("src/sepr/atcGame/Images/side_bg_selected.png");
+	private Icon background = new ImageIcon(getClass().getResource("/sepr/atcGame/Images/side_bg.png"));
+	private Icon selectedBg = new ImageIcon(getClass().getResource("/sepr/atcGame/Images/side_bg_selected.png"));
 	private Icon baseBg  = background;
 
 

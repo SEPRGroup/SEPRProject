@@ -1,6 +1,7 @@
 package sepr.atcGame.tests;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import javax.imageio.ImageIO;
 
@@ -62,9 +63,12 @@ public class HeathrowTest {
 		
 		// Catch the IO image and assert if images are the same
 		try {
-			assertEquals(ImageIO.read(new File("src/sepr/atcGame/Images/dummy1.png")), instance.getBackground());
+			assertEquals(ImageIO.read(new File(getClass().getResource("/sepr/atcGame/Images/dummy1.png").toURI())), instance.getBackground());
 		}catch (IOException e){
 			System.out.println("Image cannnot be found");
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 	}

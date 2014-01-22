@@ -58,8 +58,8 @@ public class Game extends JFrame implements ActionListener, AirspaceListener{
 		setTitle("ATC Game | GAME");
 		setResizable(false);	//may change if aspect ratio is locked
 		timerDisplay.setText("Time : 0");
-		timeImage = new ImageIcon("src/sepr/atcGame/Images/timer_bg.png");
-		fpsImage = new ImageIcon("src/sepr/atcGame/Images/score_bg.png");
+		timeImage = new ImageIcon(getClass().getResource("/sepr/atcGame/Images/timer_bg.png"));
+		fpsImage = new ImageIcon(getClass().getResource("/sepr/atcGame/Images/score_bg.png"));
 		//Sets background for status bar labels
 		timerDisplay.setIcon(timeImage);
 		timerDisplay.setVerticalTextPosition(JLabel.CENTER);

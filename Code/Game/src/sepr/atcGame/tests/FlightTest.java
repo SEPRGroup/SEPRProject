@@ -12,7 +12,7 @@ import sepr.atcGame.Game;
 import sepr.atcGame.TransferWaypoint;
 import sepr.atcGame.Waypoint;
 import sepr.atcGame.testAircraft;
-import static java.lang.Math.PI;
+
 import static org.junit.Assert.*;
 
 import org.junit.After;
@@ -21,7 +21,7 @@ import org.junit.After;
  * SJ: USE 'testAircraft' THAT INHERITS CLASSES INSTEAD
  */
 import org.junit.Before;
-import org.junit.BeforeClass;
+
 import org.junit.Test; import org.junit.Ignore;
 
 public class FlightTest {

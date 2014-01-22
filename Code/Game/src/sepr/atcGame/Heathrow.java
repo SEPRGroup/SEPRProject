@@ -4,13 +4,15 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+
 import javax.imageio.ImageIO;
 
 
 public final class Heathrow extends Airport {
 	
 	private static String 
-		backgroundPath = "src/sepr/atcGame/Images/dummy1.jpg";
+		backgroundPath = "/sepr/atcGame/Images/dummy1.jpg";
 	private static Image background;
 	
 	//constructor
@@ -19,7 +21,7 @@ public final class Heathrow extends Airport {
 		
 		if (background == null){
 			try {
-				background = ImageIO.read(new File(backgroundPath));
+				background = ImageIO.read(getClass().getResourceAsStream(backgroundPath));
 			}
 			catch (IOException e){
 				System.out.println("Heathrow:\tImage loading failed");
