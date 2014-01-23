@@ -133,9 +133,8 @@ public class Menu extends JFrame{
 					showMenus(1, 4);
 					break;
 				case AIRPORT1:
-					game = new Game(GameDifficulty.EASY, Game.HEATHROW);
-					getOuterClass().setVisible(false);
-					game.Play();
+					closeMenus(8,10);
+					showMenus(1, 4);
 					break;
 				case AIRPORT2:		
 					JOptionPane.showMessageDialog(null,"Unfortunately this airport is unavailable!");

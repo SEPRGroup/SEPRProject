@@ -43,7 +43,7 @@ public class Game extends JFrame implements ActionListener, AirspaceListener{
 	private MouseInput input;
 	private testOutput output = new testOutput();
 	private JPanel statusPanel = new JPanel();
-	private JLabel timerDisplay = new JLabel();
+	private JLabel timerDisplay;
 	private JLabel fpsDisplay = new JLabel();
 	
 	private static double nanoToGameTime(long time){
@@ -54,6 +54,38 @@ public class Game extends JFrame implements ActionListener, AirspaceListener{
 
 	//constructor
 	public Game(GameDifficulty difficulty, int airport_selection) {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //{!} for while menu does not redisplay
+		//setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setTitle("When Planes Collide");
+		setResizable(false);	//may change if aspect ratio is locked
+		
+		timerDisplay =  new JLabel("Time : 0");
+		//Sets background for status bar labels
+		timerDisplay.setIcon(new ImageIcon(getClass().getResource("/sepr/atcGame/Images/timer_bg.png")));
+		timerDisplay.setVerticalTextPosition(JLabel.CENTER);
+		timerDisplay.setHorizontalTextPosition(JLabel.CENTER);
+		
+		fpsDisplay.setIcon(new ImageIcon(getClass().getResource("/sepr/atcGame/Images/score_bg.png")));
+		fpsDisplay.setVerticalTextPosition(JLabel.CENTER);
+		fpsDisplay.setHorizontalTextPosition(JLabel.CENTER);
+	
+		statusPanel.add(timerDisplay);
+		statusPanel.add(fpsDisplay);
+		statusPanel.setBackground(Color.WHITE);
+		add(statusPanel,BorderLayout.PAGE_START);
+		
+		//configure model
+		generateWorld(airport_selection);
+		atc = new ATC("bob",airport);
+		atc.addListener(output);
+		add(atc,BorderLayout.EAST);
+		add(airport);
+		pack();
+		input = new MouseInput(airport);
+		getRootPane().getLayeredPane().add(input, JLayeredPane.MODAL_LAYER);
+				
+		//configure game logic
+		airport.addListener(this);
 		switch (difficulty){
 		case EASY:
 			flightsMax = Airport.MAX_FLIGHTS-2;
@@ -65,38 +97,6 @@ public class Game extends JFrame implements ActionListener, AirspaceListener{
 			flightsMax = Airport.MAX_FLIGHTS;
 			break;			
 		}
-		ImageIcon timeImage,fpsImage;
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //{!} for while menu does not redisplay
-		//setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setTitle("ATC Game | GAME");
-		setResizable(false);	//may change if aspect ratio is locked
-		timerDisplay.setText("Time : 0");
-		timeImage = new ImageIcon(getClass().getResource("/sepr/atcGame/Images/timer_bg.png"));
-		fpsImage = new ImageIcon(getClass().getResource("/sepr/atcGame/Images/score_bg.png"));
-		//Sets background for status bar labels
-		timerDisplay.setIcon(timeImage);
-		timerDisplay.setVerticalTextPosition(JLabel.CENTER);
-		timerDisplay.setHorizontalTextPosition(JLabel.CENTER);
-		
-		fpsDisplay.setIcon(fpsImage);
-		fpsDisplay.setVerticalTextPosition(JLabel.CENTER);
-		fpsDisplay.setHorizontalTextPosition(JLabel.CENTER);
-	
-		statusPanel.add(timerDisplay);
-		statusPanel.add(fpsDisplay);
-		statusPanel.setBackground(Color.WHITE);
-		add(statusPanel,BorderLayout.PAGE_START);
-		
-		generateWorld(airport_selection);
-		atc = new ATC("bob",airport);
-		atc.addListener(output);
-		add(atc,BorderLayout.EAST);
-		add(airport);
-		pack();
-		input = new MouseInput(airport);
-		getRootPane().getLayeredPane().add(input, JLayeredPane.MODAL_LAYER);
-		
-		airport.addListener(this);
 		
 		setLocationRelativeTo(null);
 		setMinimumSize(getSize());
@@ -308,11 +308,12 @@ public class Game extends JFrame implements ActionListener, AirspaceListener{
 		
 		if (gameOver){		
 			gameOverTime -= elapsedTime;	
-			if (gameOverTime < 0)	
+			if (gameOverTime < 0)
 				Pause();
 		}		
 
 	}
+
 	
 	// Testing purposes
 	public Airport getAirport(){
@@ -352,5 +353,6 @@ public class Game extends JFrame implements ActionListener, AirspaceListener{
 				timerDisplay.getText() + ", Difficulty: Not implemented" ;
 		return s;
 	}
+	
 
 }
