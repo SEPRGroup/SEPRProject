@@ -98,7 +98,7 @@ public class Menu extends JFrame{
 					showMenus(1, 4);
 					break;
 				case PLAY:				
-					game = new Game(GameDifficulty.EASY);
+					game = new Game(GameDifficulty.EASY, Game.HEATHROW);
 					getOuterClass().setVisible(false);
 					game.Play();
 					break;
@@ -123,7 +123,7 @@ public class Menu extends JFrame{
 				case HARD:
 					break;
 				case AIRPORT1:
-					game = new Game(GameDifficulty.EASY);
+					game = new Game(GameDifficulty.EASY, Game.HEATHROW);
 					getOuterClass().setVisible(false);
 					game.Play();
 					break;

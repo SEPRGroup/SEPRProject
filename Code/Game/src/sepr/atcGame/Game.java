@@ -19,21 +19,24 @@ import javax.swing.JPanel;
 import sepr.atcGame.events.AirspaceListener;
 
 public class Game extends JFrame implements ActionListener, AirspaceListener{
-
+	private static final Random random = new Random();
+	private static final double BASE_GAME_SPEED = 1/1000000000.0;
+	private static final int FPS_MAX = 60;
+	private static final int FPS_DELAY = 1000/FPS_MAX;
+	
+	public static final int HEATHROW=1, SCHIPOL = 2;
+	
 	private Airport airport;
 	private Airspace[] airspaces;
 	private List<TransferWaypoint> transferWaypoints = new ArrayList<TransferWaypoint>();
 	private List<Queue<Waypoint>> flightPlans = new ArrayList<Queue<Waypoint>>();
 
-	private static final int FPS_MAX = 60;
-	private static final int FPS_DELAY = 1000/FPS_MAX;
 	private javax.swing.Timer frameTimer = new javax.swing.Timer(FPS_DELAY, this);
 	private FrameRateMonitor fps = new FrameRateMonitor(FPS_MAX *5);
-	private long lastTime, gameTime, gameOverTime = -1;
+	private long lastTime, gameTime;
 	private boolean paused = true, gameOver = false;
 
-	private static Random random = new Random();
-	private long sinceLastFlight;
+	private long sinceLastFlight, gameOverTime = -1;
 
 	private ATC atc;
 	private MouseInput input;
@@ -42,16 +45,14 @@ public class Game extends JFrame implements ActionListener, AirspaceListener{
 	private JLabel timerDisplay = new JLabel();
 	private JLabel fpsDisplay = new JLabel();
 	
-	
 	private static double nanoToGameTime(long time){
-		return time/1000000000.0;}
+		return time*BASE_GAME_SPEED;}
 	private static long gameToNanoTime(double time){	
-		return Math.round(time*1000000000);}
-
+		return Math.round(time/BASE_GAME_SPEED);}
 
 
 	//constructor
-	public Game(GameDifficulty difficulty) {
+	public Game(GameDifficulty difficulty, int airport_selection) {
 		ImageIcon timeImage,fpsImage;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //{!} for while menu does not redisplay
 		//setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -74,7 +75,7 @@ public class Game extends JFrame implements ActionListener, AirspaceListener{
 		statusPanel.setBackground(Color.WHITE);
 		add(statusPanel,BorderLayout.PAGE_START);
 		
-		generateWorld();
+		generateWorld(airport_selection);
 		atc = new ATC("bob",airport);
 		atc.addListener(output);
 		add(atc,BorderLayout.EAST);
@@ -104,20 +105,30 @@ public class Game extends JFrame implements ActionListener, AirspaceListener{
 		flightPlans.add(flightPlan);				
 	}					
 
-	private void generateWorld(){
+	private void generateWorld(int airportSelection){
 		//Generate airspaces
-		airport = new Heathrow();
-		airspaces = new Airspace[]{
-				new DummyAirspace("Athens"), 
-				new DummyAirspace("Dubai"), 
-				new DummyAirspace("Paris"),
-				new DummyAirspace("Sydney"),
-				new DummyAirspace("Zurich"),
-				};
-		double[] bearings = new double[]{
-				1, 2, 3, 4, 5
-		};
-
+		double[] bearings = new double[0];
+		switch (airportSelection){
+		case HEATHROW:
+			airport = new Heathrow();
+			airspaces = new Airspace[]{
+					new DummyAirspace("Athens"), 
+					new DummyAirspace("Dubai"), 
+					new DummyAirspace("Paris"),
+					new DummyAirspace("Sydney"),
+					new DummyAirspace("Zurich"),
+			};
+			bearings = new double[]{
+					1, 2, 3, 4, 5
+			};
+			break;
+		case SCHIPOL:
+			//{!}
+			break;
+		default:
+			System.out.println("[ERROR Game.generateWorld(" +String.valueOf(airportSelection) +")]\tInvalid airport");
+		}
+		
 		//TRANSFERS
 		//Generate all possible transfers
 		for (int i=0; i<airspaces.length; i++){
@@ -126,44 +137,47 @@ public class Game extends JFrame implements ActionListener, AirspaceListener{
 					airport, a, bearings[i]));
 		}
 		
-		//FLIGHTPLANS					
-		Waypoint[] intermediate = airport.getWaypoints();					
-		{	//Generate all possible flightPlans				
+		//FLIGHTPLANS	
+		Waypoint[] intermediate = airport.getWaypoints();
+		switch (airportSelection){
+		case HEATHROW:
 			int ATHENS=0, DUBAI=1, PARIS=2,SYDNEY=3,ZURICH=4,				
 				ALPHA=0, BRAVO=1, CHARLIE=2, DELTA=3, ECHO=4, FOXTROT=5, GOLF=6, HOTEL=7, INDIGO=8, JULIETT=9;			
-							
+
 			newFlightPlan(transferWaypoints, intermediate, 				
 					new int[]{ATHENS, JULIETT, HOTEL, DUBAI});		
-							
+
 			newFlightPlan(transferWaypoints, intermediate, 				
 					new int[]{ATHENS, FOXTROT, ALPHA ,GOLF ,SYDNEY});		
-							
+
 			newFlightPlan(transferWaypoints, intermediate, 				
 					new int[]{DUBAI, ECHO, JULIETT, FOXTROT, BRAVO, SYDNEY});		
-							
+
 			newFlightPlan(transferWaypoints, intermediate, 				
 					new int[]{DUBAI, CHARLIE, ECHO, ATHENS});		
-							
+
 			newFlightPlan(transferWaypoints, intermediate, 				
 					new int[]{PARIS, DELTA, BRAVO, JULIETT, ATHENS});		
-							
+
 			newFlightPlan(transferWaypoints, intermediate, 				
 					new int[]{PARIS, INDIGO, CHARLIE, FOXTROT, ZURICH});		
-							
+
 			newFlightPlan(transferWaypoints, intermediate, 				
 					new int[]{SYDNEY, DELTA, INDIGO, HOTEL, DUBAI});		
-							
+
 			newFlightPlan(transferWaypoints, intermediate, 				
 					new int[]{SYDNEY, DELTA, INDIGO, CHARLIE, ATHENS});		
-							
+
 			newFlightPlan(transferWaypoints, intermediate, 				
 					new int[]{ZURICH, FOXTROT, JULIETT, CHARLIE, HOTEL, DUBAI});		
-							
-			newFlightPlan(transferWaypoints, intermediate, 				
-					new int[]{ZURICH, BRAVO, INDIGO, DUBAI});		
-		}					
-							
 
+			newFlightPlan(transferWaypoints, intermediate, 				
+					new int[]{ZURICH, BRAVO, INDIGO, DUBAI});
+			break;
+		case SCHIPOL:
+			//{!}
+			break;
+		}
 
 		//Link airports: random subset of all transferWaypoints
 		List<TransferWaypoint> transfers = new ArrayList<TransferWaypoint>();
