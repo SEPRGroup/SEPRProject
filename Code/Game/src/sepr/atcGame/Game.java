@@ -4,12 +4,16 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -58,6 +62,12 @@ public class Game extends JFrame implements ActionListener, AirspaceListener{
 		//setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setTitle("When Planes Collide");
 		setResizable(false);	//may change if aspect ratio is locked
+		
+		
+		InputStream imgStream = Game.class.getResourceAsStream("/sepr/atcGame/Images/plane.png");
+		try {BufferedImage myImg = ImageIO.read(imgStream);
+			setIconImage(myImg);} catch (IOException e) {}
+		
 		
 		timerDisplay =  new JLabel("Time : 0");
 		//Sets background for status bar labels

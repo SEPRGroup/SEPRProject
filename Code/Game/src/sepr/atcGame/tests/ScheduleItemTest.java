@@ -15,7 +15,7 @@ public class ScheduleItemTest {
 	@Before
 	public void setup() {
 		testtime = 3;
-		testgame = new Game(GameDifficulty.EASY);
+		testgame = new Game(GameDifficulty.EASY, 1);
 		testposition = new Position(-1,-1,-1);
 		testaircraft = new Aircraft("A1", testgame.randomFlightPlan());		
 		testinstance = new ScheduleItem(testaircraft, testtime);

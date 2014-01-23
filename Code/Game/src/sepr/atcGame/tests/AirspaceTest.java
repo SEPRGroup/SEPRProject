@@ -97,7 +97,7 @@ public class AirspaceTest {
 							airport, a, bearings[i]));
 				}
 		
-		Game newGame = new Game(GameDifficulty.EASY);
+		Game newGame = new Game(GameDifficulty.EASY, 1);
 		instance = newGame.getAirport();
 		
 		// See if the transfers in 'instance' are a subset 

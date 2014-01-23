@@ -7,7 +7,11 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -29,6 +33,9 @@ public class Menu extends JFrame{
 		setSize(810, 610);
 		setResizable(false);
 		setLocationRelativeTo(null);
+		InputStream imgStream = Game.class.getResourceAsStream("/sepr/atcGame/Images/plane.png");
+		try {BufferedImage myImg = ImageIO.read(imgStream);
+			setIconImage(myImg);} catch (IOException e) {}
 	}
 	
 	class ImagePanel extends JPanel {

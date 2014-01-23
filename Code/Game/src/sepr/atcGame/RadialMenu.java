@@ -36,7 +36,7 @@ public class RadialMenu extends JComponent implements MouseListener, MouseMotion
 		radius,
 		pressed = -1;
 	private Boolean outline = true;
-	private Font font = new Font(Font.SERIF, Font.BOLD, 11);
+	private Font font = new Font(Font.SANS_SERIF, Font.BOLD, 13);
 
 	private List<RadialMenuListener> listeners = new ArrayList<RadialMenuListener>();
 

@@ -31,7 +31,7 @@ public class FlightTest {
 	
 	@Before
 	public void setup() {
-		testgame = new Game(GameDifficulty.EASY);
+		testgame = new Game(GameDifficulty.EASY, 1);
 		testposition = new Position(-1,-1,-1);
 		testinstance = new testAircraft("Q12", (testgame.randomFlightPlan()));
 	}

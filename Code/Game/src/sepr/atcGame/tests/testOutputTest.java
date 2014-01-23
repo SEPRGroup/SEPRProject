@@ -15,7 +15,7 @@ public class testOutputTest {
 	
 	@Before
 	public void setup(){
-		testGame = new Game(GameDifficulty.EASY);
+		testGame = new Game(GameDifficulty.EASY, 1);
 						
 		f1 = new testAircraft("DummyName", testGame.randomFlightPlan());
 		f2 = new testAircraft("DummyName2", testGame.randomFlightPlan());
