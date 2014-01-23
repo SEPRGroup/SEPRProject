@@ -16,7 +16,7 @@ public class SchedulerTest {
 	@Before
 	public void setup() {
 		testdummyairspace = new DummyAirspace("testdummyairspace");
-		testgame = new Game(GameDifficulty.EASY, 1);
+		testgame = new Game(GameDifficulty.EASY, Game.HEATHROW);
 		testposition = new Position(-1,-1,-1);
 		testinstance = new Scheduler(testdummyairspace);
 		testaircraft = new Aircraft("A1", testgame.randomFlightPlan());

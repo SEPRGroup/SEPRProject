@@ -2,11 +2,10 @@ package sepr.atcGame;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,6 +23,8 @@ import sepr.atcGame.events.AirspaceListener;
 
 public class Game extends JFrame implements ActionListener, AirspaceListener{
 	private static final Random random = new Random();
+	private static final String iconPath = "/sepr/atcGame/Images/plane.png";
+	private static Image icon;
 	private static final double BASE_GAME_SPEED = 1/1000000000.0;
 	private static final int FPS_MAX = 60;
 	private static final int FPS_DELAY = 1000/FPS_MAX;
@@ -61,13 +62,10 @@ public class Game extends JFrame implements ActionListener, AirspaceListener{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //{!} for while menu does not redisplay
 		//setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setTitle("When Planes Collide");
+		try {icon = ImageIO.read(getClass().getResourceAsStream(iconPath));}
+		catch (IOException e){System.out.println("[ERROR Game()]\tImage loading failed");};
+		setIconImage(icon);
 		setResizable(false);	//may change if aspect ratio is locked
-		
-		
-		InputStream imgStream = Game.class.getResourceAsStream("/sepr/atcGame/Images/plane.png");
-		try {BufferedImage myImg = ImageIO.read(imgStream);
-			setIconImage(myImg);} catch (IOException e) {}
-		
 		
 		timerDisplay =  new JLabel("Time : 0");
 		//Sets background for status bar labels

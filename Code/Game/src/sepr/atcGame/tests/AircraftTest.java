@@ -19,7 +19,7 @@ public class AircraftTest {
 	
 	@Before
 	public void setup() {
-		testgame = new Game(GameDifficulty.EASY, 1);
+		testgame = new Game(GameDifficulty.EASY, Game.HEATHROW);
 		testflightplan = testgame.randomFlightPlan();
 		System.out.println(testflightplan);
 		testinstance = new Aircraft("Q12", testflightplan);

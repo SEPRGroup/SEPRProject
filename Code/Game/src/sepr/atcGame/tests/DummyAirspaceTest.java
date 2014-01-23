@@ -13,7 +13,7 @@ public class DummyAirspaceTest {
 	
 	@Before
 	public void setup() {
-		testgame = new Game(GameDifficulty.EASY, 1);
+		testgame = new Game(GameDifficulty.EASY, Game.HEATHROW);
 		testaircraft = new Aircraft("A1", testgame.randomFlightPlan());
 		testinstance = new DummyAirspace("testinstance");
 	}

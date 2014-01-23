@@ -13,7 +13,7 @@ public class GameTest {
 	
 	@Before
 	public void Setup(){
-		instance = new Game(GameDifficulty.EASY, 1);
+		instance = new Game(GameDifficulty.EASY, Game.HEATHROW);
 	}
 	
 	public void teardown(){
@@ -22,7 +22,7 @@ public class GameTest {
 	
 	@Ignore
 	public void testGame() {
-		Game testGame = new Game(GameDifficulty.EASY, 1);
+		Game testGame = new Game(GameDifficulty.EASY, Game.HEATHROW);
 		//no longer necessarily true since 
 			//random transfers => flightPlans are no longer the same
 		assertEquals(testGame.toString(), instance.toString());
