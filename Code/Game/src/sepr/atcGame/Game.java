@@ -36,6 +36,7 @@ public class Game extends JFrame implements ActionListener, AirspaceListener{
 	private long lastTime, gameTime;
 	private boolean paused = true, gameOver = false;
 
+	private int flightsMax;
 	private long sinceLastFlight, gameOverTime = -1;
 
 	private ATC atc;
@@ -53,6 +54,17 @@ public class Game extends JFrame implements ActionListener, AirspaceListener{
 
 	//constructor
 	public Game(GameDifficulty difficulty, int airport_selection) {
+		switch (difficulty){
+		case EASY:
+			flightsMax = Airport.MAX_FLIGHTS-2;
+			break;
+		case MEDIUM:
+			flightsMax = Airport.MAX_FLIGHTS-1;
+			break;
+		case HARD:
+			flightsMax = Airport.MAX_FLIGHTS;
+			break;			
+		}
 		ImageIcon timeImage,fpsImage;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //{!} for while menu does not redisplay
 		//setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -268,9 +280,9 @@ public class Game extends JFrame implements ActionListener, AirspaceListener{
 		//Game logic
 		sinceLastFlight += elapsedTime;
 		
-		if(airport.getAircraftCount() != Airspace.MAX_FLIGHTS){		
+		if(airport.getAircraftCount() != flightsMax){		
 			//increase spawn rate while airport is near empty	
-			long interval = gameToNanoTime(20)/ (Airspace.MAX_FLIGHTS -airport.getAircraftCount());	
+			long interval = gameToNanoTime(100/flightsMax)/ (flightsMax -airport.getAircraftCount());	
 			if(sinceLastFlight >= interval){	
 				Flight f = randomFlight();
 				airport.receiveFlight(f, (TransferWaypoint)f.getFlightPlan().poll());

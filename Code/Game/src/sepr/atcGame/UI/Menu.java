@@ -92,13 +92,14 @@ public class Menu extends JFrame{
 
 		public void selectedOption(MenuOptions menuOption)
 		{	Game game;
+			GameDifficulty difficulty = GameDifficulty.MEDIUM;
 			switch (menuOption){
 				case START:
 					MenuOptions.START.menuButton.setVisible(false);
 					showMenus(1, 4);
 					break;
 				case PLAY:				
-					game = new Game(GameDifficulty.EASY, Game.HEATHROW);
+					game = new Game(difficulty, Game.HEATHROW);
 					getOuterClass().setVisible(false);
 					game.Play();
 					break;
@@ -116,11 +117,20 @@ public class Menu extends JFrame{
 				case EXIT:
 					System.exit(0);				
 					break;
-				case EASY:				
+				case EASY:
+					difficulty = GameDifficulty.EASY;
+					closeMenus(5, 7);
+					showMenus(1, 4);
 					break;
 				case MEDIUM:
+					difficulty = GameDifficulty.MEDIUM;
+					closeMenus(5, 7);
+					showMenus(1, 4);
 					break;
 				case HARD:
+					difficulty = GameDifficulty.HARD;
+					closeMenus(5, 7);
+					showMenus(1, 4);
 					break;
 				case AIRPORT1:
 					game = new Game(GameDifficulty.EASY, Game.HEATHROW);
