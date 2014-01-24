@@ -267,22 +267,32 @@ public /*abstract*/ class Aircraft extends Flight {
 	@Override
 	public final void toAltitude(double altitude) {
 		/*System.out.println("Aircraft.toAltitude()| minAlt="+minAlt+"maxAlt="+maxAlt); //MH: Used for test creation. */
-		if ((altitude >= minAlt) && (altitude <= maxAlt)){
+		if (altitude < minAlt){
+			System.out.println(getIdentifier() +" cannot go to this low");	//{!}
+			tAlt = minAlt;
+		} else if (altitude > maxAlt){
+			System.out.println(getIdentifier() +" cannot go to this high");	//{!}
+			tAlt = maxAlt;
+		} else {
 			tAlt = altitude;
-			if (CRUISING == status){
-				status = COMPLYING;}
 		}
-		else System.out.println(getIdentifier() +" cannot go to this altitude");	//{!} error
+		if (CRUISING == status){
+			status = COMPLYING;}
 	}
 
 	@Override
 	public final void toSpeed(double speed) {
-		if ((speed >= minV) && (speed <= maxV)){
+		if (speed < minV){
+			System.out.println(getIdentifier() +" cannot go to this slow");	//{!}
+			tV = minV;
+		} else if (speed > maxV){
+			System.out.println(getIdentifier() +" cannot go to this fast");	//{!}
+			tV = maxV;
+		} else {
 			tV = speed;
-			if (CRUISING == status){
-				status = COMPLYING;}
 		}
-		else System.out.println(getIdentifier() +" cannot go to this speed");;	//{!} error
+		if (CRUISING == status){
+			status = COMPLYING;}
 	}
 
 	@Override
