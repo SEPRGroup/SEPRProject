@@ -38,7 +38,7 @@ public final class MouseInput extends Input implements GameTime{
 	
 	private void initMain(){
 		main = new RadialMenu();
-		main.setFont(main.getFont().deriveFont(Font.PLAIN));
+		main.setFont(main.getFont().deriveFont(Font.PLAIN, 11));
 		main.addButton("Bearing", null);
 		main.addButton("Altitude", null);
 		main.addButton("Speed", null);
@@ -73,12 +73,11 @@ public final class MouseInput extends Input implements GameTime{
 	private void initBearing(){
 		final int interval = 4;	//even 1 will work, but you'll start to see input lag
 		bearing = new RadialMenu();
-		main.setFont(main.getFont().deriveFont(Font.PLAIN, 10));
 		bearing.setSpacing(0);
-		bearing.setOffset(-2);
+		bearing.setOffset(-interval/2);
 		bearing.setStyle(RadialMenu.DONUT);
 		bearing.setOutline(false);
-		bearing.setButtonSize(25);
+		bearing.setButtonSize(30);
 		for (int i=0; i<360; i+=interval){
 			bearing.addButton("", null);
 		}
@@ -99,7 +98,6 @@ public final class MouseInput extends Input implements GameTime{
 		speed.setSpacing(1);
 		speed.setOffset(0);
 		speed.setStyle(RadialMenu.DONUT);
-		bearing.setButtonSize(30);
 		for (int i=min; i<=max; i+=interval){
 			String s = (i%50 == 0) ? String.valueOf(i) : "";
 			speed.addButton(s, null);
@@ -197,13 +195,14 @@ public final class MouseInput extends Input implements GameTime{
 	@Override
 	public void eventHighlighted(Flight f) {
 		highlighted = f;
-		//hide any existing menus
-		main.setVisible(false);
-		bearing.setVisible(false);
-		speed.setVisible(false);
-		altitude.setVisible(false);
 		
 		if (f != null){
+			//hide any existing menus
+			main.setVisible(false);
+			bearing.setVisible(false);
+			speed.setVisible(false);
+			altitude.setVisible(false);
+			
 			tryLocation(main,
 					airport.positionToLocation(f.getPosition()));
 			setVisible(true);
