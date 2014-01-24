@@ -43,7 +43,7 @@ public class TransferWaypointTest {
 	public void testGetPosition() {
 		Position newPosition = new Position(-1, -1, -1);
 		// Initially the position is the value above
-		assertEquals(newPosition.toString(), instance.getPosition().toString());
+		assertEquals(newPosition.toString(), instance.getPosition(testDummyAirspace).toString());
 
 	}
 
@@ -53,7 +53,7 @@ public class TransferWaypointTest {
 		
 		// Use the same initialised airspace
 		instance.setPosition(testAirspace, newPosition);
-		assertEquals(newPosition.toString(), instance.getPosition().toString());
+		assertEquals(newPosition.toString(), instance.getPosition(testAirspace).toString());
 	}
 
 	// No implementation of a second airport no need to test

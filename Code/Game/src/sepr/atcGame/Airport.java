@@ -19,8 +19,7 @@ import static java.lang.Math.PI;
 
 public abstract class Airport extends Airspace {
 
-	private Image background;
-	private Image scaleBackground;
+	private Image background, scaleBackground;
 	private Dimension boundaries; // size of airspace in metres
 	private Flight highlighted;
 
@@ -35,7 +34,9 @@ public abstract class Airport extends Airspace {
 		public void mouseClicked(MouseEvent e){
 			//clear current highlighted plane
 			if (highlighted != null){
-				highlighted.highlight(false);}
+				highlighted.highlight(false);
+				highlighted = null;
+			}
 
 			Position pos = new Position(e.getX(), e.getY(), -1);
 			//convert to internal coordinates
@@ -62,7 +63,6 @@ public abstract class Airport extends Airspace {
 					minF.highlight(true);
 					eventHighlighted(minF);
 				} else {
-					highlighted = null;
 					eventHighlighted(null);
 				}
 			} else {
@@ -248,9 +248,8 @@ public abstract class Airport extends Airspace {
 			pos = highlighted.getPosition();
 			Point lastLoc = new Point(
 					(int)Math.round(pos.x *scale), (int)Math.round(pos.y *scale));
-			Waypoint w;
 			for (int i=0; i<num; i++){
-				w = flightPlan.poll();
+				Waypoint w = flightPlan.poll();
 				if (w instanceof TransferWaypoint)
 					pos = ((TransferWaypoint)w).getPosition(this);
 				else pos = w.getPosition();
