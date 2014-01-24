@@ -41,7 +41,8 @@ public abstract class Airport extends Airspace {
 			//convert to internal coordinates
 			double scale = (double)boundaries.width / getWidth();
 			pos.x *= scale;	pos.y *= scale;
-
+			
+			//find closest plane to click location
 			double minD = Double.MAX_VALUE; 
 			Flight minF = null;
 			for (Flight f : aircraft){
@@ -75,7 +76,7 @@ public abstract class Airport extends Airspace {
 		super(airspaceName);
 		this.boundaries = boundaries;
 
-		this.setOpaque(true);
+		setOpaque(true);
 		setDoubleBuffered(true);
 		addComponentListener(resizeListener);
 		addMouseListener(mouseListener);
@@ -104,7 +105,7 @@ public abstract class Airport extends Airspace {
 
 	protected final void setBackground(Image background) {
 		this.background = background;
-		this.scaleBackground = null;
+		scaleBackground = null;
 		setPreferredSize(new Dimension(background.getWidth(null),
 				background.getHeight(null)));
 	}
@@ -261,7 +262,7 @@ public abstract class Airport extends Airspace {
 		}
 
 		// draw Waypoints
-		for (Waypoint w : getWaypoints()) {
+		for (Waypoint w : waypoints) {
 			if (w != null) {
 				pos = w.getPosition();
 				loc.x = (int) Math.round(pos.x * scale);
@@ -271,7 +272,7 @@ public abstract class Airport extends Airspace {
 		}
 
 		// draw TransferWaypoints
-		for (TransferWaypoint t : getTransfers()) {
+		for (TransferWaypoint t : transfers) {
 			if (t != null) {
 				pos = t.getPosition(this);
 				loc.x = (int) Math.round(pos.x * scale);
@@ -281,7 +282,7 @@ public abstract class Airport extends Airspace {
 		}
 
 		// draw Flights
-		for (Flight f : getAircraft()) {
+		for (Flight f : aircraft) {
 			if (f != null) {
 				pos = f.getPosition();
 				loc.x = (int) Math.round(pos.x * scale);
