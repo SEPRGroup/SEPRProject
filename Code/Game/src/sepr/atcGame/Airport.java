@@ -11,7 +11,9 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import static java.lang.Math.PI;
 
@@ -234,6 +236,28 @@ public abstract class Airport extends Airspace {
 		} else {
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, getWidth(), getHeight());
+		}
+		
+		//highlight path
+		if (highlighted != null){
+			g.setColor(Color.RED);
+			Queue<Waypoint> flightPlan = 
+					new LinkedList<Waypoint>(highlighted.getFlightPlan());
+			int num = flightPlan.size();
+			pos = highlighted.getPosition();
+			Point lastLoc = new Point(
+					(int)Math.round(pos.x *scale), (int)Math.round(pos.y *scale));
+			Waypoint w;
+			for (int i=0; i<num; i++){
+				w = flightPlan.poll();
+				if (w instanceof TransferWaypoint)
+					pos = ((TransferWaypoint)w).getPosition(this);
+				else pos = w.getPosition();
+				loc.x = (int) Math.round(pos.x *scale);
+				loc.y = (int) Math.round(pos.y *scale);
+				g.drawLine(lastLoc.x, lastLoc.y, loc.x, loc.y);
+				lastLoc.x = loc.x; lastLoc.y = loc.y;
+			}
 		}
 
 		// draw Waypoints
